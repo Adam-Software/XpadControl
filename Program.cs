@@ -16,18 +16,23 @@ namespace XpadControl
 
             IServiceProvider services = scope.ServiceProvider;
             ILoggerService logger = services.GetRequiredService<ILoggerService>();
+            App app = services.GetRequiredService<App>();
 
             try
             {
-                services.GetRequiredService<App>().Run(args);
+                logger.WriteInformationLog("App normally start");
+                app.RunAsync(args).Wait();   
+                
             }
             catch (Exception e)
             {
                 logger.WriteErrorLog($"Exception on app start {e.Message}");
+                app.Dispose();
             }
             finally 
             {
-                logger.WriteInformationLog("App normally start");
+                logger.WriteInformationLog("App normally stop");
+                app.Dispose();
             }
         }
 

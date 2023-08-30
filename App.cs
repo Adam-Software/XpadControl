@@ -1,27 +1,32 @@
 ﻿using Microsoft.Extensions.Configuration;
-using XpadControl.Services;
+using XpadControl.Services.LoggerService;
+using XpadControl.Services.WebSocketCkientService;
 
 namespace XpadControl
 {
     public class App
     {
         private readonly IWebSocketClientsService WebSocketClientsService;
+        private readonly ILoggerService LoggerService;
+
         private readonly IConfiguration Configuration;
 
-        public App(IWebSocketClientsService webSocketClientsService, IConfiguration configuration)
+        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IConfiguration configuration)
         {
             WebSocketClientsService = webSocketClientsService;
+            LoggerService = loggerService;
+
             Configuration = configuration;
         }
 
         public void Run(string[] args)
         {
             // version settings
-            var version = Configuration["Version"];
-            Console.WriteLine("version " + version);
+            IConfigurationSection appSettings = Configuration.GetRequiredSection("AppSettings");
+            LoggerService.WriteInformationLog("version " + appSettings["Version"]);
 
             var testCalc = WebSocketClientsService.CalculateCustomerAgs(1);
-            Console.WriteLine(testCalc);
+            LoggerService.WriteVerboseLog($"{testCalc}");
         }
     }
 }

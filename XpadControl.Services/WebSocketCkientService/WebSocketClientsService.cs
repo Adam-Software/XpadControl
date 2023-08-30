@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XpadControl.Services
+namespace XpadControl.Services.WebSocketCkientService
 {
     public class WebSocketClientsService : IWebSocketClientsService
     {

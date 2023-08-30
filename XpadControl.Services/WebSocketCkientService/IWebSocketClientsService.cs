@@ -1,4 +1,4 @@
-﻿namespace XpadControl.Services
+﻿namespace XpadControl.Services.WebSocketCkientService
 {
     public interface IWebSocketClientsService
     {

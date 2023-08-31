@@ -11,38 +11,25 @@ namespace XpadControl
     {
         static void Main(string[] args)
         {
-            IHost host = CreateHostBuilder(args).Build();
-            IServiceScope scope = host.Services.CreateScope();
-
-            IServiceProvider services = scope.ServiceProvider;
-            ILoggerService logger = services.GetRequiredService<ILoggerService>();
-            App app = services.GetRequiredService<App>();
-
-            try
-            {
-                logger.WriteInformationLog("App normally start");
-                app.RunAsync(args).Wait();   
-            }
-            catch (Exception e)
-            {
-                logger.WriteErrorLog($"Exception on app start {e.Message}");
-                app.Dispose();
-            }
-            finally 
-            {
-                logger.WriteInformationLog("App normally stop");
-                app.Dispose();
-            }
-        }
-
-        private static IHostBuilder CreateHostBuilder(string[] strings)
-        {
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            return Host.CreateDefaultBuilder()
+            var loogerService = new LoggerService(configuration);
+
+            HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+            builder.Configuration.AddConfiguration(configuration);
+            builder.Services.AddSingleton<ILoggerService>(loogerService);
+            builder.Services.AddSingleton<IWebSocketClientsService>(new WebSocketClientsService(loogerService));
+            builder.Services.AddSingleton<IGamepadService>(new GamepadService(loogerService));
+            builder.Services.AddHostedService<App>();
+
+            using IHost host = builder.Build();
+
+            host.RunAsync().Wait();
+
+            /*Host.CreateDefaultBuilder()
                 .ConfigureServices((_, services) =>
                 {
                     var loogerService = new LoggerService(configuration);
@@ -50,9 +37,12 @@ namespace XpadControl
                     services.AddSingleton<ILoggerService>(loogerService);
                     services.AddSingleton<IWebSocketClientsService>(new WebSocketClientsService(loogerService));
                     services.AddSingleton<IGamepadService>(new GamepadService(loogerService));
-                    services.AddSingleton<App>();
+                    services.AddHostedService<App>();
                 })
-                .ConfigureAppConfiguration(app => { app.AddConfiguration(configuration); } );
+                //.UseConsoleLifetime()
+                //.ConfigureAppConfiguration(app => { app.AddConfiguration(configuration); })
+                .Build().RunAsync();*/
+
         }
     }
 }

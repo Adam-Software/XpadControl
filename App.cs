@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using XpadControl.Services.GamepadService;
+using XpadControl.Services.GamepadService.EventArgs;
 using XpadControl.Services.LoggerService;
 using XpadControl.Services.WebSocketCkientService;
 
@@ -27,6 +28,19 @@ namespace XpadControl
             mApplicationLifetime.ApplicationStarted.Register(OnStarted);
             mApplicationLifetime.ApplicationStopped.Register(OnStopped);
             mApplicationLifetime.ApplicationStopping.Register(OnStopping);
+
+            mGamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
+            mGamepadService.RaiseAxisChangedEvent += RaiseAxisChangedEvent;
+        }
+
+        private void RaiseAxisChangedEvent(object sender, AxisEventArgs e)
+        {
+            mLoggerService.WriteDebugLog($"RaiseAxisChangedEvent {e.Axis} is {e.Value}");
+        }
+
+        private void RaiseButtonChangedEvent(object sender, ButtonEventArgs e)
+        {
+            mLoggerService.WriteDebugLog($"RaiseButtonChangedEvent {e.Button} is {e.Pressed}");
         }
 
         private void OnStopping()
@@ -47,33 +61,11 @@ namespace XpadControl
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            /*simple realization*/
-            /*try
-            {
-                // read AppSettings test
-                IConfigurationSection appSettings = mConfiguration.GetRequiredSection("AppSettings");
-                mLoggerService.WriteInformationLog("Setting version " + appSettings["Version"]);
+            mLoggerService.WriteInformationLog("App start. Try use gamepad");
 
-                // execute service
-                int testCalc = mWebSocketClientsService.CalculateCustomerAgs(1);
-                mLoggerService.WriteVerboseLog($"Websocket calculation is {testCalc}");
+            /* example async process */
 
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    mLoggerService.WriteVerboseLog("I do work");
-                    Task.Delay(TimeSpan.FromSeconds(10)).Wait();
-                }
-            }
-            catch (Exception ex) 
-            {
-                mLoggerService.WriteErrorLog($"Error when run app {ex.Message}");
-            }
-            finally 
-            {
-                mApplicationLifetime.StopApplication();
-            }*/
-
-            Task.Run(async () =>
+            /*Task.Run(async () =>
             {
                 try
                 {
@@ -85,13 +77,13 @@ namespace XpadControl
                     int testCalc = mWebSocketClientsService.CalculateCustomerAgs(1);
                     mLoggerService.WriteVerboseLog($"Websocket calculation is {testCalc}");
 
-                    while (!cancellationToken.IsCancellationRequested)
+                    /*while (!cancellationToken.IsCancellationRequested)
                     {
                         mLoggerService.WriteVerboseLog("I do work");
                         await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
-                    }
+                    }*/
 
-                }
+                /*}
                 catch (TaskCanceledException)
                 {
                     mLoggerService.WriteVerboseLog($"App canceled");
@@ -100,9 +92,14 @@ namespace XpadControl
                 {
                     mLoggerService.WriteErrorLog($"Unhandled exception when run app {ex}");
                 }
-            }, cancellationToken);
-
+            }, cancellationToken);*/
            
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            mLoggerService.WriteVerboseLog("Task complete and stop async called");
             return Task.CompletedTask;
         }
 
@@ -113,15 +110,18 @@ namespace XpadControl
         {
             mLoggerService.WriteVerboseLog("Coomon dispose called");
 
-            mLoggerService.Dispose();
-            mWebSocketClientsService.Dispose();
-            mGamepadService.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        protected virtual void Dispose(bool disposing)
         {
-            mLoggerService.WriteVerboseLog("Task complete and stop async called");
-            return Task.CompletedTask;
+            if (disposing)
+            {
+                mLoggerService.Dispose();
+                mWebSocketClientsService.Dispose();
+                mGamepadService.Dispose();
+            }
         }
     }
 }

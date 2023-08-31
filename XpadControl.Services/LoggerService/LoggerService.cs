@@ -13,7 +13,6 @@ namespace XpadControl.Services.LoggerService
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
         }
-
         public void Dispose()
         {
             mLogger?.Dispose();

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace XpadControl.Services.GamepadService
 {
-    public interface IGamepadService
+    public interface IGamepadService : IDisposable
     {
     }
 }

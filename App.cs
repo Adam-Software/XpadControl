@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using XpadControl.Services.GamepadService;
 using XpadControl.Services.LoggerService;
 using XpadControl.Services.WebSocketCkientService;
 
@@ -6,38 +7,46 @@ namespace XpadControl
 {
     public class App : IDisposable
     {
-        private readonly IWebSocketClientsService WebSocketClientsService;
-        private readonly ILoggerService LoggerService;
-        private readonly IConfiguration Configuration;
-
-        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IConfiguration configuration)
+        private readonly IConfiguration mConfiguration;
+        private readonly ILoggerService mLoggerService;
+        private readonly IWebSocketClientsService mWebSocketClientsService;
+        private readonly IGamepadService mGamepadService;
+        
+        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IConfiguration configuration, IGamepadService gamepadService)
         {
-            WebSocketClientsService = webSocketClientsService;
-            LoggerService = loggerService;
-            Configuration = configuration;
+            mConfiguration = configuration;
+            mLoggerService = loggerService;
+            mWebSocketClientsService = webSocketClientsService;
+            mGamepadService = gamepadService;
         }
 
         public Task RunAsync(string[] args)
         {
             // read AppSettings test
-            IConfigurationSection appSettings = Configuration.GetRequiredSection("AppSettings");
-            LoggerService.WriteInformationLog("version " + appSettings["Version"]);
+            IConfigurationSection appSettings = mConfiguration.GetRequiredSection("AppSettings");
+            mLoggerService.WriteInformationLog("Setting version " + appSettings["Version"]);
 
             // execute service
-            var testCalc = WebSocketClientsService.CalculateCustomerAgs(1);
-            LoggerService.WriteVerboseLog($"{testCalc}");
+            int testCalc = mWebSocketClientsService.CalculateCustomerAgs(1);
+            mLoggerService.WriteVerboseLog($"Websocket calculation is {testCalc}");
 
             // imitation work
             Task.Delay(10000).Wait();
 
-            LoggerService.WriteInformationLog("Task complete");
+            mLoggerService.WriteInformationLog("Task complete");
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Dispose all services
+        /// </summary>
         public void Dispose()
         {
-            LoggerService.WriteVerboseLog("Dispose called");
-            LoggerService.Dispose();
+            mLoggerService.WriteVerboseLog("Dispose called");
+
+            mLoggerService.Dispose();
+            mWebSocketClientsService.Dispose();
+            mGamepadService.Dispose();
         }
     }
 }

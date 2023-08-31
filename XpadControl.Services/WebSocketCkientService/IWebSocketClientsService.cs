@@ -1,6 +1,8 @@
-﻿namespace XpadControl.Services.WebSocketCkientService
+﻿using System;
+
+namespace XpadControl.Services.WebSocketCkientService
 {
-    public interface IWebSocketClientsService
+    public interface IWebSocketClientsService : IDisposable
     {
         public int CalculateCustomerAgs(int args);
     }

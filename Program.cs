@@ -22,7 +22,6 @@ namespace XpadControl
             {
                 logger.WriteInformationLog("App normally start");
                 app.RunAsync(args).Wait();   
-                
             }
             catch (Exception e)
             {
@@ -46,9 +45,11 @@ namespace XpadControl
             return Host.CreateDefaultBuilder()
                 .ConfigureServices((_, services) =>
                 {
-                    services.AddSingleton<ILoggerService>(new LoggerService(configuration));
-                    services.AddSingleton<IWebSocketClientsService, WebSocketClientsService>();
-                    services.AddSingleton<IGamepadService, GamepadService>();
+                    var loogerService = new LoggerService(configuration);
+
+                    services.AddSingleton<ILoggerService>(loogerService);
+                    services.AddSingleton<IWebSocketClientsService>(new WebSocketClientsService(loogerService));
+                    services.AddSingleton<IGamepadService>(new GamepadService(loogerService));
                     services.AddSingleton<App>();
                 })
                 .ConfigureAppConfiguration(app => { app.AddConfiguration(configuration); } );

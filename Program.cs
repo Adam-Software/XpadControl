@@ -19,13 +19,24 @@ namespace XpadControl
 
             var loogerService = new LoggerService(configuration);
 
+
             HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
             builder.Logging.ClearProviders();
             builder.Configuration.AddConfiguration(configuration);
-            builder.Services.AddSingleton<ILoggerService>(loogerService);
-            builder.Services.AddSingleton<IWebSocketClientsService>(new WebSocketClientsService(loogerService));
-            builder.Services.AddSingleton<IGamepadService>(new GamepadService(loogerService));
-            builder.Services.AddHostedService<App>();
+
+            try
+            {
+                builder.Services.AddSingleton<ILoggerService>(loogerService);
+                builder.Services.AddSingleton<IWebSocketClientsService>(new WebSocketClientsService(loogerService));
+                builder.Services.AddSingleton<IGamepadService>(new GamepadService(loogerService));
+                builder.Services.AddHostedService<App>();
+            }
+            catch (Exception ex) 
+            {
+                Console.Error.WriteLine("Service initialization error");
+                Console.WriteLine(ex.ToString());
+            }
+
 
             using IHost host = builder.Build();
             host.RunAsync().Wait();

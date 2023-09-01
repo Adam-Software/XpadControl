@@ -8,9 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="XpadControl.Dll\**" />
     <Compile Remove="XpadControl.Services\**" />
+    <Compile Remove="XpadControl.WindowsServices.Interface\**" />
+    <Compile Remove="XpadControl.WindowsServices\**" />
+    <EmbeddedResource Remove="XpadControl.Dll\**" />
     <EmbeddedResource Remove="XpadControl.Services\**" />
+    <EmbeddedResource Remove="XpadControl.WindowsServices.Interface\**" />
+    <EmbeddedResource Remove="XpadControl.WindowsServices\**" />
+    <None Remove="XpadControl.Dll\**" />
     <None Remove="XpadControl.Services\**" />
+    <None Remove="XpadControl.WindowsServices.Interface\**" />
+    <None Remove="XpadControl.WindowsServices\**" />
   </ItemGroup>
 
   <ItemGroup>

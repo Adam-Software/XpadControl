@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using System.Runtime.InteropServices;
 using XpadControl.Services.GamepadService;
 using XpadControl.Services.GamepadService.EventArgs;
 using XpadControl.Services.LoggerService;
@@ -63,25 +64,26 @@ namespace XpadControl
         {
             mLoggerService.WriteInformationLog("App start. Try use gamepad");
 
-            /* example async process */
+            
+                /* example async process */
 
-            /*Task.Run(async () =>
-            {
-                try
+                /*Task.Run(async () =>
                 {
-                    // read AppSettings test
-                    IConfigurationSection appSettings = mConfiguration.GetRequiredSection("AppSettings");
-                    mLoggerService.WriteInformationLog("Setting version " + appSettings["Version"]);
-
-                    // execute service
-                    int testCalc = mWebSocketClientsService.CalculateCustomerAgs(1);
-                    mLoggerService.WriteVerboseLog($"Websocket calculation is {testCalc}");
-
-                    /*while (!cancellationToken.IsCancellationRequested)
+                    try
                     {
-                        mLoggerService.WriteVerboseLog("I do work");
-                        await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
-                    }*/
+                        // read AppSettings test
+                        IConfigurationSection appSettings = mConfiguration.GetRequiredSection("AppSettings");
+                        mLoggerService.WriteInformationLog("Setting version " + appSettings["Version"]);
+
+                        // execute service
+                        int testCalc = mWebSocketClientsService.CalculateCustomerAgs(1);
+                        mLoggerService.WriteVerboseLog($"Websocket calculation is {testCalc}");
+
+                        /*while (!cancellationToken.IsCancellationRequested)
+                        {
+                            mLoggerService.WriteVerboseLog("I do work");
+                            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                        }*/
 
                 /*}
                 catch (TaskCanceledException)
@@ -93,8 +95,8 @@ namespace XpadControl
                     mLoggerService.WriteErrorLog($"Unhandled exception when run app {ex}");
                 }
             }, cancellationToken);*/
-           
-            return Task.CompletedTask;
+
+                return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

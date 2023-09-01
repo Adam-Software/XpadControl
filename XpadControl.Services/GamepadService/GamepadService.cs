@@ -10,7 +10,6 @@ namespace XpadControl.Services.GamepadService
         public event AxisChangedEventHandler RaiseAxisChangedEvent;
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
 
-        private readonly MaxRev.Input.Gamepad.GamepadController? mGamepadWindows;
         private readonly Gamepad.GamepadController? mGamepadLinux;
         private readonly ILoggerService mLoggerService;
 
@@ -32,33 +31,11 @@ namespace XpadControl.Services.GamepadService
                 }
             }
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                mLoggerService.WriteVerboseLog("OS is Windows");
-
-                try
-                {
-                    mGamepadWindows = new MaxRev.Input.Gamepad.GamepadController();
-                    mGamepadWindows.RunAsync();
-                }
-                catch (Exception ex)
-                {
-                    mLoggerService.WriteErrorLog($"Error when bind gamepad {ex.Message}");
-                }
-            }
-
             if (mGamepadLinux != null)
             {
                 mGamepadLinux.AxisChanged += AxisChanged;
                 mGamepadLinux.ButtonChanged += ButtonChanged;
             }    
-
-            if(mGamepadWindows != null)
-            {
-                mGamepadWindows.AxisChanged += AxisChanged;
-                mGamepadWindows.ButtonChanged += ButtonChanged; 
-            }
-            
         }
 
         public void Dispose()
@@ -66,8 +43,8 @@ namespace XpadControl.Services.GamepadService
             mLoggerService.WriteVerboseLog($"Dispose {nameof(GamepadService)} called");
 
             mGamepadLinux?.Dispose();
-            mGamepadWindows?.Dispose();
         }
+
 
         #region Linux gamepad event
 
@@ -83,24 +60,6 @@ namespace XpadControl.Services.GamepadService
             mLoggerService.WriteVerboseLog($"{e.Axis} is {e.Value}");
 
             OnRaiseAxisChangedEvent(e.Axis, e.Value);
-        }
-
-        #endregion
-
-        #region Windows gamepad event
-
-        private void ButtonChanged(object sender, MaxRev.Input.Gamepad.ButtonEventArgs e)
-        {
-            mLoggerService.WriteVerboseLog($"{e.Button} is {e.Pressed}");
-
-            OnRaiseButtonChangedEvent((byte) e.Button, e.Pressed);
-        }
-
-        private void AxisChanged(object sender, MaxRev.Input.Gamepad.AxisEventArgs e)
-        {
-            mLoggerService.WriteVerboseLog($"{e.Axis} is {e.Value}");
-
-            OnRaiseAxisChangedEvent(Convert.ToByte(e.Axis), e.Value);
         }
 
         #endregion

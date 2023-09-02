@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
 using XpadControl.Services.GamepadService;
 using XpadControl.Services.LoggerService;
 using XpadControl.Services.WebSocketCkientService;

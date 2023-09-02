@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using XpadControl.Services.GamepadService;
 using XpadControl.Services.GamepadService.EventArgs;
 using XpadControl.Services.LoggerService;
@@ -58,7 +61,6 @@ namespace XpadControl
         {
             mLoggerService.WriteVerboseLog("OnStarted() called");
         }
-
 
         public Task StartAsync(CancellationToken cancellationToken)
         {

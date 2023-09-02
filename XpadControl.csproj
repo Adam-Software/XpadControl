@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
     <TargetFramework>net7.0-windows</TargetFramework>
   </PropertyGroup>
 

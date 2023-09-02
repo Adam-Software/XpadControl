@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using XpadControl.Services.GamepadService.EventArgs;
-using XpadControl.Services.LoggerService;
+using XpadControl.Interfaces.GamepadService;
+using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
+using XpadControl.Interfaces.LoggerService;
 
-namespace XpadControl.Services.GamepadService
+namespace XpadControl.Linux.Services.GamepadService
 {
     public class GamepadService :  IGamepadService
     {
@@ -17,19 +18,18 @@ namespace XpadControl.Services.GamepadService
         {
             mLoggerService = loggerService;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            mLoggerService.WriteVerboseLog("OS is Linux");
+           
+            try
             {
-                mLoggerService.WriteVerboseLog("OS is Linux");
                 
-                try
-                {
-                    mGamepadLinux = new Gamepad.GamepadController("/dev/input/js0");
-                }
-                catch (Exception ex)
-                {
-                    mLoggerService.WriteErrorLog($"Error when bind gamepad {ex.Message}");
-                }
+                mGamepadLinux = new Gamepad.GamepadController("/dev/input/js0");    
             }
+            catch (Exception ex)
+            {
+                mLoggerService.WriteErrorLog($"Error when bind gamepad {ex.Message}");
+            }
+            
 
             if (mGamepadLinux != null)
             {
@@ -70,7 +70,7 @@ namespace XpadControl.Services.GamepadService
         {
             AxisChangedEventHandler raiseEvent = RaiseAxisChangedEvent;
 
-            AxisEventArgs eventArgs = new AxisEventArgs
+            AxisEventArgs eventArgs = new()
             {
                  Axis = axis,
                  Value = value
@@ -83,7 +83,7 @@ namespace XpadControl.Services.GamepadService
         {
             ButtonChangedEventHandler raiseEvent = RaiseButtonChangedEvent;
 
-            ButtonEventArgs eventArgs = new ButtonEventArgs
+            ButtonEventArgs eventArgs = new()
             {
                  Button = button,
                  Pressed = pressed

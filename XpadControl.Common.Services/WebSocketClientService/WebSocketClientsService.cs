@@ -1,7 +1,7 @@
-﻿using System;
-using XpadControl.Services.LoggerService;
+﻿using XpadControl.Interfaces.LoggerService;
+using XpadControl.Interfaces.WebSocketCkientService;
 
-namespace XpadControl.Services.WebSocketCkientService
+namespace XpadControl.Common.Services.WebSocketCkientService
 {
     public class WebSocketClientsService : IWebSocketClientsService
     {

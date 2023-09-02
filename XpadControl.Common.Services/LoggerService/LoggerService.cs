@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Core;
+using XpadControl.Interfaces.LoggerService;
 
-namespace XpadControl.Services.LoggerService
+namespace XpadControl.Common.Services.LoggerService
 {
     public class LoggerService : ILoggerService
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using XpadControl.Services.GamepadService.EventArgs;
+using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 
-namespace XpadControl.Services.GamepadService
+namespace XpadControl.Interfaces.GamepadService
 {
     public delegate void AxisChangedEventHandler(object sender, AxisEventArgs e);
     public delegate void ButtonChangedEventHandler(object sender, ButtonEventArgs e);

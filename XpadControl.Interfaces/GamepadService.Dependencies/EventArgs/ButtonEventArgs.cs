@@ -1,4 +1,4 @@
-﻿namespace XpadControl.Services.GamepadService.EventArgs
+﻿namespace XpadControl.Interfaces.GamepadService.Dependencies.EventArgs
 {
     public class ButtonEventArgs : System.EventArgs
     {

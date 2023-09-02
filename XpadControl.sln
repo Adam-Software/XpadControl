@@ -5,11 +5,6 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpadControl", "XpadControl.csproj", "{9E11D24B-1608-493A-842F-0B38AC130CAB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AC945C69-87D1-4CB2-99A8-7F2C090A6072}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpadControl.Interfaces", "XpadControl.Interfaces\XpadControl.Interfaces.csproj", "{5B918874-11B7-4712-98DA-2DFE1965A7B6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpadControl.Windows.Services", "XpadControl.Windows.Services\XpadControl.Windows.Services.csproj", "{907C26DC-494D-42ED-8CCC-8DBA0D2508CD}"

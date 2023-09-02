@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XpadControl.Services.WebSocketCkientService
+namespace XpadControl.Interfaces.WebSocketCkientService
 {
     public interface IWebSocketClientsService : IDisposable
     {

@@ -3,10 +3,10 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using XpadControl.Services.GamepadService;
-using XpadControl.Services.GamepadService.EventArgs;
-using XpadControl.Services.LoggerService;
-using XpadControl.Services.WebSocketCkientService;
+using XpadControl.Interfaces.GamepadService;
+using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
+using XpadControl.Interfaces.LoggerService;
+using XpadControl.Interfaces.WebSocketCkientService;
 
 namespace XpadControl
 {
@@ -27,7 +27,6 @@ namespace XpadControl
             mGamepadService = gamepadService;
             mApplicationLifetime = applicationLifetime;
 
-            // register to lifetime callbacks
             mApplicationLifetime.ApplicationStarted.Register(OnStarted);
             mApplicationLifetime.ApplicationStopped.Register(OnStopped);
             mApplicationLifetime.ApplicationStopping.Register(OnStopping);

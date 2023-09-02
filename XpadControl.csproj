@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,11 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="XpadControl.Common.Services\**" />
     <Compile Remove="XpadControl.Interfaces\**" />
-    <Compile Remove="XpadControl.Services\**" />
+    <Compile Remove="XpadControl.Linux.Services\**" />
+    <Compile Remove="XpadControl.Windows.Services\**" />
+    <EmbeddedResource Remove="XpadControl.Common.Services\**" />
     <EmbeddedResource Remove="XpadControl.Interfaces\**" />
+    <EmbeddedResource Remove="XpadControl.Linux.Services\**" />
+    <EmbeddedResource Remove="XpadControl.Windows.Services\**" />
+    <None Remove="XpadControl.Common.Services\**" />
     <None Remove="XpadControl.Interfaces\**" />
-    <None Remove="XpadControl.Services\**" />
+    <None Remove="XpadControl.Linux.Services\**" />
+    <None Remove="XpadControl.Windows.Services\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,8 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="XpadControl.Common.Services\XpadControl.Common.Services.csproj" />
     <ProjectReference Include="XpadControl.Interfaces\XpadControl.Interfaces.csproj" />
-    <ProjectReference Include="XpadControl.Services\XpadControl.Services.csproj" />
+    <ProjectReference Include="XpadControl.Linux.Services\XpadControl.Linux.Services.csproj" />
+    <ProjectReference Include="XpadControl.Windows.Services\XpadControl.Windows.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

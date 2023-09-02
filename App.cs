@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using XpadControl.Services.GamepadService;

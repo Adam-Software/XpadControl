@@ -2,24 +2,17 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <TargetFramework>net7.0-windows</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="XpadControl.Dll\**" />
+    <Compile Remove="XpadControl.Interfaces\**" />
     <Compile Remove="XpadControl.Services\**" />
-    <Compile Remove="XpadControl.WindowsServices.Interface\**" />
-    <Compile Remove="XpadControl.WindowsServices\**" />
-    <EmbeddedResource Remove="XpadControl.Dll\**" />
-    <EmbeddedResource Remove="XpadControl.Services\**" />
-    <EmbeddedResource Remove="XpadControl.WindowsServices.Interface\**" />
-    <EmbeddedResource Remove="XpadControl.WindowsServices\**" />
-    <None Remove="XpadControl.Dll\**" />
+    <EmbeddedResource Remove="XpadControl.Interfaces\**" />
+    <None Remove="XpadControl.Interfaces\**" />
     <None Remove="XpadControl.Services\**" />
-    <None Remove="XpadControl.WindowsServices.Interface\**" />
-    <None Remove="XpadControl.WindowsServices\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="XpadControl.Interfaces\XpadControl.Interfaces.csproj" />
     <ProjectReference Include="XpadControl.Services\XpadControl.Services.csproj" />
   </ItemGroup>
 

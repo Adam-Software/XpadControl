@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using XInputium.XInput;
 using XpadControl.Interfaces.GamepadService;
@@ -32,16 +31,18 @@ namespace XpadControl.Windows.Services.GamepadService
                 mLoggerService.WriteErrorLog($"Error when bind gamepad {ex.Message}");
             }
 
-           
-
             if (mGamepad != null)
             {
-                mGamepad.LeftJoystick.PositionChanged += LeftJoystick_PositionChanged;
-                mGamepad.ButtonPressed += MGamepad_ButtonPressed;
+                mGamepad.LeftJoystick.PositionChanged += LeftJoystickPositionChanged;
+                mGamepad.ButtonStateChanged += ButtonStateChanged;
+                mGamepad.ButtonPressed += ButtonPressed;
             }
             
             Task.Run(Start);
         }
+
+
+
         private Task Start()
         {
             try
@@ -59,39 +60,29 @@ namespace XpadControl.Windows.Services.GamepadService
             return Task.CompletedTask;
         }
 
+        #region Gamepad event
 
-        private void MGamepad_ButtonPressed(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
+        private void ButtonPressed(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
         {
             mLoggerService.WriteVerboseLog($"{e.Button}");
         }
 
-        private void LeftJoystick_PositionChanged(object sender, EventArgs e)
+        private void ButtonStateChanged(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
+        {
+            mLoggerService.WriteVerboseLog($"{e.Button}");
+        }
+
+        private void LeftJoystickPositionChanged(object sender, EventArgs e)
         {
             mLoggerService.WriteVerboseLog($"X {mGamepad.LeftJoystick.RawX} Y {mGamepad.LeftJoystick.RawY}");
         }
+
+        #endregion
 
         public void Dispose()
         {
             mLoggerService.WriteVerboseLog($"Dispose {nameof(GamepadService)} called");
         }
-
-        #region Linux gamepad event
-
-        //private void ButtonChanged(object sender, Gamepad.ButtonEventArgs e)
-        //{
-        //    mLoggerService.WriteVerboseLog($"{e.Button} is {e.Pressed}");
-        //
-        //   OnRaiseButtonChangedEvent(e.Button, e.Pressed);
-        //}
-
-        //private void AxisChanged(object sender, Gamepad.AxisEventArgs e)
-        //{
-        //    mLoggerService.WriteVerboseLog($"{e.Axis} is {e.Value}");
-
-        //    OnRaiseAxisChangedEvent(e.Axis, e.Value);
-        //}
-
-        #endregion
 
         #region Raise events
 

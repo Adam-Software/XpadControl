@@ -1,8 +1,9 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using Gamepad;
+using System;
 using XpadControl.Interfaces.GamepadService;
-using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 using XpadControl.Interfaces.LoggerService;
+using AxisEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.AxisEventArgs;
+using ButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
 
 namespace XpadControl.Linux.Services.GamepadService
 {
@@ -11,7 +12,7 @@ namespace XpadControl.Linux.Services.GamepadService
         public event AxisChangedEventHandler RaiseAxisChangedEvent;
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
 
-        private readonly Gamepad.GamepadController? mGamepadLinux;
+        private readonly GamepadController mGamepad;
         private readonly ILoggerService mLoggerService;
 
         public GamepadService(ILoggerService loggerService) 
@@ -22,8 +23,7 @@ namespace XpadControl.Linux.Services.GamepadService
            
             try
             {
-                
-                mGamepadLinux = new Gamepad.GamepadController("/dev/input/js0");    
+                mGamepad = new GamepadController("/dev/input/js0");    
             }
             catch (Exception ex)
             {
@@ -31,10 +31,10 @@ namespace XpadControl.Linux.Services.GamepadService
             }
             
 
-            if (mGamepadLinux != null)
+            if (mGamepad != null)
             {
-                mGamepadLinux.AxisChanged += AxisChanged;
-                mGamepadLinux.ButtonChanged += ButtonChanged;
+                mGamepad.AxisChanged += AxisChanged;
+                mGamepad.ButtonChanged += ButtonChanged;
             }    
         }
 
@@ -42,11 +42,11 @@ namespace XpadControl.Linux.Services.GamepadService
         {
             mLoggerService.WriteVerboseLog($"Dispose {nameof(GamepadService)} called");
 
-            mGamepadLinux?.Dispose();
+            mGamepad?.Dispose();
         }
 
 
-        #region Linux gamepad event
+        #region Gamepad event
 
         private void ButtonChanged(object sender, Gamepad.ButtonEventArgs e)
         {

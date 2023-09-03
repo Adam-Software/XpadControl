@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using XInputium.XInput;
 using XpadControl.Interfaces.GamepadService;
@@ -40,6 +41,9 @@ namespace XpadControl.Windows.Services.GamepadService
             }
 
             Task.Run(Start);
+
+            mLoggerService.WriteVerboseLog($"Is gamepad connected: {mGamepad.IsConnected}");
+
         }
         private async Task Start()
         {

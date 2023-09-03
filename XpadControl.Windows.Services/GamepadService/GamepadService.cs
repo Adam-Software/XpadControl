@@ -32,30 +32,31 @@ namespace XpadControl.Windows.Services.GamepadService
                 mLoggerService.WriteErrorLog($"Error when bind gamepad {ex.Message}");
             }
 
+           
 
             if (mGamepad != null)
             {
                 mGamepad.LeftJoystick.PositionChanged += LeftJoystick_PositionChanged;
-                mGamepad.LeftJoystick.PropertyChanged += LeftJoystick_PropertyChanged;
                 mGamepad.ButtonPressed += MGamepad_ButtonPressed;
             }
-
+            
             Task.Run(Start);
-
-            mLoggerService.WriteVerboseLog($"Is gamepad connected: {mGamepad.IsConnected}");
-
         }
-        private async Task Start()
+        private Task Start()
         {
             try
             {
-                mGamepad.Update();
-                await Task.Delay(1000);
+                while (true)
+                {
+                    mGamepad.Update();
+                }
             }
             catch (Exception ex)
             {
                 mLoggerService.WriteErrorLog($"{ex.Message}");
             }
+
+            return Task.CompletedTask;
         }
 
 
@@ -64,22 +65,14 @@ namespace XpadControl.Windows.Services.GamepadService
             mLoggerService.WriteVerboseLog($"{e.Button}");
         }
 
-        private void LeftJoystick_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            mLoggerService.WriteVerboseLog($"{e}");
-        }
-
         private void LeftJoystick_PositionChanged(object sender, EventArgs e)
         {
-
-            mLoggerService.WriteVerboseLog($"{e}");
+            mLoggerService.WriteVerboseLog($"X {mGamepad.LeftJoystick.RawX} Y {mGamepad.LeftJoystick.RawY}");
         }
 
         public void Dispose()
         {
             mLoggerService.WriteVerboseLog($"Dispose {nameof(GamepadService)} called");
-
-            //mGamepad.
         }
 
         #region Linux gamepad event

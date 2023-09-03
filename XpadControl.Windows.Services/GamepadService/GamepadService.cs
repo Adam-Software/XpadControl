@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using XInputium.XInput;
 using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 using XpadControl.Interfaces.LoggerService;
@@ -10,7 +12,7 @@ namespace XpadControl.Windows.Services.GamepadService
         public event AxisChangedEventHandler RaiseAxisChangedEvent;
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
 
-        //private readonly Gamepad.GamepadController? mGamepadLinux;
+        private readonly XGamepad mGamepad;
         private readonly ILoggerService mLoggerService;
 
         public GamepadService(ILoggerService loggerService)
@@ -22,7 +24,7 @@ namespace XpadControl.Windows.Services.GamepadService
 
             try
             {
-                //mGamepadLinux = new Gamepad.GamepadController("/dev/input/js0");
+                mGamepad = new XGamepad();
             }
             catch (Exception ex)
             {
@@ -30,18 +32,50 @@ namespace XpadControl.Windows.Services.GamepadService
             }
 
 
-            //if (mGamepadLinux != null)
-            //{
-            //    mGamepadLinux.AxisChanged += AxisChanged;
-            //    mGamepadLinux.ButtonChanged += ButtonChanged;
-            //}    
+            if (mGamepad != null)
+            {
+                mGamepad.LeftJoystick.PositionChanged += LeftJoystick_PositionChanged;
+                mGamepad.LeftJoystick.PropertyChanged += LeftJoystick_PropertyChanged;
+                mGamepad.ButtonPressed += MGamepad_ButtonPressed;
+            }
+
+            Task.Run(Start);
+        }
+        private async Task Start()
+        {
+            try
+            {
+                mGamepad.Update();
+                await Task.Delay(1000);
+            }
+            catch (Exception ex)
+            {
+                mLoggerService.WriteErrorLog($"{ex.Message}");
+            }
+        }
+
+
+        private void MGamepad_ButtonPressed(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
+        {
+            mLoggerService.WriteVerboseLog($"{e.Button}");
+        }
+
+        private void LeftJoystick_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            mLoggerService.WriteVerboseLog($"{e}");
+        }
+
+        private void LeftJoystick_PositionChanged(object sender, EventArgs e)
+        {
+
+            mLoggerService.WriteVerboseLog($"{e}");
         }
 
         public void Dispose()
         {
             mLoggerService.WriteVerboseLog($"Dispose {nameof(GamepadService)} called");
 
-            //mGamepadLinux?.Dispose();
+            //mGamepad.
         }
 
         #region Linux gamepad event

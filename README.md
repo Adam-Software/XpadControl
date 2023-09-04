@@ -1,6 +1,6 @@
 # XpadControl
 
-A cross-platform application for controlling the Adam robot via a local/remote socket using an xbox gamepad and its analogues.
+A cross-platform console application  for controlling the Adam robot via a local/remote socket using an xbox gamepad and its analogues.
 
 ### Capture and simulation of game controllers
 

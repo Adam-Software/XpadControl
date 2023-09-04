@@ -10,6 +10,9 @@ using XpadControl.Common.Services.WebSocketCkientService;
 using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.LoggerService;
 using XpadControl.Interfaces.WebSocketCkientService;
+using LinuxGamepadService = XpadControl.Linux.Services.GamepadService.GamepadService;
+using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.GamepadService;
+using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 
 namespace XpadControl
 {
@@ -35,12 +38,14 @@ namespace XpadControl
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    builder.Services.AddSingleton<IGamepadService>(new Linux.Services.GamepadService.GamepadService(loogerService));
+                    builder.Services.AddSingleton<IGamepadService>(new LinuxGamepadService(loogerService));
                 }
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    builder.Services.AddSingleton<IGamepadService>(new Windows.Services.GamepadService.GamepadService(loogerService));
+                    //The Gamepad library for Windows requires background updates
+                    builder.Services.AddSingleton<IGamepadService>(new WindowsGamepadService(loogerService));
+                    builder.Services.AddHostedService<WindowsGamepadHostedService>();
                 }
 
                 builder.Services.AddHostedService<App>();

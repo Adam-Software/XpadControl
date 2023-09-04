@@ -10,5 +10,7 @@ namespace XpadControl.Interfaces.GamepadService
     {
         public event AxisChangedEventHandler RaiseAxisChangedEvent;
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
+
+        public virtual void Update() { }
     }
 }

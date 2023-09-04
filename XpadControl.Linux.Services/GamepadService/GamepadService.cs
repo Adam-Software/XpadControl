@@ -7,7 +7,7 @@ using ButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.Event
 
 namespace XpadControl.Linux.Services.GamepadService
 {
-    public class GamepadService :  IGamepadService
+    public class GamepadService : IGamepadService
     {
         public event AxisChangedEventHandler RaiseAxisChangedEvent;
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;

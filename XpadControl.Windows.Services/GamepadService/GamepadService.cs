@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Hosting;
+using System;
 using XInputium.XInput;
 using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
@@ -7,11 +7,11 @@ using XpadControl.Interfaces.LoggerService;
 
 namespace XpadControl.Windows.Services.GamepadService
 {
-    public class GamepadService :  IGamepadService
+    public class GamepadService : IGamepadService
     {
         public event AxisChangedEventHandler RaiseAxisChangedEvent;
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
-
+        
         private readonly XGamepad mGamepad;
         private readonly ILoggerService mLoggerService;
 
@@ -37,29 +37,13 @@ namespace XpadControl.Windows.Services.GamepadService
                 mGamepad.ButtonStateChanged += ButtonStateChanged;
                 mGamepad.ButtonPressed += ButtonPressed;
             }
-            
-            Task.Run(Start);
         }
 
-
-
-        private Task Start()
+        public void Update() 
         {
-            try
-            {
-                while (true)
-                {
-                    mGamepad.Update();
-                }
-            }
-            catch (Exception ex)
-            {
-                mLoggerService.WriteErrorLog($"{ex.Message}");
-            }
-
-            return Task.CompletedTask;
+            mGamepad.Update();
         }
-
+        
         #region Gamepad event
 
         private void ButtonPressed(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)

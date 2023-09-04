@@ -18,7 +18,6 @@ namespace XpadControl.Windows.Services.GamepadService
         {
             mLoggerService = loggerService;
 
-
             mLoggerService.WriteVerboseLog("OS is Windows");
 
             try

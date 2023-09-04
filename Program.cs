@@ -34,7 +34,23 @@ namespace XpadControl
             try
             {
                 builder.Services.AddSingleton<ILoggerService>(loogerService);
-                builder.Services.AddSingleton<IWebSocketClientsService>(new WebSocketClientsService(loogerService));
+
+                Uri uri = new("ws://127.0.0.1:9001");
+
+                try
+                {
+                    uri = ReadUriFromSettings(configuration);
+                }
+                catch (Exception ex) 
+                {
+                    Console.Error.WriteLine($"{ex.Message}");
+                }
+                finally
+                {
+                    Console.WriteLine($"WebSocket uri {uri}");
+                }
+                
+                builder.Services.AddSingleton<IWebSocketClientsService>(new WebSocketClientsService(loogerService, uri));
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
@@ -59,7 +75,23 @@ namespace XpadControl
             using IHost host = builder.Build();
             host.RunAsync().Wait();
             host.WaitForShutdownAsync();
+        }
 
+        private static Uri ReadUriFromSettings(IConfigurationRoot configuration)
+        {
+            IConfigurationSection appSettings = configuration.GetRequiredSection("AppSettings");
+
+            string webSocketHost = appSettings["WebSocketHost"];
+            string webSocketPort = appSettings["WebSocketPort"];
+            string webSocketPath = appSettings["WebSocketPath"];
+
+            if (string.IsNullOrEmpty(webSocketHost) || string.IsNullOrEmpty(webSocketPort) || string.IsNullOrEmpty(webSocketPath))
+                throw new Exception("Error create uri from configuration");
+            
+            string ws = $"ws://{webSocketHost}:{webSocketPort}{webSocketPath}";
+
+            Uri uri = new(ws);
+            return uri;
         }
     }
 }

@@ -38,6 +38,11 @@ namespace XpadControl.Linux.Services.GamepadService
             }    
         }
 
+        private static float ConvertThumbToFloat(short axis)
+        {
+            return ((float)axis) / (axis >= 0 ? 32767 : 32768);
+        }
+
         public void Dispose()
         {
             mLoggerService.WriteVerboseLog($"Dispose {nameof(GamepadService)} called");
@@ -58,6 +63,26 @@ namespace XpadControl.Linux.Services.GamepadService
         private void AxisChanged(object sender, Gamepad.AxisEventArgs e)
         {
             mLoggerService.WriteVerboseLog($"{e.Axis} is {e.Value}");
+
+            switch (e.Axis)
+            {
+                case 0:
+                    float x0 = ConvertThumbToFloat(e.Value);
+                    mLoggerService.WriteVerboseLog($"LEFT STICK X:{x0} or {e.Value}");
+                    break;
+                case 1:
+                    float y0 = ConvertThumbToFloat(e.Value);
+                    mLoggerService.WriteVerboseLog($"LEFT STICK Y:{y0} or {e.Value}");
+                    break; 
+                case 2:
+                    float x1 = ConvertThumbToFloat(e.Value);
+                    mLoggerService.WriteVerboseLog($"RIGHT STICK X:{x1} or {e.Value}");
+                    break;
+                case 3:
+                    float y1 = ConvertThumbToFloat(e.Value);
+                    mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{y1} or {e.Value}");
+                    break;
+            }
 
             OnRaiseAxisChangedEvent(e.Axis, e.Value);
         }

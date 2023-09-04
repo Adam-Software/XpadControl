@@ -56,7 +56,7 @@ namespace XpadControl.Windows.Services.GamepadService
 
         private void LeftJoystickPositionChanged(object sender, EventArgs e)
         {
-            mLoggerService.WriteVerboseLog($"X {mGamepad.LeftJoystick.RawX} Y {mGamepad.LeftJoystick.RawY}");
+            mLoggerService.WriteVerboseLog($"Raw.X {mGamepad.LeftJoystick.RawX} Raw.Y {mGamepad.LeftJoystick.RawY}");
         }
 
         #endregion

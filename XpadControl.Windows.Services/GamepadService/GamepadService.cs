@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using System;
+﻿using System;
 using XInputium.XInput;
 using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;

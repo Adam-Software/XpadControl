@@ -56,7 +56,6 @@ namespace XpadControl
                 Console.WriteLine(ex.ToString());
             }
 
-
             using IHost host = builder.Build();
             host.RunAsync().Wait();
             host.WaitForShutdownAsync();

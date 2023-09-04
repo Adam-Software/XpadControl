@@ -11,6 +11,7 @@ namespace XpadControl.Interfaces.GamepadService
         public event AxisChangedEventHandler RaiseAxisChangedEvent;
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
 
+        // Call this on every app/game frame if needed
         public virtual void Update() { }
     }
 }

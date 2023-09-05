@@ -32,12 +32,19 @@ namespace XpadControl
             mApplicationLifetime.ApplicationStopping.Register(OnStopping);
 
             mGamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
-            mGamepadService.RaiseAxisChangedEvent += RaiseAxisChangedEvent;
+
+            mGamepadService.RaiseLeftAxisChangedEvent += RaiseLeftAxisChangedEvent;
+            mGamepadService.RaiseRightAxisChangedEvent += RaiseRightAxisChangedEvent;
         }
 
-        private void RaiseAxisChangedEvent(object sender, AxisEventArgs e)
+        private void RaiseRightAxisChangedEvent(object sender, AxisEventArgs e)
         {
-            mLoggerService.WriteDebugLog($"RaiseAxisChangedEvent {e.Axis} is {e.Value}");
+            mLoggerService.WriteDebugLog($"RaiseRightAxisChangedEvent {e.Axis} is {e.Value} x {e.X} y {e.Y}");
+        }
+
+        private void RaiseLeftAxisChangedEvent(object sender, AxisEventArgs e)
+        {
+            mLoggerService.WriteDebugLog($"RaiseLeftAxisChangedEvent {e.Axis} is {e.Value} x {e.X} y {e.Y}");
         }
 
         private void RaiseButtonChangedEvent(object sender, ButtonEventArgs e)

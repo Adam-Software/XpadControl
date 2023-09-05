@@ -9,8 +9,11 @@ namespace XpadControl.Linux.Services.GamepadService
 {
     public class GamepadService : IGamepadService
     {
-        public event AxisChangedEventHandler RaiseAxisChangedEvent;
+        public event LeftAxisChangedEventHandler RaiseLeftAxisChangedEvent;
+        public event RightAxisChangedEventHandler RaiseRightAxisChangedEvent;
+
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
+
 
         private readonly GamepadController mGamepad;
         private readonly ILoggerService mLoggerService;
@@ -64,41 +67,70 @@ namespace XpadControl.Linux.Services.GamepadService
         {
             mLoggerService.WriteVerboseLog($"{e.Axis} is {e.Value}");
 
-            switch (e.Axis)
+            float x0 = 0, y0 = 0, x1 = 0, y1 = 0;
+            byte axys = e.Axis;
+
+            switch (axys)
             {
                 case 0:
-                    float x0 = ConvertThumbToFloat(e.Value);
+                    x0 = ConvertThumbToFloat(e.Value);
                     mLoggerService.WriteVerboseLog($"LEFT STICK X:{x0} or {e.Value}");
                     break;
                 case 1:
-                    float y0 = ConvertThumbToFloat(e.Value);
+                    y0 = ConvertThumbToFloat(e.Value);
                     mLoggerService.WriteVerboseLog($"LEFT STICK Y:{y0} or {e.Value}");
                     break; 
                 case 2:
-                    float x1 = ConvertThumbToFloat(e.Value);
+                    x1 = ConvertThumbToFloat(e.Value);
                     mLoggerService.WriteVerboseLog($"RIGHT STICK X:{x1} or {e.Value}");
                     break;
                 case 3:
-                    float y1 = ConvertThumbToFloat(e.Value);
+                    y1 = ConvertThumbToFloat(e.Value);
                     mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{y1} or {e.Value}");
                     break;
             }
 
-            OnRaiseAxisChangedEvent(e.Axis, e.Value);
+            switch (axys <=1)
+            {
+                case true:
+                    OnRaiseLeftAxisChangedEvent(e.Axis, e.Value, x0, y0);
+                    break;
+
+                case false:
+                    OnRaiseLeftAxisChangedEvent(e.Axis, e.Value, x1, y1);
+                    break;
+            }
         }
 
         #endregion
 
         #region Raise events
 
-        protected virtual void OnRaiseAxisChangedEvent(byte axis, short value)
+        protected virtual void OnRaiseRightAxisChangedEvent(byte axis, short value, float x, float y)
         {
-            AxisChangedEventHandler raiseEvent = RaiseAxisChangedEvent;
+            RightAxisChangedEventHandler raiseEvent = RaiseRightAxisChangedEvent;
+
+            AxisEventArgs eventArgs = new()
+            {
+                Axis = axis,
+                Value = value,
+                X = x,
+                Y = y
+            };
+
+            raiseEvent?.Invoke(this, eventArgs);
+        }
+
+        protected virtual void OnRaiseLeftAxisChangedEvent(byte axis, short value, float x, float y)
+        {
+            LeftAxisChangedEventHandler raiseEvent = RaiseLeftAxisChangedEvent;
 
             AxisEventArgs eventArgs = new()
             {
                  Axis = axis,
-                 Value = value
+                 Value = value,
+                 X = x,
+                 Y = y
             };
 
             raiseEvent?.Invoke(this, eventArgs);

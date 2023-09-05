@@ -8,9 +8,10 @@ namespace XpadControl.Windows.Services.GamepadService
 {
     public class GamepadService : IGamepadService
     {
-        public event AxisChangedEventHandler RaiseAxisChangedEvent;
+        public event LeftAxisChangedEventHandler RaiseLeftAxisChangedEvent;
+        public event RightAxisChangedEventHandler RaiseRightAxisChangedEvent;
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
-        
+
         private readonly XGamepad mGamepad;
         private readonly ILoggerService mLoggerService;
 
@@ -31,32 +32,44 @@ namespace XpadControl.Windows.Services.GamepadService
 
             if (mGamepad != null)
             {
+                mGamepad.RightJoystickMove += MGamepad_RightJoystickMove;
+                mGamepad.LeftJoystickMove += MGamepad_LeftJoystickMove;
                 mGamepad.LeftJoystick.PositionChanged += LeftJoystickPositionChanged;
-                mGamepad.ButtonStateChanged += ButtonStateChanged;
-                mGamepad.ButtonPressed += ButtonPressed;
+                mGamepad.RightJoystick.PositionChanged += RightJoystickPositionChanged;
             }
         }
+
+
 
         public void Update() 
         {
             mGamepad.Update();
         }
-        
+
         #region Gamepad event
 
-        private void ButtonPressed(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
+        private void MGamepad_LeftJoystickMove(object sender, EventArgs e)
         {
-            mLoggerService.WriteVerboseLog($"{e.Button}");
+            OnRaiseLeftAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y);
         }
 
-        private void ButtonStateChanged(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
+        private void MGamepad_RightJoystickMove(object sender, EventArgs e)
         {
-            mLoggerService.WriteVerboseLog($"{e.Button}");
+            OnRaiseRightAxisChangedEvent(mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y);
         }
 
         private void LeftJoystickPositionChanged(object sender, EventArgs e)
         {
-            mLoggerService.WriteVerboseLog($"Raw.X {mGamepad.LeftJoystick.RawX} Raw.Y {mGamepad.LeftJoystick.RawY}");
+            mLoggerService.WriteVerboseLog($"X {mGamepad.LeftJoystick.X} Y {mGamepad.LeftJoystick.Y}");
+
+            
+        }
+
+        private void RightJoystickPositionChanged(object sender, EventArgs e)
+        {
+            mLoggerService.WriteVerboseLog($"X {mGamepad.RightJoystick.X} Y {mGamepad.RightJoystick.Y}");
+
+            
         }
 
         #endregion
@@ -68,14 +81,31 @@ namespace XpadControl.Windows.Services.GamepadService
 
         #region Raise events
 
-        protected virtual void OnRaiseAxisChangedEvent(byte axis, short value)
+        protected virtual void OnRaiseLeftAxisChangedEvent(float x, float y)
         {
-            AxisChangedEventHandler raiseEvent = RaiseAxisChangedEvent;
+            LeftAxisChangedEventHandler raiseEvent = RaiseLeftAxisChangedEvent;
 
             AxisEventArgs eventArgs = new()
             {
-                 Axis = axis,
-                 Value = value
+                 Axis = 0,
+                 Value = 0,
+                 X = x,
+                 Y = y
+            };
+
+            raiseEvent?.Invoke(this, eventArgs);
+        }
+
+        protected virtual void OnRaiseRightAxisChangedEvent(float x, float y)
+        {
+            LeftAxisChangedEventHandler raiseEvent = RaiseLeftAxisChangedEvent;
+
+            AxisEventArgs eventArgs = new()
+            {
+                Axis = 0,
+                Value = 0,
+                X = x,
+                Y = y
             };
 
             raiseEvent?.Invoke(this, eventArgs);

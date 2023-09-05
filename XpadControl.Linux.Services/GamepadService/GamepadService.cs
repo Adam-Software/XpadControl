@@ -2,8 +2,8 @@
 using System;
 using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.LoggerService;
-using AxisEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.AxisEventArgs;
-using ButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
+using MyAxisEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.AxisEventArgs;
+using MyButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
 
 namespace XpadControl.Linux.Services.GamepadService
 {
@@ -56,14 +56,14 @@ namespace XpadControl.Linux.Services.GamepadService
 
         #region Gamepad event
 
-        private void ButtonChanged(object sender, Gamepad.ButtonEventArgs e)
+        private void ButtonChanged(object sender, ButtonEventArgs e)
         {
             mLoggerService.WriteVerboseLog($"{e.Button} is {e.Pressed}");
 
             OnRaiseButtonChangedEvent(e.Button, e.Pressed);
         }
 
-        private void AxisChanged(object sender, Gamepad.AxisEventArgs e)
+        private void AxisChanged(object sender, AxisEventArgs e)
         {
             mLoggerService.WriteVerboseLog($"{e.Axis} is {e.Value}");
 
@@ -110,7 +110,7 @@ namespace XpadControl.Linux.Services.GamepadService
         {
             RightAxisChangedEventHandler raiseEvent = RaiseRightAxisChangedEvent;
 
-            AxisEventArgs eventArgs = new()
+            MyAxisEventArgs eventArgs = new()
             {
                 Axis = axis,
                 Value = value,
@@ -125,7 +125,7 @@ namespace XpadControl.Linux.Services.GamepadService
         {
             LeftAxisChangedEventHandler raiseEvent = RaiseLeftAxisChangedEvent;
 
-            AxisEventArgs eventArgs = new()
+            MyAxisEventArgs eventArgs = new()
             {
                  Axis = axis,
                  Value = value,
@@ -140,7 +140,7 @@ namespace XpadControl.Linux.Services.GamepadService
         {
             ButtonChangedEventHandler raiseEvent = RaiseButtonChangedEvent;
 
-            ButtonEventArgs eventArgs = new()
+            MyButtonEventArgs eventArgs = new()
             {
                  Button = button,
                  Pressed = pressed

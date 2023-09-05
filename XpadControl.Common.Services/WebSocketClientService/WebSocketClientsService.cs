@@ -23,6 +23,8 @@ namespace XpadControl.Common.Services.WebSocketCkientService
             {
                 ReconnectTimeout = null
             };
+
+            StartOrFail();
         }
 
         public bool IsRunning => mWebsocketClient.IsRunning;
@@ -33,6 +35,7 @@ namespace XpadControl.Common.Services.WebSocketCkientService
         {
             mLoggerService.WriteVerboseLog($"Dispose {nameof(WebSocketCkientService)} called");
 
+            StopOrFail();
             mWebsocketClient.Dispose();
         }
 

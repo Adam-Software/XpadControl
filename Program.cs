@@ -13,6 +13,8 @@ using XpadControl.Interfaces.WebSocketCkientService;
 using LinuxGamepadService = XpadControl.Linux.Services.GamepadService.GamepadService;
 using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.GamepadService;
 using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
+using System.Configuration;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace XpadControl
 {
@@ -35,21 +37,7 @@ namespace XpadControl
             {
                 builder.Services.AddSingleton<ILoggerService>(loogerService);
 
-                Uri uri = new("ws://127.0.0.1:9001");
-
-                try
-                {
-                    uri = ReadUriFromSettings(configuration);
-                }
-                catch (Exception ex) 
-                {
-                    Console.Error.WriteLine($"{ex.Message}");
-                }
-                finally
-                {
-                    Console.WriteLine($"WebSocket uri {uri}");
-                }
-                
+                Uri uri = ReadUriFromSettings(configuration);
                 builder.Services.AddSingleton<IWebSocketClientsService>(new WebSocketClientsService(loogerService, uri));
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -66,10 +54,15 @@ namespace XpadControl
 
                 builder.Services.AddHostedService<App>();
             }
+            catch (ConfigurationErrorsException ex)
+            {
+                Console.Error.WriteLine("Configuraton read error");
+                Console.Error.WriteLine(ex.ToString());
+            }
             catch (Exception ex) 
             {
                 Console.Error.WriteLine("Service initialization error");
-                Console.WriteLine(ex.ToString());
+                Console.Error.WriteLine(ex.ToString());
             }
 
             using IHost host = builder.Build();
@@ -86,7 +79,7 @@ namespace XpadControl
             string webSocketPath = appSettings["WebSocketPath"];
 
             if (string.IsNullOrEmpty(webSocketHost) || string.IsNullOrEmpty(webSocketPort) || string.IsNullOrEmpty(webSocketPath))
-                throw new Exception("Error create uri from configuration");
+                throw new ConfigurationErrorsException("Error create uri from configuration");
             
             string ws = $"ws://{webSocketHost}:{webSocketPort}{webSocketPath}";
 

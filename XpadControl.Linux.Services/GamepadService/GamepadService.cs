@@ -97,7 +97,7 @@ namespace XpadControl.Linux.Services.GamepadService
                     break;
 
                 case false:
-                    OnRaiseLeftAxisChangedEvent(e.Axis, e.Value, x1, y1);
+                    OnRaiseRightAxisChangedEvent(e.Axis, e.Value, x1, y1);
                     break;
             }
         }

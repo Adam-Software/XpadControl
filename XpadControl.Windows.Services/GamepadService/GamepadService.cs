@@ -32,8 +32,6 @@ namespace XpadControl.Windows.Services.GamepadService
 
             if (mGamepad != null)
             {
-                mGamepad.RightJoystickMove += MGamepad_RightJoystickMove;
-                mGamepad.LeftJoystickMove += MGamepad_LeftJoystickMove;
                 mGamepad.LeftJoystick.PositionChanged += LeftJoystickPositionChanged;
                 mGamepad.RightJoystick.PositionChanged += RightJoystickPositionChanged;
             }
@@ -48,18 +46,10 @@ namespace XpadControl.Windows.Services.GamepadService
 
         #region Gamepad event
 
-        private void MGamepad_LeftJoystickMove(object sender, EventArgs e)
-        {
-            OnRaiseLeftAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y);
-        }
-
-        private void MGamepad_RightJoystickMove(object sender, EventArgs e)
-        {
-            OnRaiseRightAxisChangedEvent(mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y);
-        }
-
         private void LeftJoystickPositionChanged(object sender, EventArgs e)
         {
+            OnRaiseLeftAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y);
+
             mLoggerService.WriteVerboseLog($"X {mGamepad.LeftJoystick.X} Y {mGamepad.LeftJoystick.Y}");
 
             
@@ -67,9 +57,9 @@ namespace XpadControl.Windows.Services.GamepadService
 
         private void RightJoystickPositionChanged(object sender, EventArgs e)
         {
-            mLoggerService.WriteVerboseLog($"X {mGamepad.RightJoystick.X} Y {mGamepad.RightJoystick.Y}");
+            OnRaiseRightAxisChangedEvent(mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y);
 
-            
+            mLoggerService.WriteVerboseLog($"X {mGamepad.RightJoystick.X} Y {mGamepad.RightJoystick.Y}");            
         }
 
         #endregion

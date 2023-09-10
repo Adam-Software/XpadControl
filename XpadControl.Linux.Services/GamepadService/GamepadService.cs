@@ -2,6 +2,7 @@
 using System;
 using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.LoggerService;
+using XpadControl.Interfaces.GamepadService.Dependencies.Extensions;
 using MyAxisEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.AxisEventArgs;
 using MyButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
 
@@ -40,11 +41,6 @@ namespace XpadControl.Linux.Services.GamepadService
             }    
         }
 
-        private static float ConvertThumbToFloat(short axis)
-        {
-            return ((float)axis) / (axis >= 0 ? 32767 : 32768);
-        }
-
         public void Dispose()
         {
             mLoggerService.WriteVerboseLog($"Dispose {nameof(GamepadService)} called");
@@ -73,19 +69,19 @@ namespace XpadControl.Linux.Services.GamepadService
             switch (axis)
             {
                 case 0:
-                    x0 = ConvertThumbToFloat(value);
+                    x0 = value.ToFloat();
                     mLoggerService.WriteVerboseLog($"LEFT STICK X:{x0} or {value}");
                     break;
                 case 1:
-                    y0 = -ConvertThumbToFloat(value);
+                    y0 = -value.ToFloat();
                     mLoggerService.WriteVerboseLog($"LEFT STICK Y:{y0} or {value}");
                     break; 
                 case 2:
-                    x1 = ConvertThumbToFloat(value);
+                    x1 = value.ToFloat();
                     mLoggerService.WriteVerboseLog($"RIGHT STICK X:{x1} or {value}");
                     break;
                 case 3:
-                    y1 = -ConvertThumbToFloat(value);
+                    y1 = -value.ToFloat();
                     mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{y1} or {value}");
                     break;
             }

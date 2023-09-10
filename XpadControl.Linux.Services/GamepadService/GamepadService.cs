@@ -14,7 +14,6 @@ namespace XpadControl.Linux.Services.GamepadService
 
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
 
-
         private readonly GamepadController mGamepad;
         private readonly ILoggerService mLoggerService;
 
@@ -65,39 +64,40 @@ namespace XpadControl.Linux.Services.GamepadService
 
         private void AxisChanged(object sender, AxisEventArgs e)
         {
-            mLoggerService.WriteVerboseLog($"{e.Axis} is {e.Value}");
-
             float x0 = 0, y0 = 0, x1 = 0, y1 = 0;
-            byte axys = e.Axis;
+            byte axis = e.Axis;
+            short value = e.Value;
 
-            switch (axys)
+            mLoggerService.WriteVerboseLog($"{axis} is {value}");
+
+            switch (axis)
             {
                 case 0:
-                    x0 = ConvertThumbToFloat(e.Value);
-                    mLoggerService.WriteVerboseLog($"LEFT STICK X:{x0} or {e.Value}");
+                    x0 = ConvertThumbToFloat(value);
+                    mLoggerService.WriteVerboseLog($"LEFT STICK X:{x0} or {value}");
                     break;
                 case 1:
-                    y0 = ConvertThumbToFloat(e.Value);
-                    mLoggerService.WriteVerboseLog($"LEFT STICK Y:{y0} or {e.Value}");
+                    y0 = ConvertThumbToFloat(value);
+                    mLoggerService.WriteVerboseLog($"LEFT STICK Y:{y0} or {value}");
                     break; 
                 case 2:
-                    x1 = ConvertThumbToFloat(e.Value);
-                    mLoggerService.WriteVerboseLog($"RIGHT STICK X:{x1} or {e.Value}");
+                    x1 = ConvertThumbToFloat(value);
+                    mLoggerService.WriteVerboseLog($"RIGHT STICK X:{x1} or {value}");
                     break;
                 case 3:
-                    y1 = ConvertThumbToFloat(e.Value);
-                    mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{y1} or {e.Value}");
+                    y1 = ConvertThumbToFloat(value);
+                    mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{y1} or {value}");
                     break;
             }
 
-            switch (axys <=1 )
+            switch (axis <=1)
             {
                 case true:
-                    OnRaiseLeftAxisChangedEvent(e.Axis, e.Value, x0, y0);
+                    OnRaiseLeftAxisChangedEvent(axis, value, x0, y0);
                     break;
 
                 case false:
-                    OnRaiseRightAxisChangedEvent(e.Axis, e.Value, x1, y1);
+                    OnRaiseRightAxisChangedEvent(axis, value, x1, y1);
                     break;
             }
         }

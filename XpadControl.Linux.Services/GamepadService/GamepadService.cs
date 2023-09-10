@@ -77,7 +77,7 @@ namespace XpadControl.Linux.Services.GamepadService
                     mLoggerService.WriteVerboseLog($"LEFT STICK X:{x0} or {value}");
                     break;
                 case 1:
-                    y0 = ConvertThumbToFloat(value);
+                    y0 = -ConvertThumbToFloat(value);
                     mLoggerService.WriteVerboseLog($"LEFT STICK Y:{y0} or {value}");
                     break; 
                 case 2:
@@ -85,7 +85,7 @@ namespace XpadControl.Linux.Services.GamepadService
                     mLoggerService.WriteVerboseLog($"RIGHT STICK X:{x1} or {value}");
                     break;
                 case 3:
-                    y1 = ConvertThumbToFloat(value);
+                    y1 = -ConvertThumbToFloat(value);
                     mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{y1} or {value}");
                     break;
             }

@@ -90,7 +90,7 @@ namespace XpadControl.Linux.Services.GamepadService
                     break;
             }
 
-            switch (axys <=1)
+            switch (axys <=1 )
             {
                 case true:
                     OnRaiseLeftAxisChangedEvent(e.Axis, e.Value, x0, y0);

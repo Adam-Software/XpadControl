@@ -37,8 +37,6 @@ namespace XpadControl.Windows.Services.GamepadService
             }
         }
 
-
-
         public void Update() 
         {
             mGamepad.Update();
@@ -51,8 +49,6 @@ namespace XpadControl.Windows.Services.GamepadService
             OnRaiseLeftAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y);
 
             mLoggerService.WriteVerboseLog($"X {mGamepad.LeftJoystick.X} Y {mGamepad.LeftJoystick.Y}");
-
-            
         }
 
         private void RightJoystickPositionChanged(object sender, EventArgs e)
@@ -88,7 +84,7 @@ namespace XpadControl.Windows.Services.GamepadService
 
         protected virtual void OnRaiseRightAxisChangedEvent(float x, float y)
         {
-            LeftAxisChangedEventHandler raiseEvent = RaiseLeftAxisChangedEvent;
+            RightAxisChangedEventHandler raiseEvent = RaiseRightAxisChangedEvent;
 
             AxisEventArgs eventArgs = new()
             {

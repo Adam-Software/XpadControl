@@ -90,13 +90,13 @@ namespace XpadControl.Linux.Services.GamepadService
 
             OnRaiseAxisChangedEvent(axis, value, lx, ly, rx, ry);
 
-            switch (axis <=1)
+            switch (axis)
             {
-                case true:
+                case <1:
                     OnRaiseLeftAxisChangedEvent(axis, value, lx, ly);
                     break;
 
-                case false:
+                case >=3 and <=4:
                     OnRaiseRightAxisChangedEvent(axis, value, rx, ry);
                     break;
             }

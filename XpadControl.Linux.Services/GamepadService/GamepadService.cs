@@ -78,11 +78,11 @@ namespace XpadControl.Linux.Services.GamepadService
                     ly = -value.ThumbToFloat();
                     mLoggerService.WriteVerboseLog($"LEFT STICK Y:{ly} or {value}");
                     break; 
-                case 2:
+                case 3:
                     rx = value.ThumbToFloat();
                     mLoggerService.WriteVerboseLog($"RIGHT STICK X:{rx} or {value}");
                     break;
-                case 3:
+                case 4:
                     ry = -value.ThumbToFloat();
                     mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{ry} or {value}");
                     break;

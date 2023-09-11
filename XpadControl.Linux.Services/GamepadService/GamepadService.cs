@@ -75,6 +75,9 @@ namespace XpadControl.Linux.Services.GamepadService
                     lx = value.ThumbToFloat();
                     mLoggerService.WriteVerboseLog($"LEFT STICK X:{lx} or {value}");
                     break;
+                case 2:
+                    mLoggerService.WriteVerboseLog($"LEFT TRIGGER value is {value}");
+                    break;
                 case 1:
                     ly = -value.ThumbToFloat();
                     mLoggerService.WriteVerboseLog($"LEFT STICK Y:{ly} or {value}");
@@ -86,6 +89,9 @@ namespace XpadControl.Linux.Services.GamepadService
                 case 4:
                     ry = -value.ThumbToFloat();
                     mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{ry} or {value}");
+                    break;
+                case 5:
+                    mLoggerService.WriteVerboseLog($"RIGHT TRIGGER value is {value}");
                     break;
             }
 

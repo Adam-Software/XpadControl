@@ -60,9 +60,10 @@ namespace XpadControl.Linux.Services.GamepadService
             OnRaiseButtonChangedEvent(e.Button, e.Pressed);
         }
 
+        float lx = 0, ly = 0, rx = 0, ry = 0;
+
         private void AxisChanged(object sender, AxisEventArgs e)
         {
-            float lx = 0, ly = 0, rx = 0, ry = 0;
             byte axis = e.Axis;
             short value = e.Value;
 

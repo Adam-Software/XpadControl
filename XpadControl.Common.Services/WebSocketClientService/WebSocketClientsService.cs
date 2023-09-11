@@ -21,12 +21,35 @@ namespace XpadControl.Common.Services.WebSocketCkientService
 
             mWebsocketClient = new WebsocketClient(uri)
             {
-                ReconnectTimeout = null
+                ReconnectTimeout = null,
+                 
             };
 
+            mWebsocketClient.ReconnectionHappened.Subscribe(ReconectHappened);
+            mWebsocketClient.DisconnectionHappened.Subscribe(DisconnectionHappened);
+
             StartOrFail();
+
+            mLoggerService.WriteInformationLog($"Connect with uri {uri.AbsoluteUri} result {IsRunning}");
         }
 
+        #region client events 
+
+        private void DisconnectionHappened(DisconnectionInfo info)
+        {
+            mLoggerService.WriteInformationLog($"DisconnectionHappened reason {info.Type}");
+        }
+
+        private void ReconectHappened(ReconnectionInfo info)
+        {
+            mLoggerService.WriteInformationLog($"ReconectHappened reason {info.Type}");
+        }
+
+        #endregion
+
+        /// <summary>
+        /// If connect to server true, false otherwise
+        /// </summary>
         public bool IsRunning => mWebsocketClient.IsRunning;
 
         public bool IsStarted => mWebsocketClient.IsStarted;

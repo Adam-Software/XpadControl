@@ -1,12 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 using XpadControl.Interfaces.LoggerService;
 using XpadControl.Interfaces.WebSocketCkientService;
+using XpadControl.Model;
 
 namespace XpadControl
 {
@@ -32,24 +35,30 @@ namespace XpadControl
             mApplicationLifetime.ApplicationStopping.Register(OnStopping);
 
             mGamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
-
-            mGamepadService.RaiseLeftAxisChangedEvent += RaiseLeftAxisChangedEvent;
-            mGamepadService.RaiseRightAxisChangedEvent += RaiseRightAxisChangedEvent;
+            mGamepadService.RaiseAxisChangedEvent += RaiseAxisChangedEvent;
         }
 
-        private void RaiseRightAxisChangedEvent(object sender, AxisEventArgs e)
+        private void RaiseAxisChangedEvent(object sender, AxisEventArgs left, AxisEventArgs right)
         {
-            mLoggerService.WriteDebugLog($"RaiseRightAxisChangedEvent {e.Axis} is {e.Value} x {e.X} y {e.Y}");
-        }
+            VectorModel vector = new()
+            {
+                Move = new VectorItem
+                {
+                    X = left.X,
+                    Y = left.Y,
+                    Z = right.X
+                }
+            };
 
-        private void RaiseLeftAxisChangedEvent(object sender, AxisEventArgs e)
-        {
-            mLoggerService.WriteDebugLog($"RaiseLeftAxisChangedEvent {e.Axis} is {e.Value} x {e.X} y {e.Y}");
+            string json = JsonSerializer.Serialize(vector);
+            mWebSocketClientsService.SendTextInstant(json);
+
+            mLoggerService.WriteDebugLog($"lx {left.X} ly {left.Y} rx {right.X} ry {right.Y}");
         }
 
         private void RaiseButtonChangedEvent(object sender, ButtonEventArgs e)
         {
-            mLoggerService.WriteDebugLog($"RaiseButtonChangedEvent {e.Button} is {e.Pressed}");
+            mLoggerService.WriteVerboseLog($"RaiseButtonChangedEvent {e.Button} is {e.Pressed}");
         }
 
         private void OnStopping()

@@ -10,10 +10,12 @@ namespace XpadControl.Linux.Services.GamepadService
 {
     public class GamepadService : IGamepadService
     {
+        public event AxisChangedEventHandler RaiseAxisChangedEvent;
         public event LeftAxisChangedEventHandler RaiseLeftAxisChangedEvent;
         public event RightAxisChangedEventHandler RaiseRightAxisChangedEvent;
 
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
+       
 
         private readonly GamepadController mGamepad;
         private readonly ILoggerService mLoggerService;
@@ -60,7 +62,7 @@ namespace XpadControl.Linux.Services.GamepadService
 
         private void AxisChanged(object sender, AxisEventArgs e)
         {
-            float x0 = 0, y0 = 0, x1 = 0, y1 = 0;
+            float lx = 0, ly = 0, rx = 0, ry = 0;
             byte axis = e.Axis;
             short value = e.Value;
 
@@ -69,31 +71,33 @@ namespace XpadControl.Linux.Services.GamepadService
             switch (axis)
             {
                 case 0:
-                    x0 = value.ToFloat();
-                    mLoggerService.WriteVerboseLog($"LEFT STICK X:{x0} or {value}");
+                    lx = value.ThumbToFloat();
+                    mLoggerService.WriteVerboseLog($"LEFT STICK X:{lx} or {value}");
                     break;
                 case 1:
-                    y0 = -value.ToFloat();
-                    mLoggerService.WriteVerboseLog($"LEFT STICK Y:{y0} or {value}");
+                    ly = -value.ThumbToFloat();
+                    mLoggerService.WriteVerboseLog($"LEFT STICK Y:{ly} or {value}");
                     break; 
                 case 2:
-                    x1 = value.ToFloat();
-                    mLoggerService.WriteVerboseLog($"RIGHT STICK X:{x1} or {value}");
+                    rx = value.ThumbToFloat();
+                    mLoggerService.WriteVerboseLog($"RIGHT STICK X:{rx} or {value}");
                     break;
                 case 3:
-                    y1 = -value.ToFloat();
-                    mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{y1} or {value}");
+                    ry = -value.ThumbToFloat();
+                    mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{ry} or {value}");
                     break;
             }
+
+            OnRaiseAxisChangedEvent(axis, value, lx, ly, rx, ry);
 
             switch (axis <=1)
             {
                 case true:
-                    OnRaiseLeftAxisChangedEvent(axis, value, x0, y0);
+                    OnRaiseLeftAxisChangedEvent(axis, value, lx, ly);
                     break;
 
                 case false:
-                    OnRaiseRightAxisChangedEvent(axis, value, x1, y1);
+                    OnRaiseRightAxisChangedEvent(axis, value, rx, ry);
                     break;
             }
         }
@@ -101,6 +105,30 @@ namespace XpadControl.Linux.Services.GamepadService
         #endregion
 
         #region Raise events
+
+
+        protected virtual void OnRaiseAxisChangedEvent(byte axis, short value, float lx, float ly, float rx, float ry)
+        {
+            AxisChangedEventHandler raiseEvent = RaiseAxisChangedEvent;
+
+            MyAxisEventArgs leftEventArgs = new()
+            {
+                Axis = axis,
+                Value = value,
+                X = lx,
+                Y = ly
+            };
+
+            MyAxisEventArgs rightEventArgs = new()
+            {
+                Axis = axis,
+                Value = value,
+                X = rx,
+                Y = ry
+            };
+
+            raiseEvent?.Invoke(this, leftEventArgs, rightEventArgs);
+        }
 
         protected virtual void OnRaiseRightAxisChangedEvent(byte axis, short value, float x, float y)
         {

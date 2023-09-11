@@ -11,6 +11,7 @@ namespace XpadControl.Windows.Services.GamepadService
         public event LeftAxisChangedEventHandler RaiseLeftAxisChangedEvent;
         public event RightAxisChangedEventHandler RaiseRightAxisChangedEvent;
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
+        public event AxisChangedEventHandler RaiseAxisChangedEvent;
 
         private readonly XGamepad mGamepad;
         private readonly ILoggerService mLoggerService;
@@ -37,6 +38,7 @@ namespace XpadControl.Windows.Services.GamepadService
             }
         }
 
+        
         public void Update() 
         {
             mGamepad.Update();
@@ -47,6 +49,7 @@ namespace XpadControl.Windows.Services.GamepadService
         private void LeftJoystickPositionChanged(object sender, EventArgs e)
         {
             OnRaiseLeftAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y);
+            OnRaiseAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y, mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y);
 
             mLoggerService.WriteVerboseLog($"X {mGamepad.LeftJoystick.X} Y {mGamepad.LeftJoystick.Y}");
         }
@@ -54,6 +57,7 @@ namespace XpadControl.Windows.Services.GamepadService
         private void RightJoystickPositionChanged(object sender, EventArgs e)
         {
             OnRaiseRightAxisChangedEvent(mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y);
+            OnRaiseAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y, mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y);
 
             mLoggerService.WriteVerboseLog($"X {mGamepad.RightJoystick.X} Y {mGamepad.RightJoystick.Y}");            
         }
@@ -66,6 +70,29 @@ namespace XpadControl.Windows.Services.GamepadService
         }
 
         #region Raise events
+
+        protected virtual void OnRaiseAxisChangedEvent(float lx, float ly, float rx, float ry)
+        {
+            AxisChangedEventHandler raiseEvent = RaiseAxisChangedEvent;
+
+            AxisEventArgs leftEventArgs = new()
+            {
+                Axis = 0,
+                Value = 0,
+                X = lx,
+                Y = ly
+            };
+
+            AxisEventArgs rightEventArgs = new()
+            {
+                Axis = 0,
+                Value = 0,
+                X = rx,
+                Y = ry
+            };
+
+            raiseEvent?.Invoke(this, leftEventArgs, rightEventArgs);
+        }
 
         protected virtual void OnRaiseLeftAxisChangedEvent(float x, float y)
         {

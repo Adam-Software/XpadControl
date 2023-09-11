@@ -11,8 +11,8 @@ namespace XpadControl.Math.Tests
             short minAxis = -32768;
             short maxAxis = 32767;
 
-            Assert.That(minAxis.ToFloat(), Is.EqualTo(-1));
-            Assert.That(maxAxis.ToFloat(), Is.EqualTo(1));
+            Assert.That(minAxis.ThumbToFloat(), Is.EqualTo(-1));
+            Assert.That(maxAxis.ThumbToFloat(), Is.EqualTo(1));
         }
     }
 }

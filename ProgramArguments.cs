@@ -11,15 +11,15 @@ namespace XpadControl
             Description = "Set the path to the settings file",
             DefaultValue = DefaultConfigName,
             ValueOptional = true)]
-        public string ConfigPathName;
+        internal string ConfigPathName;
 
         [SwitchArgument('v',  "version", 
             defaultValue: false,
             Description = "Show app version")]
-        public bool ShowVersion; 
+        internal bool ShowVersion; 
 
         [SwitchArgument('h', "help", defaultValue: false, 
             Description = "Show this help")]
-        public bool ShowHelp;
+        internal bool ShowHelp;
     }
 }

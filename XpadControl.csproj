@@ -6,6 +6,8 @@
     <Nullable>disable</Nullable>
     <TargetFramework>net7.0-windows</TargetFramework>
     <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Adam-Software/XpadControl</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -49,6 +51,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="appsettings.debug.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="appsettings.default.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "XpadControl": {
+      "commandName": "Project",
+      "commandLineArgs": "-c appsettings.debug.json"
+    }
+  }
+}

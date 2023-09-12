@@ -78,7 +78,8 @@ namespace XpadControl.Linux.Services.GamepadService
                     mLoggerService.WriteVerboseLog($"LEFT STICK X:{lx} or {value}");
                     break;
                 case 2:
-                    OnRaiseLeftTriggerChangedEvent(value.ThumbToFloat());
+                    var leftTriggerValue = Convert.ToUInt16(value);
+                    OnRaiseLeftTriggerChangedEvent(leftTriggerValue);
                     mLoggerService.WriteVerboseLog($"LEFT TRIGGER value is {value}");
                     break;
                 case 1:
@@ -94,7 +95,8 @@ namespace XpadControl.Linux.Services.GamepadService
                     mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{ry} or {value}");
                     break;
                 case 5:
-                    OnRaiseRightTriggerChangedEvent(value.ThumbToFloat());
+                    var rightTriggerValue = Convert.ToUInt16(value);
+                    OnRaiseRightTriggerChangedEvent(rightTriggerValue);
                     mLoggerService.WriteVerboseLog($"RIGHT TRIGGER value is {value}");
                     break;
             }

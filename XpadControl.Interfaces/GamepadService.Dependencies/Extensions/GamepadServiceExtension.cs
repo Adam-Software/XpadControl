@@ -10,6 +10,11 @@
             return ((float)axis) / (axis >= 0 ? 32767 : 32768);
         }
 
+        public static float TriggerToFloat(this ushort trigger)
+        {
+            return ((float)trigger) / 65535;
+        }
+
         /// <summary>
         /// Copy from <see cref="https://github.com/AderitoSilva/XInputium/blob/main/source/XInputium/XInputium/XInput/XInputDevice.cs"/>
         /// </summary>

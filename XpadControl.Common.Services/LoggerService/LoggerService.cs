@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Core;
+using Serilog.Events;
 using XpadControl.Interfaces.LoggerService;
 
 namespace XpadControl.Common.Services.LoggerService
@@ -31,7 +32,7 @@ namespace XpadControl.Common.Services.LoggerService
 
         public void WriteFatalLog(string logMessage)
         {
-            mLogger?.Error(logMessage);
+            mLogger?.Fatal(logMessage);
         }
 
         public void WriteInformationLog(string logMessage)

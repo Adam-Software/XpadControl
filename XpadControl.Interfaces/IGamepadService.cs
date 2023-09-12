@@ -26,6 +26,6 @@ namespace XpadControl.Interfaces.GamepadService
         // Call this on every app/game frame if needed
         public virtual void Update() { }
 
-        protected virtual void OnRaiseAxisChangedEvent(byte axis, short value, float lx, float ly, float rx, float ry) { }
+        //protected virtual void OnRaiseAxisChangedEvent(byte axis, short value, float lx, float ly, float rx, float ry) { }
     }
 }

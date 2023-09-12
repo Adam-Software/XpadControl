@@ -5,6 +5,7 @@ using XpadControl.Interfaces.LoggerService;
 using XpadControl.Interfaces.GamepadService.Dependencies.Extensions;
 using MyAxisEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.AxisEventArgs;
 using MyButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
+using MyTriggerEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.TriggerEventArgs;
 
 namespace XpadControl.Linux.Services.GamepadService
 {
@@ -14,8 +15,10 @@ namespace XpadControl.Linux.Services.GamepadService
         public event LeftAxisChangedEventHandler RaiseLeftAxisChangedEvent;
         public event RightAxisChangedEventHandler RaiseRightAxisChangedEvent;
 
+        public event LeftTriggerChangedEventHandler RaiseLeftTriggerChangedEvent;
+        public event RightTriggerChangedEventHandler RaiseRightTriggerChangedEvent;
+
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
-       
 
         private readonly GamepadController mGamepad;
         private readonly ILoggerService mLoggerService;
@@ -35,7 +38,6 @@ namespace XpadControl.Linux.Services.GamepadService
                 mLoggerService.WriteErrorLog($"Error when bind gamepad {ex.Message}");
             }
             
-
             if (mGamepad != null)
             {
                 mGamepad.AxisChanged += AxisChanged;
@@ -76,6 +78,7 @@ namespace XpadControl.Linux.Services.GamepadService
                     mLoggerService.WriteVerboseLog($"LEFT STICK X:{lx} or {value}");
                     break;
                 case 2:
+                    OnRaiseLeftTriggerChangedEvent(value);
                     mLoggerService.WriteVerboseLog($"LEFT TRIGGER value is {value}");
                     break;
                 case 1:
@@ -91,6 +94,7 @@ namespace XpadControl.Linux.Services.GamepadService
                     mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{ry} or {value}");
                     break;
                 case 5:
+                    OnRaiseRightTriggerChangedEvent(value);
                     mLoggerService.WriteVerboseLog($"RIGHT TRIGGER value is {value}");
                     break;
             }
@@ -112,7 +116,6 @@ namespace XpadControl.Linux.Services.GamepadService
         #endregion
 
         #region Raise events
-
 
         protected virtual void OnRaiseAxisChangedEvent(byte axis, short value, float lx, float ly, float rx, float ry)
         {
@@ -162,6 +165,30 @@ namespace XpadControl.Linux.Services.GamepadService
                  Value = value,
                  X = x,
                  Y = y
+            };
+
+            raiseEvent?.Invoke(this, eventArgs);
+        }
+
+        protected virtual void OnRaiseLeftTriggerChangedEvent(float value)
+        {
+            LeftTriggerChangedEventHandler raiseEvent = RaiseLeftTriggerChangedEvent;
+
+            MyTriggerEventArgs eventArgs = new()
+            {
+                Value = value
+            };
+
+            raiseEvent?.Invoke(this, eventArgs);
+        }
+
+        protected virtual void OnRaiseRightTriggerChangedEvent(float value)
+        {
+            RightTriggerChangedEventHandler raiseEvent = RaiseRightTriggerChangedEvent;
+
+            MyTriggerEventArgs eventArgs = new()
+            {
+                Value = value
             };
 
             raiseEvent?.Invoke(this, eventArgs);

@@ -14,22 +14,39 @@ using LinuxGamepadService = XpadControl.Linux.Services.GamepadService.GamepadSer
 using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.GamepadService;
 using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 using System.Configuration;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Reflection;
 
 namespace XpadControl
 {
     public class Program 
     {
+        private static ProgramArguments mProgramArguments;
+
         static void Main(string[] args)
         {
+            try
+            {
+                if (!ParseArguments(args))
+                    return;
+            }
+            catch(FileNotFoundException e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
+
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile(mProgramArguments.ConfigPathName)
                 .Build();
 
             var loogerService = new LoggerService(configuration);
 
-            HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+            HostApplicationBuilder builder = Host.CreateApplicationBuilder();
             builder.Logging.ClearProviders();
             builder.Configuration.AddConfiguration(configuration);
 
@@ -85,6 +102,37 @@ namespace XpadControl
 
             Uri uri = new(ws);
             return uri;
+        }
+
+        private static bool ParseArguments(string[] args)
+        {
+            mProgramArguments = new();
+            CommandLineParser.CommandLineParser parser = new()
+            {
+                IgnoreCase = true,
+            };
+
+            parser.ExtractArgumentAttributes(mProgramArguments);
+            parser.ParseCommandLine(args);
+
+            if (mProgramArguments.ShowVersion)
+            {
+                Version v = Assembly.GetExecutingAssembly().GetName().Version;
+                Console.WriteLine($"{v}");
+                return false;
+            }
+
+            if (mProgramArguments.ShowHelp)
+            {
+                parser.ShowUsage();
+                return false;
+            }
+
+            if (!Path.Exists(mProgramArguments.ConfigPathName))
+                throw new FileNotFoundException($"Cannot find app settings file {mProgramArguments.ConfigPathName}");
+
+            return true;
+
         }
     }
 }

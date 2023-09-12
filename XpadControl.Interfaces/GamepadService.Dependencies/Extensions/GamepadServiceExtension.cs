@@ -14,13 +14,5 @@
         {
             return ((float)trigger) / 65535;
         }
-
-        /// <summary>
-        /// Copy from <see cref="https://github.com/AderitoSilva/XInputium/blob/main/source/XInputium/XInputium/XInput/XInputDevice.cs"/>
-        /// </summary>
-        /*public static float TriggerToFloat(this byte axis) 
-        {
-            return ((float)axis) / byte.MaxValue;   
-        }*/
     }
 }

@@ -35,6 +35,18 @@ namespace XpadControl
 
             mGamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
             mGamepadService.RaiseAxisChangedEvent += RaiseAxisChangedEvent;
+            mGamepadService.RaiseLeftTriggerChangedEvent += RaiseLeftTriggerChangedEvent;
+            mGamepadService.RaiseRightTriggerChangedEvent += RaiseRightTriggerChangedEvent;
+        }
+
+        private void RaiseRightTriggerChangedEvent(object sender, TriggerEventArgs e)
+        {
+            mLoggerService.WriteVerboseLog($"RaiseRightTriggerChangedEvent {e.Value}");
+        }
+
+        private void RaiseLeftTriggerChangedEvent(object sender, TriggerEventArgs e)
+        {
+            mLoggerService.WriteVerboseLog($"RaiseLeftTriggerChangedEvent {e.Value}");
         }
 
         private void RaiseAxisChangedEvent(object sender, AxisEventArgs left, AxisEventArgs right)

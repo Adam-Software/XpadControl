@@ -25,7 +25,7 @@ $ sudo dkms install -m xpad -v 0.4
 You can view the command line arguments by typing --help or -h in Linux:
 
 ```bash
-$ XpadControl.dll -h
+$ dotnet XpadControl.dll -h
         -c, --config[optional]... Set the path to the settings file
         -v, --version[optional]... Show app version
         -h, --help[optional]... Show this help
@@ -53,20 +53,20 @@ To set your own configuration file, you need to copy and rename the default ones
 If the file is located in the same directory as the executable, it is enough to specify only the name:
 
 ```bash
-$ XpadControl.dll -c mysettings.json
+$ dotnet XpadControl.dll -c mysettings.json
 
 ```
 
 If the configuration file is located in a nested directory relative to the executable file:
 
 ```bash
-$ XpadControl.dll -c settings/mysettings.json
+$ dotnet XpadControl.dll -c settings/mysettings.json
 
 ```
 
 If the configuration file is located in an external directory relative to the executable file, you must specify the full path:
 
 ```bash
-$ XpadControl.dll -c /etc/mysettings.json
+$ dotnet XpadControl.dll -c /etc/mysettings.json
 
 ```

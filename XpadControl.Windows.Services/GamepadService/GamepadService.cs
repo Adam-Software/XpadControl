@@ -8,11 +8,15 @@ namespace XpadControl.Windows.Services.GamepadService
 {
     public class GamepadService : IGamepadService
     {
+        public event AxisChangedEventHandler RaiseAxisChangedEvent;
         public event LeftAxisChangedEventHandler RaiseLeftAxisChangedEvent;
         public event RightAxisChangedEventHandler RaiseRightAxisChangedEvent;
-        public event ButtonChangedEventHandler RaiseButtonChangedEvent;
-        public event AxisChangedEventHandler RaiseAxisChangedEvent;
 
+        public event LeftTriggerChangedEventHandler RaiseLeftTriggerChangedEvent;
+        public event RightTriggerChangedEventHandler RaiseRightTriggerChangedEvent;
+
+        public event ButtonChangedEventHandler RaiseButtonChangedEvent;
+        
         private readonly XGamepad mGamepad;
         private readonly ILoggerService mLoggerService;
 
@@ -35,10 +39,11 @@ namespace XpadControl.Windows.Services.GamepadService
             {
                 mGamepad.LeftJoystick.PositionChanged += LeftJoystickPositionChanged;
                 mGamepad.RightJoystick.PositionChanged += RightJoystickPositionChanged;
+                mGamepad.LeftTrigger.ValueChanged += LeftTriggerValueChanged;
+                mGamepad.RightTrigger.ValueChanged += RightTriggerValueChanged;
             }
         }
 
-        
         public void Update() 
         {
             mGamepad.Update();
@@ -60,6 +65,20 @@ namespace XpadControl.Windows.Services.GamepadService
             OnRaiseAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y, mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y);
 
             mLoggerService.WriteVerboseLog($"X {mGamepad.RightJoystick.X} Y {mGamepad.RightJoystick.Y}");            
+        }
+
+        private void RightTriggerValueChanged(object sender, EventArgs e)
+        {
+            OnRaiseRightTriggerChangedEvent(mGamepad.RightTrigger.Value);
+
+            mLoggerService.WriteVerboseLog($"{mGamepad.RightTrigger.Value}");
+        }
+
+        private void LeftTriggerValueChanged(object sender, EventArgs e)
+        {
+            OnRaiseLeftTriggerChangedEvent(mGamepad.LeftTrigger.Value);
+
+            mLoggerService.WriteVerboseLog($"{mGamepad.LeftTrigger.Value}");
         }
 
         #endregion
@@ -119,6 +138,30 @@ namespace XpadControl.Windows.Services.GamepadService
                 Value = 0,
                 X = x,
                 Y = y
+            };
+
+            raiseEvent?.Invoke(this, eventArgs);
+        }
+
+        protected virtual void OnRaiseLeftTriggerChangedEvent(float value)
+        {
+            LeftTriggerChangedEventHandler raiseEvent = RaiseLeftTriggerChangedEvent;
+
+            TriggerEventArgs eventArgs = new()
+            {
+                Value = value
+            };
+
+            raiseEvent?.Invoke(this, eventArgs);
+        }
+
+        protected virtual void OnRaiseRightTriggerChangedEvent(float value)
+        {
+            RightTriggerChangedEventHandler raiseEvent = RaiseRightTriggerChangedEvent;
+
+            TriggerEventArgs eventArgs = new()
+            {
+                Value = value
             };
 
             raiseEvent?.Invoke(this, eventArgs);

@@ -6,6 +6,10 @@ namespace XpadControl.Interfaces.GamepadService
     public delegate void AxisChangedEventHandler(object sender, AxisEventArgs left, AxisEventArgs right);
     public delegate void LeftAxisChangedEventHandler(object sender, AxisEventArgs e);
     public delegate void RightAxisChangedEventHandler(object sender, AxisEventArgs e);
+
+    public delegate void LeftTriggerChangedEventHandler(object sender, TriggerEventArgs e);
+    public delegate void RightTriggerChangedEventHandler(object sender, TriggerEventArgs e);
+
     public delegate void ButtonChangedEventHandler(object sender, ButtonEventArgs e);
 
     public interface IGamepadService : IDisposable
@@ -13,6 +17,10 @@ namespace XpadControl.Interfaces.GamepadService
         public event AxisChangedEventHandler RaiseAxisChangedEvent;
         public event LeftAxisChangedEventHandler RaiseLeftAxisChangedEvent;
         public event RightAxisChangedEventHandler RaiseRightAxisChangedEvent;
+
+        public event LeftTriggerChangedEventHandler RaiseLeftTriggerChangedEvent;
+        public event RightTriggerChangedEventHandler RaiseRightTriggerChangedEvent;
+
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
 
         // Call this on every app/game frame if needed

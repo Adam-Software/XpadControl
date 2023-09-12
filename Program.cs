@@ -29,11 +29,6 @@ namespace XpadControl
                 if (!ParseArguments(args))
                     return;
             }
-            catch(FileNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
-                return;
-            }
             catch(Exception e)
             {
                 Console.WriteLine(e.Message);

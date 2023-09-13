@@ -1,6 +1,7 @@
 ﻿using System;
 using XInputium.XInput;
 using XpadControl.Interfaces.GamepadService;
+using XpadControl.Interfaces.GamepadService.Dependencies;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 using XpadControl.Interfaces.LoggerService;
 
@@ -45,17 +46,14 @@ namespace XpadControl.Windows.Services.GamepadService
 
                 mGamepad.ButtonPressed += ButtonPressed;
                 mGamepad.ButtonReleased += ButtonReleased;
+
+                mGamepad.ButtonStateChanged += ButtonStateChanged;
             }
         }
 
-        private void ButtonReleased(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
+        private void ButtonStateChanged(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
         {
-            mLoggerService.WriteVerboseLog($"{e.Button} is false");
-        }
-
-        private void ButtonPressed(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
-        {
-            mLoggerService.WriteVerboseLog($"{e.Button} is true");
+            OnRaiseButtonChangedEvent(e.Button.Button, e.Button.IsPressed);
         }
 
         public void Update() 
@@ -64,6 +62,23 @@ namespace XpadControl.Windows.Services.GamepadService
         }
 
         #region Gamepad event
+
+        #region Buttons
+
+        private void ButtonReleased(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
+        {
+            
+            mLoggerService.WriteVerboseLog($"{e.Button} is false");
+        }
+
+        private void ButtonPressed(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
+        {
+            mLoggerService.WriteVerboseLog($"{e.Button} is true");
+        }
+
+        #endregion
+
+        #region Axis
 
         private void LeftJoystickPositionChanged(object sender, EventArgs e)
         {
@@ -81,6 +96,10 @@ namespace XpadControl.Windows.Services.GamepadService
             mLoggerService.WriteVerboseLog($"X {mGamepad.RightJoystick.X} Y {mGamepad.RightJoystick.Y}");            
         }
 
+        #endregion
+
+        #region Trigger
+
         private void RightTriggerValueChanged(object sender, EventArgs e)
         {
             OnRaiseRightTriggerChangedEvent(mGamepad.RightTrigger.Value);
@@ -94,6 +113,8 @@ namespace XpadControl.Windows.Services.GamepadService
 
             mLoggerService.WriteVerboseLog($"{mGamepad.LeftTrigger.Value}");
         }
+
+        #endregion
 
         #endregion
 
@@ -181,7 +202,7 @@ namespace XpadControl.Windows.Services.GamepadService
             raiseEvent?.Invoke(this, eventArgs);
         }
 
-        protected virtual void OnRaiseButtonChangedEvent(byte button, bool pressed)
+        protected virtual void OnRaiseButtonChangedEvent(Buttons button, bool pressed)
         {
             ButtonChangedEventHandler raiseEvent = RaiseButtonChangedEvent;
 

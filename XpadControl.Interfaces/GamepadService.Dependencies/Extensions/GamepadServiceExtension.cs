@@ -55,5 +55,7 @@ namespace XpadControl.Interfaces.GamepadService.Dependencies.Extensions
                 
             return (float)value;
         }
+
+        
     }
 }

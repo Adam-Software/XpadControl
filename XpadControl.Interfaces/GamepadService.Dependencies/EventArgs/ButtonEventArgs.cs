@@ -2,7 +2,7 @@
 {
     public class ButtonEventArgs : System.EventArgs
     {
-        public byte Button { get; set; }
+        public Buttons Button { get; set; }
         public bool Pressed { get; set; }
     }
 }

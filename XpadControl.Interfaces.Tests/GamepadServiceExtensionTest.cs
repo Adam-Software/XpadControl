@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using XpadControl.Interfaces.GamepadService.Dependencies.Extensions;
 
-namespace XpadControl.Math.Tests
+namespace XpadControl.Interfaces.Tests
 {
     public class GamepadServiceExtensionTest
     {

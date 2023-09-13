@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpadControl.Linux.Services"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpadControl.Common.Services", "XpadControl.Common.Services\XpadControl.Common.Services.csproj", "{BA451E1B-609C-4675-984B-6187FACC3D58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpadControl.Math.Tests", "XpadControl.Math.Tests\XpadControl.Math.Tests.csproj", "{EF3632B4-5889-46D6-B300-44A9063CDEBF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpadControl.Math.Tests", "XpadControl.Interfaces.Tests\XpadControl.Interfaces.Tests.csproj", "{EF3632B4-5889-46D6-B300-44A9063CDEBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

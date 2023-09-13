@@ -39,9 +39,23 @@ namespace XpadControl.Windows.Services.GamepadService
             {
                 mGamepad.LeftJoystick.PositionChanged += LeftJoystickPositionChanged;
                 mGamepad.RightJoystick.PositionChanged += RightJoystickPositionChanged;
+
                 mGamepad.LeftTrigger.ValueChanged += LeftTriggerValueChanged;
                 mGamepad.RightTrigger.ValueChanged += RightTriggerValueChanged;
+
+                mGamepad.ButtonPressed += ButtonPressed;
+                mGamepad.ButtonReleased += ButtonReleased;
             }
+        }
+
+        private void ButtonReleased(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
+        {
+            mLoggerService.WriteVerboseLog($"{e.Button} is false");
+        }
+
+        private void ButtonPressed(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
+        {
+            mLoggerService.WriteVerboseLog($"{e.Button} is true");
         }
 
         public void Update() 

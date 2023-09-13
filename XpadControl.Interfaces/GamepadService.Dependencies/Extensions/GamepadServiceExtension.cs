@@ -47,17 +47,13 @@ namespace XpadControl.Interfaces.GamepadService.Dependencies.Extensions
             {
                 return (float)-1f;
             }
-            else
+           
+            if (value > 1f)
             {
-                if (value > 1f)
-                {
-                    return (float)((float)1f);
-                }
-                else
-                {
-                    return (float)((float)value);
-                }
+                return (float)1f;
             }
+                
+            return (float)value;
         }
     }
 }

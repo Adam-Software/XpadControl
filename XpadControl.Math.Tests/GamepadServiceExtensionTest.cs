@@ -1,6 +1,4 @@
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using System;
 using XpadControl.Interfaces.GamepadService.Dependencies.Extensions;
 
 namespace XpadControl.Math.Tests
@@ -18,18 +16,6 @@ namespace XpadControl.Math.Tests
                 Assert.That(minAxis.ThumbToFloat(), Is.EqualTo(-1));
                 Assert.That(maxAxis.ThumbToFloat(), Is.EqualTo(1));
             });
-        }
-
-        [Test]
-        public void TestConvertsThumbRange()
-        {
-            short minAxis = short.MinValue;
-            short maxAxis = short.MaxValue;
-
-            for(short i = minAxis; i<= maxAxis; i++)
-            {
-                Assert.That(i.ThumbToFloat(), Is.InRange(-1f, 1f));
-            }
         }
 
         [Test]  

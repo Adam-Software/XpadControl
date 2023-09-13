@@ -1,4 +1,6 @@
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
+using System;
 using XpadControl.Interfaces.GamepadService.Dependencies.Extensions;
 
 namespace XpadControl.Math.Tests
@@ -18,8 +20,8 @@ namespace XpadControl.Math.Tests
         [Test]  
         public void TestConvertsTriggerToFloat()
         {
-            ushort minTrigger = ushort.MinValue;
-            ushort maxTrigger = ushort.MaxValue;
+            short minTrigger = short.MinValue;
+            short maxTrigger = short.MaxValue;
 
             Assert.That(minTrigger.TriggerToFloat(), Is.EqualTo(0));
             Assert.That(maxTrigger.TriggerToFloat(), Is.EqualTo(1));

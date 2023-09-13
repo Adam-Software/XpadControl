@@ -10,9 +10,10 @@
             return ((float)axis) / (axis >= 0 ? 32767 : 32768);
         }
 
-        public static float TriggerToFloat(this ushort trigger)
+        public static float TriggerToFloat(this short trigger)
         {
-            return ((float)trigger) / 65535;
+            ushort usingedTrigger = (ushort)(trigger + 32768);
+            return ((float)usingedTrigger) / 65535;
         }
     }
 }

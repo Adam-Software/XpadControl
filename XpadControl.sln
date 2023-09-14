@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpadControl.Linux.Services"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpadControl.Common.Services", "XpadControl.Common.Services\XpadControl.Common.Services.csproj", "{BA451E1B-609C-4675-984B-6187FACC3D58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpadControl.Math.Tests", "XpadControl.Interfaces.Tests\XpadControl.Interfaces.Tests.csproj", "{EF3632B4-5889-46D6-B300-44A9063CDEBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpadControl.Interfaces.Tests", "XpadControl.Interfaces.Tests\XpadControl.Interfaces.Tests.csproj", "{EF3632B4-5889-46D6-B300-44A9063CDEBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpadControl.Windows.Services.Test", "XpadControl.Windows.Services.Test\XpadControl.Windows.Services.Test.csproj", "{6CC5DAF9-339E-4980-935A-14838C1EBF08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{EF3632B4-5889-46D6-B300-44A9063CDEBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF3632B4-5889-46D6-B300-44A9063CDEBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF3632B4-5889-46D6-B300-44A9063CDEBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CC5DAF9-339E-4980-935A-14838C1EBF08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CC5DAF9-339E-4980-935A-14838C1EBF08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CC5DAF9-339E-4980-935A-14838C1EBF08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CC5DAF9-339E-4980-935A-14838C1EBF08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

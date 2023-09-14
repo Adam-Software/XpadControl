@@ -4,6 +4,7 @@ using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.GamepadService.Dependencies;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 using XpadControl.Interfaces.LoggerService;
+using XpadControl.Windows.Services.Extensions;
 
 namespace XpadControl.Windows.Services.GamepadService
 {
@@ -51,11 +52,6 @@ namespace XpadControl.Windows.Services.GamepadService
             }
         }
 
-        private void ButtonStateChanged(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
-        {
-            OnRaiseButtonChangedEvent(e.Button.Button, e.Button.IsPressed);
-        }
-
         public void Update() 
         {
             mGamepad.Update();
@@ -65,15 +61,9 @@ namespace XpadControl.Windows.Services.GamepadService
 
         #region Buttons
 
-        private void ButtonReleased(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
+        private void ButtonStateChanged(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
         {
-            
-            mLoggerService.WriteVerboseLog($"{e.Button} is false");
-        }
-
-        private void ButtonPressed(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
-        {
-            mLoggerService.WriteVerboseLog($"{e.Button} is true");
+            OnRaiseButtonChangedEvent(e.Button.Button.ToButtons(), e.Button.IsPressed);
         }
 
         #endregion

@@ -54,15 +54,13 @@ namespace XpadControl.Linux.Services.GamepadService
             mGamepad?.Dispose();
         }
 
-
         #region Gamepad event
 
         private void ButtonChanged(object sender, ButtonEventArgs e)
         {
             mLoggerService.WriteVerboseLog($"{e.Button} is {e.Pressed}");
-            mLoggerService.WriteVerboseLog($"Converted value {e.Button.ToButtons()} is {e.Pressed}");
 
-            //OnRaiseButtonChangedEvent(e.Button.ToButtons(), e.Pressed);
+            OnRaiseButtonChangedEvent(e.Button.ToButtons(), e.Pressed);
         }
 
         float lx = 0, ly = 0, rx = 0, ry = 0;
@@ -77,7 +75,7 @@ namespace XpadControl.Linux.Services.GamepadService
             switch (axis)
             {
                 case 0:
-                    lx = value.ThumbToFloat();
+                    lx = value.AxisToFloat();
                     mLoggerService.WriteVerboseLog($"LEFT STICK X:{lx} or {value}");
                     break;
                 case 2:
@@ -86,21 +84,27 @@ namespace XpadControl.Linux.Services.GamepadService
                     mLoggerService.WriteVerboseLog($"LEFT TRIGGER value is {value}");
                     break;
                 case 1:
-                    ly = -value.ThumbToFloat();
+                    ly = -value.AxisToFloat();
                     mLoggerService.WriteVerboseLog($"LEFT STICK Y:{ly} or {value}");
                     break; 
                 case 3:
-                    rx = value.ThumbToFloat();
+                    rx = value.AxisToFloat();
                     mLoggerService.WriteVerboseLog($"RIGHT STICK X:{rx} or {value}");
                     break;
                 case 4:
-                    ry = -value.ThumbToFloat();
+                    ry = -value.AxisToFloat();
                     mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{ry} or {value}");
                     break;
                 case 5:
                     float rightTrigger = value.TriggerToFloat();
                     OnRaiseRightTriggerChangedEvent(rightTrigger);
                     mLoggerService.WriteVerboseLog($"RIGHT TRIGGER value is {value}");
+                    break;
+                case 6:
+                    mLoggerService.WriteVerboseLog($"X DPAD value is {value}");
+                    break;
+                case 7:
+                    mLoggerService.WriteVerboseLog($"Y DPAD value is {value}");
                     break;
             }
 

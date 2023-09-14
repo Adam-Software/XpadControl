@@ -6,6 +6,8 @@ using XpadControl.Interfaces.GamepadService.Dependencies.Extensions;
 using MyAxisEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.AxisEventArgs;
 using MyButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
 using MyTriggerEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.TriggerEventArgs;
+using XpadControl.Interfaces.GamepadService.Dependencies;
+using XpadControl.Linux.Services.Extensions;
 
 namespace XpadControl.Linux.Services.GamepadService
 {
@@ -59,7 +61,7 @@ namespace XpadControl.Linux.Services.GamepadService
         {
             mLoggerService.WriteVerboseLog($"{e.Button} is {e.Pressed}");
 
-            OnRaiseButtonChangedEvent(e.Button, e.Pressed);
+            OnRaiseButtonChangedEvent(e.Button.ToButtons(), e.Pressed);
         }
 
         float lx = 0, ly = 0, rx = 0, ry = 0;
@@ -196,7 +198,7 @@ namespace XpadControl.Linux.Services.GamepadService
             raiseEvent?.Invoke(this, eventArgs);
         }
 
-        protected virtual void OnRaiseButtonChangedEvent(byte button, bool pressed)
+        protected virtual void OnRaiseButtonChangedEvent(Buttons button, bool pressed)
         {
             ButtonChangedEventHandler raiseEvent = RaiseButtonChangedEvent;
 

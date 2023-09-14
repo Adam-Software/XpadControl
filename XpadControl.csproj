@@ -13,6 +13,7 @@
   <ItemGroup>
     <Compile Remove="XpadControl.Common.Services\**" />
     <Compile Remove="XpadControl.Interfaces\**" />
+    <Compile Remove="XpadControl.Linux.Services.Test\**" />
     <Compile Remove="XpadControl.Linux.Services\**" />
     <Compile Remove="XpadControl.Interfaces.Tests\**" />
     <Compile Remove="XpadControl.Services.Tests\**" />
@@ -21,6 +22,7 @@
     <Compile Remove="XpadControl.Windows.Services\**" />
     <EmbeddedResource Remove="XpadControl.Common.Services\**" />
     <EmbeddedResource Remove="XpadControl.Interfaces\**" />
+    <EmbeddedResource Remove="XpadControl.Linux.Services.Test\**" />
     <EmbeddedResource Remove="XpadControl.Linux.Services\**" />
     <EmbeddedResource Remove="XpadControl.Interfaces.Tests\**" />
     <EmbeddedResource Remove="XpadControl.Services.Tests\**" />
@@ -29,6 +31,7 @@
     <EmbeddedResource Remove="XpadControl.Windows.Services\**" />
     <None Remove="XpadControl.Common.Services\**" />
     <None Remove="XpadControl.Interfaces\**" />
+    <None Remove="XpadControl.Linux.Services.Test\**" />
     <None Remove="XpadControl.Linux.Services\**" />
     <None Remove="XpadControl.Interfaces.Tests\**" />
     <None Remove="XpadControl.Services.Tests\**" />

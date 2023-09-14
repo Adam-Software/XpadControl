@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\XpadControl.Interfaces\XpadControl.Interfaces.csproj" />
     <ProjectReference Include="..\XpadControl.Windows.Services\XpadControl.Windows.Services.csproj" />
   </ItemGroup>
 

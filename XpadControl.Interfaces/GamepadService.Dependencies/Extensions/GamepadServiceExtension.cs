@@ -7,7 +7,7 @@ namespace XpadControl.Interfaces.GamepadService.Dependencies.Extensions
         /// <summary>
         /// Copy from <see cref="https://github.com/AderitoSilva/XInputium/blob/main/source/XInputium/XInputium/XInput/XInputDevice.cs"/>
         /// </summary>
-        public static float ThumbToFloat(this short axis)
+        public static float AxisToFloat(this short axis)
         {
             float floatAxis = ((float)axis) / (axis >= 0 ? 32767 : 32768);
             return Clamp11(floatAxis);

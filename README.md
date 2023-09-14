@@ -48,7 +48,7 @@ Usage:
 When running the program without arguments, a configuration file named `appsettings.default.json` will be used, located in the same directory as the executable file.
 Console output is disabled in it, and the log level of the record is error.
 
-To set your own configuration file, you need to copy and rename the default ones, and then use the -c argument when starting the program.
+To set your own configuration file, you need to copy and rename the default ones, and then use the `-c` argument when starting the program.
 
 If the file is located in the same directory as the executable, it is enough to specify only the name:
 

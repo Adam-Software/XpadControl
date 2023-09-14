@@ -80,7 +80,7 @@ namespace XpadControl
 
         private void RaiseButtonChangedEvent(object sender, ButtonEventArgs e)
         {
-            mLoggerService.WriteVerboseLog($"RaiseButtonChangedEvent {e.Button} is {e.Pressed}");
+            //mLoggerService.WriteVerboseLog($"RaiseButtonChangedEvent {e.Button} is {e.Pressed}");
         }
 
         #endregion

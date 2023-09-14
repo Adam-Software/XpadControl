@@ -60,6 +60,7 @@ namespace XpadControl.Linux.Services.GamepadService
         private void ButtonChanged(object sender, ButtonEventArgs e)
         {
             mLoggerService.WriteVerboseLog($"{e.Button} is {e.Pressed}");
+            mLoggerService.WriteVerboseLog($"Converted value {e.Button.ToButtons()} is {e.Pressed}");
 
             //OnRaiseButtonChangedEvent(e.Button.ToButtons(), e.Pressed);
         }

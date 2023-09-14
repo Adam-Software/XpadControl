@@ -7,9 +7,17 @@ namespace XpadControl.Linux.Services.Extensions
         public static Buttons ToButtons(this byte button)
         {
             int inputButtons = button;
-            Buttons convertedButtons = (Buttons)inputButtons;
 
-            return convertedButtons;
+            return inputButtons switch
+            {
+                0 => Buttons.A,
+                1 => Buttons.B,
+                _ => Buttons.None,
+            };
+
+            //Buttons convertedButtons = (Buttons)inputButtons;
+
+            //return convertedButtons;
         }
     }
 }

@@ -45,9 +45,6 @@ namespace XpadControl.Windows.Services.GamepadService
                 mGamepad.LeftTrigger.ValueChanged += LeftTriggerValueChanged;
                 mGamepad.RightTrigger.ValueChanged += RightTriggerValueChanged;
 
-                mGamepad.ButtonPressed += ButtonPressed;
-                mGamepad.ButtonReleased += ButtonReleased;
-
                 mGamepad.ButtonStateChanged += ButtonStateChanged;
             }
         }

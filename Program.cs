@@ -15,6 +15,7 @@ using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.Gamepa
 using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 using System.Configuration;
 using System.Reflection;
+using XpadControl.Interfaces.WebSocketClientsService.Dependencies;
 
 namespace XpadControl
 {
@@ -49,7 +50,7 @@ namespace XpadControl
             {
                 builder.Services.AddSingleton<ILoggerService>(loogerService);
 
-                Uri uri = ReadUriFromSettings(configuration);
+                UriCollection uri = ReadUriFromSettings(configuration);
                 builder.Services.AddSingleton<IWebSocketClientsService>(new WebSocketClientsService(loogerService, uri));
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -82,21 +83,17 @@ namespace XpadControl
             host.WaitForShutdownAsync();
         }
 
-        private static Uri ReadUriFromSettings(IConfigurationRoot configuration)
+        private static UriCollection ReadUriFromSettings(IConfigurationRoot configuration)
         {
             IConfigurationSection appSettings = configuration.GetRequiredSection("AppSettings");
 
             string webSocketHost = appSettings["WebSocketHost"];
             string webSocketPort = appSettings["WebSocketPort"];
-            string webSocketPath = appSettings["WebSocketPath"];
+            string wheelWebSocketPath = appSettings["WheelWebSocketPath"];
+            string servosWebSocketPath = appSettings["ServosWebSocketPath"];
 
-            if (string.IsNullOrEmpty(webSocketHost) || string.IsNullOrEmpty(webSocketPort) || string.IsNullOrEmpty(webSocketPath))
-                throw new ConfigurationErrorsException("Error create uri from configuration");
-            
-            string ws = $"ws://{webSocketHost}:{webSocketPort}{webSocketPath}";
-
-            Uri uri = new(ws);
-            return uri;
+            UriCollection uriCollection = new(webSocketHost, webSocketPort, wheelWebSocketPath, servosWebSocketPath); 
+            return uriCollection;
         }
 
         private static bool ParseArguments(string[] args)

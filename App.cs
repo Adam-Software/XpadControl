@@ -1,29 +1,26 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 using XpadControl.Interfaces.LoggerService;
 using XpadControl.Interfaces.WebSocketCkientService;
-using XpadControl.Model;
+using XpadControl.JsonModel;
 
 namespace XpadControl
 {
     public class App : IHostedService, IDisposable
     {
-        private readonly IConfiguration mConfiguration;
         private readonly ILoggerService mLoggerService;
         private readonly IWebSocketClientsService mWebSocketClientsService;
         private readonly IGamepadService mGamepadService;
         private readonly IHostApplicationLifetime mApplicationLifetime;
 
-        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IConfiguration configuration, 
-            IGamepadService gamepadService, IHostApplicationLifetime applicationLifetime)
+        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IGamepadService gamepadService, 
+            IHostApplicationLifetime applicationLifetime)
         {
-            mConfiguration = configuration;
             mLoggerService = loggerService;
             mWebSocketClientsService = webSocketClientsService;
             mGamepadService = gamepadService;
@@ -35,9 +32,16 @@ namespace XpadControl
 
             mGamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
             mGamepadService.RaiseAxisChangedEvent += RaiseAxisChangedEvent;
+
             mGamepadService.RaiseLeftTriggerChangedEvent += RaiseLeftTriggerChangedEvent;
             mGamepadService.RaiseRightTriggerChangedEvent += RaiseRightTriggerChangedEvent;
+
+            mGamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
         }
+
+        #region Gamepad event
+
+        #region Trigger event
 
         private void RaiseRightTriggerChangedEvent(object sender, TriggerEventArgs e)
         {
@@ -48,6 +52,10 @@ namespace XpadControl
         {
             mLoggerService.WriteVerboseLog($"RaiseLeftTriggerChangedEvent {e.Value}");
         }
+
+        #endregion
+
+        #region Axis event
 
         private void RaiseAxisChangedEvent(object sender, AxisEventArgs left, AxisEventArgs right)
         {
@@ -61,16 +69,25 @@ namespace XpadControl
                 }
             };
 
-            string json = JsonSerializer.Serialize(vector);
-            mWebSocketClientsService.SendTextInstant(json);
+            mWebSocketClientsService.SendTextInstant(vector);
 
             mLoggerService.WriteDebugLog($"lx {left.X} ly {left.Y} rx {right.X} ry {right.Y}");
         }
+
+        #endregion
+
+        #region Button event
 
         private void RaiseButtonChangedEvent(object sender, ButtonEventArgs e)
         {
             mLoggerService.WriteVerboseLog($"RaiseButtonChangedEvent {e.Button} is {e.Pressed}");
         }
+
+        #endregion
+
+        #endregion
+
+        #region App event 
 
         private void OnStopping()
         {
@@ -91,39 +108,7 @@ namespace XpadControl
         {
             mLoggerService.WriteInformationLog("App start. Try use gamepad");
 
-            
-                /* example async process */
-
-                /*Task.Run(async () =>
-                {
-                    try
-                    {
-                        // read AppSettings test
-                        IConfigurationSection appSettings = mConfiguration.GetRequiredSection("AppSettings");
-                        mLoggerService.WriteInformationLog("Setting version " + appSettings["Version"]);
-
-                        // execute service
-                        int testCalc = mWebSocketClientsService.CalculateCustomerAgs(1);
-                        mLoggerService.WriteVerboseLog($"Websocket calculation is {testCalc}");
-
-                        /*while (!cancellationToken.IsCancellationRequested)
-                        {
-                            mLoggerService.WriteVerboseLog("I do work");
-                            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
-                        }*/
-
-                /*}
-                catch (TaskCanceledException)
-                {
-                    mLoggerService.WriteVerboseLog($"App canceled");
-                }
-                catch (Exception ex)
-                {
-                    mLoggerService.WriteErrorLog($"Unhandled exception when run app {ex}");
-                }
-            }, cancellationToken);*/
-
-                return Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -131,6 +116,10 @@ namespace XpadControl
             mLoggerService.WriteVerboseLog("Task complete and stop async called");
             return Task.CompletedTask;
         }
+
+        #endregion
+
+        #region Dispose
 
         /// <summary>
         /// Dispose all services
@@ -152,5 +141,7 @@ namespace XpadControl
                 mGamepadService.Dispose();
             }
         }
+
+        #endregion
     }
 }

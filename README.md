@@ -5,7 +5,7 @@
 
 A cross-platform console application  for controlling the Adam robot via a local/remote socket using an xbox gamepad and its analogues.
 
-### Capture and simulation of game controllers
+## Capture and simulation of game controllers
 
 To capture the gamepad in Windows, the [XInputium](https://github.com/AderitoSilva/XInputium) library is used. In Linux the [Gamepad](https://github.com/nahueltaibo/gamepad) library is used.
 
@@ -70,3 +70,8 @@ If the configuration file is located in an external directory relative to the ex
 $ dotnet XpadControl.dll -c /etc/mysettings.json
 
 ```
+## Tested WebSocket server
+
+The test web socket server is located [here](https://raw.githubusercontent.com/Adam-Software/Adam-SDK/main/servers/GamepadDebugServer.py)
+
+

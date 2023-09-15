@@ -3,6 +3,8 @@ using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 
 namespace XpadControl.Interfaces.GamepadService
 {
+    #region Delegate axis/button/trigger
+
     public delegate void AxisChangedEventHandler(object sender, AxisEventArgs left, AxisEventArgs right);
     
     public delegate void LeftTriggerChangedEventHandler(object sender, TriggerEventArgs e);
@@ -10,8 +12,18 @@ namespace XpadControl.Interfaces.GamepadService
 
     public delegate void ButtonChangedEventHandler(object sender, ButtonEventArgs e);
 
+    #endregion
+
+    #region Delegate connect/disconect
+
+    public delegate void ConnectedChangedEventHandler(object sender, ConnectedEventArgs e);
+
+    #endregion
+
     public interface IGamepadService : IDisposable
     {
+        #region Event axis/button/trigger
+
         public event AxisChangedEventHandler RaiseAxisChangedEvent;
     
         public event LeftTriggerChangedEventHandler RaiseLeftTriggerChangedEvent;
@@ -19,9 +31,17 @@ namespace XpadControl.Interfaces.GamepadService
 
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
 
-        // Call this on every app/game frame if needed
-        public virtual void Update() { }
+        #endregion
 
-        //protected virtual void OnRaiseAxisChangedEvent(byte axis, short value, float lx, float ly, float rx, float ry) { }
+        #region Event connect/disconect
+
+        public event ConnectedChangedEventHandler RaiseConnectedChangedEvent;
+
+        #endregion
+
+        // Call this on every app/game frame in windows
+        // Call this for check connected/disconected in linux
+        public void Update();
+
     }
 }

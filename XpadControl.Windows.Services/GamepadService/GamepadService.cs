@@ -10,13 +10,21 @@ namespace XpadControl.Windows.Services.GamepadService
 {
     public class GamepadService : IGamepadService
     {
-        public event AxisChangedEventHandler RaiseAxisChangedEvent;
+        #region Event axis/button/trigger
 
+        public event AxisChangedEventHandler RaiseAxisChangedEvent;
         public event LeftTriggerChangedEventHandler RaiseLeftTriggerChangedEvent;
         public event RightTriggerChangedEventHandler RaiseRightTriggerChangedEvent;
-
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
-        
+
+        #endregion
+
+        #region Event connect/disconect
+
+        public event ConnectedChangedEventHandler RaiseConnectedChangedEvent;
+
+        #endregion
+
         private readonly XGamepad mGamepad;
         private readonly ILoggerService mLoggerService;
 
@@ -44,7 +52,16 @@ namespace XpadControl.Windows.Services.GamepadService
                 mGamepad.RightTrigger.ValueChanged += RightTriggerValueChanged;
 
                 mGamepad.ButtonStateChanged += ButtonStateChanged;
+                mGamepad.IsConnectedChanged += IsConnectedChanged;
             }
+        }
+
+        private void IsConnectedChanged(object sender, EventArgs e)
+        {
+            bool isConnected = mGamepad.IsConnected;
+            OnRaiseConnectedChangedEvent(isConnected);
+
+            mLoggerService.WriteInformationLog($"Gamepad conected state change. Now is {isConnected}");
         }
 
         public void Update() 
@@ -162,6 +179,18 @@ namespace XpadControl.Windows.Services.GamepadService
             };
 
             raiseEvent?.Invoke(this, eventArgs);
+        }
+
+        protected virtual void OnRaiseConnectedChangedEvent(bool isConnected)
+        {
+            ConnectedChangedEventHandler raiseEvent = RaiseConnectedChangedEvent;
+
+            ConnectedEventArgs eventArgs = new()
+            {
+                IsConnected = isConnected
+            };
+
+            raiseEvent.Invoke(this, eventArgs);
         }
 
         #endregion

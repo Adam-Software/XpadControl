@@ -9,7 +9,9 @@ using XpadControl.Linux.Services.Extensions;
 using MyAxisEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.AxisEventArgs;
 using MyButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
 using MyTriggerEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.TriggerEventArgs;
+using MyConnectedEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ConnectedEventArgs;
 using System.IO;
+
 
 namespace XpadControl.Linux.Services.GamepadService
 {
@@ -21,40 +23,71 @@ namespace XpadControl.Linux.Services.GamepadService
         public event RightTriggerChangedEventHandler RaiseRightTriggerChangedEvent;
 
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
+        public event ConnectedChangedEventHandler RaiseConnectedChangedEvent;
 
-        private readonly GamepadController mGamepad;
+        private GamepadController mGamepad;
         private readonly ILoggerService mLoggerService;
 
         public GamepadService(ILoggerService loggerService) 
         {
             mLoggerService = loggerService;
 
-            mLoggerService.WriteVerboseLog("OS is Linux");
-           
-            try
-            {
-                mGamepad = new GamepadController("/dev/input/js0");    
-            }
-            catch (Exception ex)
-            {
-                mLoggerService.WriteErrorLog($"Error when bind gamepad {ex.Message}");
-            }
-            
-            if (mGamepad != null)
-            {
-                mGamepad.AxisChanged += AxisChanged;
-                mGamepad.ButtonChanged += ButtonChanged;
-            }    
+            mLoggerService.WriteVerboseLog("OS is Linux");   
         }
 
         public void Update() 
         {
             if (File.Exists("/dev/input/js0"))
-                mLoggerService.WriteVerboseLog("Gamepad connected");
+            {
+                GamepadConnected();
+            }
+                
 
             if (!File.Exists("/dev/input/js0"))
-                mLoggerService.WriteVerboseLog("Gamepad disconnected");
+            {
+                GamepadDisconnected();
+            }
         }
+
+        #region Connect/Disconect gamepad methods
+
+        private void GamepadConnected()
+        {
+            OnRaiseConnectedChangedEvent(true);
+
+            try
+            {
+                mGamepad = new GamepadController("/dev/input/js0");
+            }
+            catch (Exception ex)
+            {
+                mLoggerService.WriteErrorLog($"Error when bind gamepad {ex.Message}");
+            }
+
+            if (mGamepad != null)
+            {
+                mGamepad.AxisChanged += AxisChanged;
+                mGamepad.ButtonChanged += ButtonChanged;
+            }
+
+            mLoggerService.WriteVerboseLog("Gamepad connected");
+        }
+
+        private void GamepadDisconnected()
+        {
+            OnRaiseConnectedChangedEvent(false);
+
+            if (mGamepad != null)
+            {
+                mGamepad.AxisChanged -= AxisChanged;
+                mGamepad.ButtonChanged -= ButtonChanged;
+                mGamepad = null;
+            }
+
+            mLoggerService.WriteVerboseLog("Gamepad disconnected");
+        }
+
+        #endregion
 
         public void Dispose()
         {
@@ -199,6 +232,18 @@ namespace XpadControl.Linux.Services.GamepadService
             ButtonChangedEventHandler raiseEvent = RaiseButtonChangedEvent;
 
             raiseEvent?.Invoke(this, eventArgs);
+        }
+
+        protected virtual void OnRaiseConnectedChangedEvent(bool isConnected)
+        {
+            ConnectedChangedEventHandler raiseEvent = RaiseConnectedChangedEvent;
+
+            MyConnectedEventArgs eventArgs = new()
+            {
+                IsConnected = isConnected
+            };
+
+            raiseEvent.Invoke(this, eventArgs);
         }
 
         #endregion

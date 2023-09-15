@@ -114,16 +114,12 @@ namespace XpadControl.Windows.Services.GamepadService
 
             AxisEventArgs leftEventArgs = new()
             {
-                Axis = 0,
-                Value = 0,
                 X = lx,
                 Y = ly
             };
 
             AxisEventArgs rightEventArgs = new()
             {
-                Axis = 0,
-                Value = 0,
                 X = rx,
                 Y = ry
             };

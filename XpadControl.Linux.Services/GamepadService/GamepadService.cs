@@ -127,22 +127,18 @@ namespace XpadControl.Linux.Services.GamepadService
 
         #region Raise events
 
-        protected virtual void OnRaiseAxisChangedEvent(byte axis, short value, float lx, float ly, float rx, float ry)
+        protected virtual void OnRaiseAxisChangedEvent(float lx, float ly, float rx, float ry)
         {
             AxisChangedEventHandler raiseEvent = RaiseAxisChangedEvent;
 
             MyAxisEventArgs leftEventArgs = new()
             {
-                Axis = axis,
-                Value = value,
                 X = lx,
                 Y = ly
             };
 
             MyAxisEventArgs rightEventArgs = new()
             {
-                Axis = axis,
-                Value = value,
                 X = rx,
                 Y = ry
             };

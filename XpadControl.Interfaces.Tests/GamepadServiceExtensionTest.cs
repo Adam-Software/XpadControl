@@ -13,8 +13,8 @@ namespace XpadControl.Interfaces.Tests
 
             Assert.Multiple(() =>
             {
-                Assert.That(minAxis.ThumbToFloat(), Is.EqualTo(-1));
-                Assert.That(maxAxis.ThumbToFloat(), Is.EqualTo(1));
+                Assert.That(minAxis.AxisToFloat(), Is.EqualTo(-1));
+                Assert.That(maxAxis.AxisToFloat(), Is.EqualTo(1));
             });
         }
 

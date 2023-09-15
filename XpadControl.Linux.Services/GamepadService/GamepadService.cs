@@ -14,8 +14,6 @@ namespace XpadControl.Linux.Services.GamepadService
     public class GamepadService : IGamepadService
     {
         public event AxisChangedEventHandler RaiseAxisChangedEvent;
-        public event LeftAxisChangedEventHandler RaiseLeftAxisChangedEvent;
-        public event RightAxisChangedEventHandler RaiseRightAxisChangedEvent;
 
         public event LeftTriggerChangedEventHandler RaiseLeftTriggerChangedEvent;
         public event RightTriggerChangedEventHandler RaiseRightTriggerChangedEvent;
@@ -63,7 +61,8 @@ namespace XpadControl.Linux.Services.GamepadService
             OnRaiseButtonChangedEvent(e.Button.ToButtons(), e.Pressed);
         }
 
-        float lx = 0, ly = 0, rx = 0, ry = 0;
+        private float lx = 0, ly = 0, rx = 0, ry = 0;
+        private float leftTrigger, rightTrigger = 0;
 
         private void AxisChanged(object sender, AxisEventArgs e)
         {
@@ -76,53 +75,55 @@ namespace XpadControl.Linux.Services.GamepadService
             {
                 case 0:
                     lx = value.AxisToFloat();
+                    OnRaiseAxisChangedEvent(axis, value, lx, ly, rx, ry);
+
                     mLoggerService.WriteVerboseLog($"LEFT STICK X:{lx} or {value}");
                     break;
                 case 2:
-                    float leftTrigger = value.TriggerToFloat();
+                    leftTrigger = value.TriggerToFloat();
                     OnRaiseLeftTriggerChangedEvent(leftTrigger);
+                    
                     mLoggerService.WriteVerboseLog($"LEFT TRIGGER value is {value}");
                     break;
                 case 1:
                     ly = -value.AxisToFloat();
+                    OnRaiseAxisChangedEvent(axis, value, lx, ly, rx, ry);
+
                     mLoggerService.WriteVerboseLog($"LEFT STICK Y:{ly} or {value}");
                     break; 
                 case 3:
                     rx = value.AxisToFloat();
+                    OnRaiseAxisChangedEvent(axis, value, lx, ly, rx, ry);
+
                     mLoggerService.WriteVerboseLog($"RIGHT STICK X:{rx} or {value}");
                     break;
                 case 4:
                     ry = -value.AxisToFloat();
+                    OnRaiseAxisChangedEvent(axis, value, lx, ly, rx, ry);
+
                     mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{ry} or {value}");
                     break;
                 case 5:
-                    float rightTrigger = value.TriggerToFloat();
+                    rightTrigger = value.TriggerToFloat();
                     OnRaiseRightTriggerChangedEvent(rightTrigger);
+                    
                     mLoggerService.WriteVerboseLog($"RIGHT TRIGGER value is {value}");
                     break;
                 case 6:
+                    value.ToButtonEventArgs(true);
+
                     mLoggerService.WriteVerboseLog($"X DPAD value is {value}");
                     break;
                 case 7:
+                    value.ToButtonEventArgs(false);
+
                     mLoggerService.WriteVerboseLog($"Y DPAD value is {value}");
-                    break;
-            }
-
-            OnRaiseAxisChangedEvent(axis, value, lx, ly, rx, ry);
-
-            switch (axis)
-            {
-                case <1:
-                    OnRaiseLeftAxisChangedEvent(axis, value, lx, ly);
-                    break;
-
-                case >=3 and <=4:
-                    OnRaiseRightAxisChangedEvent(axis, value, rx, ry);
                     break;
             }
         }
 
         #endregion
+
 
         #region Raise events
 
@@ -147,36 +148,6 @@ namespace XpadControl.Linux.Services.GamepadService
             };
 
             raiseEvent?.Invoke(this, leftEventArgs, rightEventArgs);
-        }
-
-        protected virtual void OnRaiseRightAxisChangedEvent(byte axis, short value, float x, float y)
-        {
-            RightAxisChangedEventHandler raiseEvent = RaiseRightAxisChangedEvent;
-
-            MyAxisEventArgs eventArgs = new()
-            {
-                Axis = axis,
-                Value = value,
-                X = x,
-                Y = y
-            };
-
-            raiseEvent?.Invoke(this, eventArgs);
-        }
-
-        protected virtual void OnRaiseLeftAxisChangedEvent(byte axis, short value, float x, float y)
-        {
-            LeftAxisChangedEventHandler raiseEvent = RaiseLeftAxisChangedEvent;
-
-            MyAxisEventArgs eventArgs = new()
-            {
-                 Axis = axis,
-                 Value = value,
-                 X = x,
-                 Y = y
-            };
-
-            raiseEvent?.Invoke(this, eventArgs);
         }
 
         protected virtual void OnRaiseLeftTriggerChangedEvent(float value)
@@ -212,6 +183,13 @@ namespace XpadControl.Linux.Services.GamepadService
                  Button = button,
                  Pressed = pressed
             };
+
+            raiseEvent?.Invoke(this, eventArgs);
+        }
+
+        protected virtual void OnRaiseButtonChangedEvent(MyButtonEventArgs eventArgs)
+        {
+            ButtonChangedEventHandler raiseEvent = RaiseButtonChangedEvent;
 
             raiseEvent?.Invoke(this, eventArgs);
         }

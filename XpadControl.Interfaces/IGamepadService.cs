@@ -4,9 +4,7 @@ using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 namespace XpadControl.Interfaces.GamepadService
 {
     public delegate void AxisChangedEventHandler(object sender, AxisEventArgs left, AxisEventArgs right);
-    public delegate void LeftAxisChangedEventHandler(object sender, AxisEventArgs e);
-    public delegate void RightAxisChangedEventHandler(object sender, AxisEventArgs e);
-
+    
     public delegate void LeftTriggerChangedEventHandler(object sender, TriggerEventArgs e);
     public delegate void RightTriggerChangedEventHandler(object sender, TriggerEventArgs e);
 
@@ -15,9 +13,7 @@ namespace XpadControl.Interfaces.GamepadService
     public interface IGamepadService : IDisposable
     {
         public event AxisChangedEventHandler RaiseAxisChangedEvent;
-        public event LeftAxisChangedEventHandler RaiseLeftAxisChangedEvent;
-        public event RightAxisChangedEventHandler RaiseRightAxisChangedEvent;
-
+    
         public event LeftTriggerChangedEventHandler RaiseLeftTriggerChangedEvent;
         public event RightTriggerChangedEventHandler RaiseRightTriggerChangedEvent;
 

@@ -1,63 +1,109 @@
 using NUnit.Framework;
 using XpadControl.Interfaces.GamepadService.Dependencies;
 using XpadControl.Linux.Services.Extensions;
+using MyButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
 
 namespace XpadControl.Linux.Services.Test
 {
     public class ButtonsExtensionTests
     {
         [Test]
-        public void TestConvertedResultByValues()
+        public void TestConvertedByteToButtonsByValues()
         {
             Assert.Multiple(() =>
             {
-                //None
-                Assert.That(((byte)0x0).ToButtons(), Is.EqualTo(Buttons.None));
+                Assert.That(((byte)0x0).ToButtons(), Is.EqualTo(Buttons.A));
+                Assert.That(((byte)0x1).ToButtons(), Is.EqualTo(Buttons.B));
+                Assert.That(((byte)0x2).ToButtons(), Is.EqualTo(Buttons.X));
+                Assert.That(((byte)0x3).ToButtons(), Is.EqualTo(Buttons.Y));
+                Assert.That(((byte)0x4).ToButtons(), Is.EqualTo(Buttons.LB));
+                Assert.That(((byte)0x5).ToButtons(), Is.EqualTo(Buttons.RB));
+                Assert.That(((byte)0x6).ToButtons(), Is.EqualTo(Buttons.Back));
+                Assert.That(((byte)0x7).ToButtons(), Is.EqualTo(Buttons.Start));
+                Assert.That(((byte)0x8).ToButtons(), Is.EqualTo(Buttons.DPadLeft));
+                Assert.That(((byte)0x9).ToButtons(), Is.EqualTo(Buttons.DPadRight));
+                Assert.That(((byte)0x10).ToButtons(), Is.EqualTo(Buttons.DPadDown));
+                Assert.That(((byte)0x11).ToButtons(), Is.EqualTo(Buttons.DPadUp));
+            });
+        }
 
-                // D-Pad Up. This is one of the directional buttons.
-                Assert.That(((byte)0x1).ToButtons(), Is.EqualTo(Buttons.DPadUp));
+        [Test]
+        public void TestConvertedShortToDpadButtonsByValues()
+        {
+            short negativeValue = short.MinValue;
+            short positiveValue = short.MaxValue;
 
+            Assert.Multiple(() =>
+            {
+                // x axis
+                Assert.That(negativeValue.ToButtonEventArgs(true).Button, Is.EqualTo(Buttons.DPadLeft));
+                Assert.That(positiveValue.ToButtonEventArgs(true).Button, Is.EqualTo(Buttons.DPadRight));
 
-                // D-Pad Down. This is one of the directional buttons.
-                Assert.That(((byte)0x2).ToButtons(), Is.EqualTo(Buttons.DPadDown));
+                // y axis
+                Assert.That(negativeValue.ToButtonEventArgs(false).Button, Is.EqualTo(Buttons.DPadDown));
+                Assert.That(positiveValue.ToButtonEventArgs(false).Button, Is.EqualTo(Buttons.DPadUp));
+            });
+        }
 
-                // D-Pad Left. This is one of the directional buttons.
-                Assert.That(((byte)0x4).ToButtons(), Is.EqualTo(Buttons.DPadLeft));
+        [Test]
+        public void TestConvertedShortToDpadButtonsPressedReleaseLogicForOneButton()
+        {
+            short negativeValue = short.MinValue;
+            short zeroValue = 0;
 
-                // D-Pad Right. This is one of the directional buttons.
-                Assert.That(((byte)0x8).ToButtons(), Is.EqualTo(Buttons.DPadRight));
+            MyButtonEventArgs actualArgs = negativeValue.ToButtonEventArgs(true);
+            MyButtonEventArgs expectedArgs = new() { Button = Buttons.DPadLeft, Pressed = true };
+            
+            // button pressed check
+            Assert.Multiple(() =>
+            {
+                Assert.That(actualArgs.Button, Is.EqualTo(expectedArgs.Button));
+                Assert.That(actualArgs.Pressed, Is.EqualTo(expectedArgs.Pressed));
+            });
 
-                // The Start button.
-                Assert.That(((byte)0x10).ToButtons(), Is.EqualTo(Buttons.Start));
+            actualArgs = zeroValue.ToButtonEventArgs(true);
+            expectedArgs = new() { Button = Buttons.DPadLeft, Pressed = false };
 
-                // The Back button.
-                Assert.That(((byte)0x20).ToButtons(), Is.EqualTo(Buttons.Back));
-                //Back = 0x20,
+            // button released check
+            Assert.Multiple(() =>
+            {
+                Assert.That(actualArgs.Button, Is.EqualTo(expectedArgs.Button));
+                Assert.That(actualArgs.Pressed, Is.EqualTo(expectedArgs.Pressed));
+            });
+        }
 
-                // The LS (Left Stick) button.
-                Assert.That(((byte)0x40).ToButtons(), Is.EqualTo(Buttons.LS));
+        [Test]
+        public void TestConvertedShortToDpadButtonsPressedReleaseLogicForTwoButton()
+        {
+            short negativeValue = short.MinValue;
+            short zeroValue = 0;
 
-                // The RS (Right Stick) button.
-                Assert.That(((byte)0x80).ToButtons(), Is.EqualTo(Buttons.RS));
+            MyButtonEventArgs actualArgsX = negativeValue.ToButtonEventArgs(true);
+            MyButtonEventArgs expectedArgsX = new() { Button = Buttons.DPadLeft, Pressed = true };
+            MyButtonEventArgs actualArgsY = negativeValue.ToButtonEventArgs(false);
+            MyButtonEventArgs expectedArgsY = new() { Button = Buttons.DPadDown, Pressed = true };
 
-                // The LB (Left Shoulder) button.
-                //Assert.That(((byte)0x100).ToButtons(), Is.EqualTo(Buttons.DPadLeft));
-                //LB = 0x100,
+            // button pressed check
+            Assert.Multiple(() =>
+            {
+                Assert.That(actualArgsX.Button, Is.EqualTo(expectedArgsX.Button));
+                Assert.That(actualArgsX.Pressed, Is.EqualTo(expectedArgsX.Pressed));
+                Assert.That(actualArgsY.Button, Is.EqualTo(expectedArgsY.Button));
+                Assert.That(actualArgsY.Pressed, Is.EqualTo(expectedArgsY.Pressed));
+            });
 
-                // The RB (Right Shoulder).
-                //RB = 0x200,
+            actualArgsX = zeroValue.ToButtonEventArgs(true);
+            expectedArgsX = new() { Button = Buttons.DPadLeft, Pressed = false };
+            actualArgsY = zeroValue.ToButtonEventArgs(false);
+            expectedArgsY = new() { Button = Buttons.DPadDown, Pressed = false };
 
-                // The A button.
-                //A = 0x1000,
-
-                // The B button.
-                //B = 0x2000,
-
-                // The X button.
-                //X = 0x4000,
-
-                // The Y button.
-                //Y = 0x8000
+            // button released check
+            Assert.Multiple(() =>
+            {
+                Assert.That(actualArgsX.Button, Is.EqualTo(expectedArgsX.Button));
+                Assert.That(actualArgsX.Pressed, Is.EqualTo(expectedArgsX.Pressed));
+                Assert.That(actualArgsY.Button, Is.EqualTo(expectedArgsY.Button));
+                Assert.That(actualArgsY.Pressed, Is.EqualTo(expectedArgsY.Pressed));
             });
         }
     }

@@ -24,7 +24,7 @@ namespace XpadControl.Linux.Services.GamepadService
 
                     // Gamepad library does not know how to
                     // connect/ disconnect to the gamepad on the fly, the logic of this is the ability to Update
-                    await Task.Delay(2000);
+                    await Task.Delay(1000);
                 }
 
             }, stoppingToken);

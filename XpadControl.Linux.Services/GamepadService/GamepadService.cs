@@ -3,11 +3,13 @@ using System;
 using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.LoggerService;
 using XpadControl.Interfaces.GamepadService.Dependencies.Extensions;
+using XpadControl.Interfaces.GamepadService.Dependencies;
+using XpadControl.Linux.Services.Extensions;
+
 using MyAxisEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.AxisEventArgs;
 using MyButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
 using MyTriggerEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.TriggerEventArgs;
-using XpadControl.Interfaces.GamepadService.Dependencies;
-using XpadControl.Linux.Services.Extensions;
+
 
 namespace XpadControl.Linux.Services.GamepadService
 {
@@ -75,7 +77,7 @@ namespace XpadControl.Linux.Services.GamepadService
             {
                 case 0:
                     lx = value.AxisToFloat();
-                    OnRaiseAxisChangedEvent(axis, value, lx, ly, rx, ry);
+                    OnRaiseAxisChangedEvent(lx, ly, rx, ry);
 
                     mLoggerService.WriteVerboseLog($"LEFT STICK X:{lx} or {value}");
                     break;
@@ -87,19 +89,19 @@ namespace XpadControl.Linux.Services.GamepadService
                     break;
                 case 1:
                     ly = -value.AxisToFloat();
-                    OnRaiseAxisChangedEvent(axis, value, lx, ly, rx, ry);
+                    OnRaiseAxisChangedEvent(lx, ly, rx, ry);
 
                     mLoggerService.WriteVerboseLog($"LEFT STICK Y:{ly} or {value}");
                     break; 
                 case 3:
                     rx = value.AxisToFloat();
-                    OnRaiseAxisChangedEvent(axis, value, lx, ly, rx, ry);
+                    OnRaiseAxisChangedEvent(lx, ly, rx, ry);
 
                     mLoggerService.WriteVerboseLog($"RIGHT STICK X:{rx} or {value}");
                     break;
                 case 4:
                     ry = -value.AxisToFloat();
-                    OnRaiseAxisChangedEvent(axis, value, lx, ly, rx, ry);
+                    OnRaiseAxisChangedEvent(lx, ly, rx, ry);
 
                     mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{ry} or {value}");
                     break;

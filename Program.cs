@@ -10,12 +10,15 @@ using XpadControl.Common.Services.WebSocketCkientService;
 using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.LoggerService;
 using XpadControl.Interfaces.WebSocketCkientService;
-using LinuxGamepadService = XpadControl.Linux.Services.GamepadService.GamepadService;
-using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.GamepadService;
-using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 using System.Configuration;
 using System.Reflection;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies;
+
+using LinuxGamepadService = XpadControl.Linux.Services.GamepadService.GamepadService;
+using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.GamepadService;
+using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
+using LinuxGamepadHostedService = XpadControl.Linux.Services.GamepadService.GamepadHostedService;
+
 
 namespace XpadControl
 {
@@ -55,7 +58,9 @@ namespace XpadControl
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
+                    // the background service monitors the connection disconnection of the game controller
                     builder.Services.AddSingleton<IGamepadService>(new LinuxGamepadService(loogerService));
+                    builder.Services.AddHostedService<LinuxGamepadHostedService>();
                 }
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

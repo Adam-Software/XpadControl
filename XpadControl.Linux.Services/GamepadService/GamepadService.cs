@@ -9,7 +9,7 @@ using XpadControl.Linux.Services.Extensions;
 using MyAxisEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.AxisEventArgs;
 using MyButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
 using MyTriggerEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.TriggerEventArgs;
-
+using System.IO;
 
 namespace XpadControl.Linux.Services.GamepadService
 {
@@ -45,6 +45,15 @@ namespace XpadControl.Linux.Services.GamepadService
                 mGamepad.AxisChanged += AxisChanged;
                 mGamepad.ButtonChanged += ButtonChanged;
             }    
+        }
+
+        public void Update() 
+        {
+            if (File.Exists("/dev/input/js0"))
+                mLoggerService.WriteVerboseLog("Gamepad connected");
+
+            if (!File.Exists("/dev/input/js0"))
+                mLoggerService.WriteVerboseLog("Gamepad disconnected");
         }
 
         public void Dispose()

@@ -50,7 +50,6 @@ namespace XpadControl.Linux.Services.GamepadService
                     mLoggerService.WriteErrorLog($"{ex.Message}");
                 }
                 
-
                 mLoggerService.WriteVerboseLog("Gamepad connected");
             }
                 
@@ -74,19 +73,12 @@ namespace XpadControl.Linux.Services.GamepadService
 
         private void GamepadConnected()
         {
-            OnRaiseConnectedChangedEvent(true);
-
-            try
+            //OnRaiseConnectedChangedEvent(true);
+            
+            if (mGamepad == null)
             {
                 mGamepad = new GamepadController("/dev/input/js0");
-            }
-            catch (Exception ex)
-            {
-                mLoggerService.WriteErrorLog($"Error when bind gamepad {ex.Message}");
-            }
 
-            if (mGamepad != null)
-            {
                 mGamepad.AxisChanged += AxisChanged;
                 mGamepad.ButtonChanged += ButtonChanged;
             }
@@ -94,7 +86,7 @@ namespace XpadControl.Linux.Services.GamepadService
 
         private void GamepadDisconnected()
         {
-            OnRaiseConnectedChangedEvent(false);
+            //OnRaiseConnectedChangedEvent(false);
 
             if (mGamepad != null)
             {

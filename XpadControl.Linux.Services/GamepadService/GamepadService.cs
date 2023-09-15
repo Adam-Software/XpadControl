@@ -25,7 +25,7 @@ namespace XpadControl.Linux.Services.GamepadService
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
         public event ConnectedChangedEventHandler RaiseConnectedChangedEvent;
 
-        private GamepadController mGamepad;
+        private GamepadController? mGamepad;
         private readonly ILoggerService mLoggerService;
 
         public GamepadService(ILoggerService loggerService) 
@@ -49,8 +49,6 @@ namespace XpadControl.Linux.Services.GamepadService
                 {
                     mLoggerService.WriteErrorLog($"{ex.Message}");
                 }
-                
-                mLoggerService.WriteVerboseLog("Gamepad connected");
             }
                 
 
@@ -64,8 +62,6 @@ namespace XpadControl.Linux.Services.GamepadService
                 {
                     mLoggerService.WriteErrorLog($"{ex.Message}");
                 }
-
-                mLoggerService.WriteVerboseLog("Gamepad disconnected");
             }
         }
 
@@ -73,27 +69,30 @@ namespace XpadControl.Linux.Services.GamepadService
 
         private void GamepadConnected()
         {
-            //OnRaiseConnectedChangedEvent(true);
-            
             if (mGamepad == null)
             {
                 mGamepad = new GamepadController("/dev/input/js0");
 
                 mGamepad.AxisChanged += AxisChanged;
                 mGamepad.ButtonChanged += ButtonChanged;
+
+                OnRaiseConnectedChangedEvent(true);
+                mLoggerService.WriteVerboseLog("Gamepad connected");
             }
         }
 
         private void GamepadDisconnected()
         {
-            //OnRaiseConnectedChangedEvent(false);
-
             if (mGamepad != null)
             {
                 mGamepad.AxisChanged -= AxisChanged;
                 mGamepad.ButtonChanged -= ButtonChanged;
+                Dispose();
+
                 mGamepad = null;
-                mGamepad.Dispose();
+
+                OnRaiseConnectedChangedEvent(false);
+                mLoggerService.WriteVerboseLog("Gamepad connected");
             }
         }
 
@@ -253,7 +252,7 @@ namespace XpadControl.Linux.Services.GamepadService
                 IsConnected = isConnected
             };
 
-            raiseEvent.Invoke(this, eventArgs);
+            raiseEvent?.Invoke(this, eventArgs);
         }
 
         #endregion

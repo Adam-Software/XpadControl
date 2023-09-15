@@ -49,7 +49,6 @@ namespace XpadControl.Linux.Services.GamepadService
                 }
             }
                 
-
             if (!File.Exists("/dev/input/js0"))
             {
                 try

@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +16,7 @@ namespace XpadControl
         private readonly IWebSocketClientsService mWebSocketClientsService;
         private readonly IGamepadService mGamepadService;
 
-        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IGamepadService gamepadService, 
+        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IGamepadService gamepadService,
             IHostApplicationLifetime applicationLifetime)
         {
             mLoggerService = loggerService;

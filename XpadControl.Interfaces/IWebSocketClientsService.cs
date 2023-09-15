@@ -34,21 +34,21 @@ namespace XpadControl.Interfaces.WebSocketCkientService
         /// <summary>
         /// Send text with queue
         /// </summary>
-        public void SendText(string text);
+        public void Send(string text);
 
         /// <summary>
         /// Send vector with queue
         /// </summary>
-        public void SendText(VectorModel vector);
+        public void Send(VectorModel vector);
 
         /// <summary>
         /// Send text without queue
         /// </summary>
-        public Task SendTextInstant(string text);
+        public Task SendInstant(string text);
 
         /// <summary>
         /// Send vector without queue
         /// </summary>
-        public Task SendTextInstant(VectorModel vector);
+        public Task SendInstant(VectorModel vector);
     }
 }

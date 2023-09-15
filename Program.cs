@@ -6,7 +6,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using XpadControl.Common.Services.LoggerService;
-using XpadControl.Common.Services.WebSocketCkientService;
+using XpadControl.Common.Services.WebSocketService;
 using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.LoggerService;
 using XpadControl.Interfaces.WebSocketCkientService;

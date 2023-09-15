@@ -8,7 +8,7 @@ using XpadControl.Interfaces.WebSocketCkientService;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies;
 using XpadControl.JsonModel;
 
-namespace XpadControl.Common.Services.WebSocketCkientService
+namespace XpadControl.Common.Services.WebSocketService
 {
     public class WebSocketClientsService : IWebSocketClientsService
     {
@@ -43,7 +43,7 @@ namespace XpadControl.Common.Services.WebSocketCkientService
             ServosClientStartOrFail();
         }
 
-        #region client events 
+        #region Client events 
 
         private void WheelClientDisconnectionHappened(DisconnectionInfo info)
         {
@@ -97,17 +97,17 @@ namespace XpadControl.Common.Services.WebSocketCkientService
 
         #endregion
 
-        public void SendText(string text) => mWheelWebsocketClient.Send(text);
+        public void Send(string text) => mWheelWebsocketClient.Send(text);
 
-        public void SendText(VectorModel vector)
+        public void Send(VectorModel vector)
         {
             string json = JsonSerializer.Serialize(vector);
             mWheelWebsocketClient.Send(json);
         }
 
-        public Task SendTextInstant(string text) => mWheelWebsocketClient.SendInstant(text);
+        public Task SendInstant(string text) => mWheelWebsocketClient.SendInstant(text);
 
-        public Task SendTextInstant(VectorModel vector) 
+        public Task SendInstant(VectorModel vector) 
         {
             string json = JsonSerializer.Serialize(vector);
             return mWheelWebsocketClient.SendInstant(json);

@@ -90,7 +90,7 @@ namespace XpadControl.Linux.Services.GamepadService
                 mGamepad = null;
 
                 OnRaiseConnectedChangedEvent(false);
-                mLoggerService.WriteVerboseLog("Gamepad connected");
+                mLoggerService.WriteVerboseLog("Gamepad disconnected");
             }
         }
 

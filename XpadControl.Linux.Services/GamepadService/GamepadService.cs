@@ -37,6 +37,8 @@ namespace XpadControl.Linux.Services.GamepadService
 
         public void Update() 
         {
+            mLoggerService.WriteVerboseLog("Update called");
+
             if (File.Exists("/dev/input/js0"))
             {
                 GamepadConnected();

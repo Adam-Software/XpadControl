@@ -9,9 +9,9 @@ namespace XpadControl.Linux.Services.GamepadService
     {
         private readonly IGamepadService mGamepadService;
 
-        public GamepadHostedService(IGamepadService mGamepadService)
+        public GamepadHostedService(IGamepadService gamepadService)
         {
-            this.mGamepadService = mGamepadService;
+            mGamepadService = gamepadService;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)

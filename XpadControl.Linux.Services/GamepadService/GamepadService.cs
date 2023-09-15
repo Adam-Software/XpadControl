@@ -37,8 +37,6 @@ namespace XpadControl.Linux.Services.GamepadService
 
         public void Update() 
         {
-            mLoggerService.WriteVerboseLog("Update called");
-
             if (File.Exists("/dev/input/js0"))
             {
                 try
@@ -87,7 +85,7 @@ namespace XpadControl.Linux.Services.GamepadService
             {
                 mGamepad.AxisChanged -= AxisChanged;
                 mGamepad.ButtonChanged -= ButtonChanged;
-                Dispose();
+                mGamepad.Dispose();
 
                 mGamepad = null;
 

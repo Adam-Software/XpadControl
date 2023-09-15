@@ -41,7 +41,15 @@ namespace XpadControl.Linux.Services.GamepadService
 
             if (File.Exists("/dev/input/js0"))
             {
-                //GamepadConnected();
+                try
+                {
+                    GamepadConnected();
+                }
+                catch (Exception ex) 
+                {
+                    mLoggerService.WriteErrorLog($"{ex.Message}");
+                }
+                
 
                 mLoggerService.WriteVerboseLog("Gamepad connected");
             }
@@ -49,7 +57,14 @@ namespace XpadControl.Linux.Services.GamepadService
 
             if (!File.Exists("/dev/input/js0"))
             {
-                //GamepadDisconnected();
+                try
+                {
+                    GamepadDisconnected();
+                }
+                catch (Exception ex)
+                {
+                    mLoggerService.WriteErrorLog($"{ex.Message}");
+                }
 
                 mLoggerService.WriteVerboseLog("Gamepad disconnected");
             }
@@ -86,6 +101,7 @@ namespace XpadControl.Linux.Services.GamepadService
                 mGamepad.AxisChanged -= AxisChanged;
                 mGamepad.ButtonChanged -= ButtonChanged;
                 mGamepad = null;
+                mGamepad.Dispose();
             }
         }
 

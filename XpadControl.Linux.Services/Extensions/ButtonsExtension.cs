@@ -59,9 +59,9 @@ namespace XpadControl.Linux.Services.Extensions
 
                     if (!isAxisX)
                     {
-                        dpadUpPressed = true;
+                        dpadDownPressed = true;
 
-                        return MyButtonEventArgs(dPadUpButton, dpadUpPressed);
+                        return MyButtonEventArgs(dPadDownButton, dpadDownPressed);
                     }
 
                     break;
@@ -77,9 +77,9 @@ namespace XpadControl.Linux.Services.Extensions
 
                     if (!isAxisX)
                     {
-                        dpadDownPressed = true;
+                        dpadUpPressed = true;
 
-                        return MyButtonEventArgs(dPadDownButton, dpadDownPressed);
+                        return MyButtonEventArgs(dPadUpButton, dpadUpPressed);
                     }
 
                     break;

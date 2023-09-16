@@ -40,8 +40,8 @@ namespace XpadControl.Linux.Services.Test
                 Assert.That(positiveValue.ToButtonEventArgs(true).Button, Is.EqualTo(Buttons.DPadRight));
 
                 // y axis
-                Assert.That(negativeValue.ToButtonEventArgs(false).Button, Is.EqualTo(Buttons.DPadDown));
-                Assert.That(positiveValue.ToButtonEventArgs(false).Button, Is.EqualTo(Buttons.DPadUp));
+                Assert.That(negativeValue.ToButtonEventArgs(false).Button, Is.EqualTo(Buttons.DPadUp));
+                Assert.That(positiveValue.ToButtonEventArgs(false).Button, Is.EqualTo(Buttons.DPadDown));
             });
         }
 
@@ -81,7 +81,7 @@ namespace XpadControl.Linux.Services.Test
             MyButtonEventArgs actualArgsX = negativeValue.ToButtonEventArgs(true);
             MyButtonEventArgs expectedArgsX = new() { Button = Buttons.DPadLeft, Pressed = true };
             MyButtonEventArgs actualArgsY = negativeValue.ToButtonEventArgs(false);
-            MyButtonEventArgs expectedArgsY = new() { Button = Buttons.DPadDown, Pressed = true };
+            MyButtonEventArgs expectedArgsY = new() { Button = Buttons.DPadUp, Pressed = true };
 
             // button pressed check
             Assert.Multiple(() =>
@@ -95,7 +95,7 @@ namespace XpadControl.Linux.Services.Test
             actualArgsX = zeroValue.ToButtonEventArgs(true);
             expectedArgsX = new() { Button = Buttons.DPadLeft, Pressed = false };
             actualArgsY = zeroValue.ToButtonEventArgs(false);
-            expectedArgsY = new() { Button = Buttons.DPadDown, Pressed = false };
+            expectedArgsY = new() { Button = Buttons.DPadUp, Pressed = false };
 
             // button released check
             Assert.Multiple(() =>

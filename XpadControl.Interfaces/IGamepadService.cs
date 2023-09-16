@@ -39,6 +39,24 @@ namespace XpadControl.Interfaces.GamepadService
 
         #endregion
 
+        public virtual int SetPollingUpdateLinux(int poolingDelay)
+        {
+            if (poolingDelay <= 0)
+                poolingDelay = 2;
+
+            return poolingDelay * 1000;
+        }
+
+        public virtual int SetPollingUpdateWindows(double poolingDelay)
+        {
+            var poolingDelayRound = Math.Round(poolingDelay, 3);
+
+            if (poolingDelayRound <= 0)
+                poolingDelayRound = 0.1;
+
+            return (int)poolingDelayRound * 1000;
+        }
+
         // Call this on every app/game frame in windows
         // Call this for check connected/disconected in linux
         public void Update();

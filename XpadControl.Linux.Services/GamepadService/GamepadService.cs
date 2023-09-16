@@ -160,12 +160,12 @@ namespace XpadControl.Linux.Services.GamepadService
                     mLoggerService.WriteVerboseLog($"RIGHT TRIGGER value is {value}");
                     break;
                 case 6:
-                    value.ToButtonEventArgs(true);
+                    OnRaiseButtonChangedEvent(value.ToButtonEventArgs(true));
 
                     mLoggerService.WriteVerboseLog($"X DPAD value is {value}");
                     break;
                 case 7:
-                    value.ToButtonEventArgs(false);
+                    OnRaiseButtonChangedEvent(value.ToButtonEventArgs(false));
 
                     mLoggerService.WriteVerboseLog($"Y DPAD value is {value}");
                     break;

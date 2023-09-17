@@ -2,16 +2,19 @@
 using System.Threading;
 using System.Threading.Tasks;
 using XpadControl.Interfaces.GamepadService;
+using XpadControl.Interfaces.GamepadService.Dependencies.SettingsCollection;
 
 namespace XpadControl.Linux.Services.GamepadService
 {
     public class GamepadHostedService : BackgroundService
     {
         private readonly IGamepadService mGamepadService;
+        private readonly UpdateIntervalCollection mUpdateIntervalCollection;
 
-        public GamepadHostedService(IGamepadService gamepadService)
+        public GamepadHostedService(IGamepadService gamepadService, UpdateIntervalCollection updateIntervalCollection)
         {
             mGamepadService = gamepadService;
+            mUpdateIntervalCollection = updateIntervalCollection;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -24,7 +27,7 @@ namespace XpadControl.Linux.Services.GamepadService
 
                     // Gamepad library does not know how to
                     // connect/ disconnect to the gamepad on the fly, the logic of this is the ability to Update
-                    await Task.Delay(2000);
+                    await Task.Delay(mUpdateIntervalCollection.LinuxGamepadUpdatePolling);
                 }
 
             }, stoppingToken);

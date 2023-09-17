@@ -13,12 +13,13 @@ using XpadControl.Interfaces.WebSocketCkientService;
 using System.Configuration;
 using System.Reflection;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies;
+using XpadControl.Interfaces.GamepadService.Dependencies.SettingsCollection;
 
 using LinuxGamepadService = XpadControl.Linux.Services.GamepadService.GamepadService;
 using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.GamepadService;
 using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 using LinuxGamepadHostedService = XpadControl.Linux.Services.GamepadService.GamepadHostedService;
-
+using System.Net.Http.Headers;
 
 namespace XpadControl
 {
@@ -43,31 +44,34 @@ namespace XpadControl
                 .AddJsonFile(mProgramArguments.ConfigPathName)
                 .Build();
 
-            var loogerService = new LoggerService(configuration);
-
             HostApplicationBuilder builder = Host.CreateApplicationBuilder();
             builder.Logging.ClearProviders();
             builder.Configuration.AddConfiguration(configuration);
 
             try
             {
-                builder.Services.AddSingleton<ILoggerService>(loogerService);
+                builder.Services.AddSingleton<ILoggerService>(new LoggerService(configuration));
 
                 UriCollection uri = ReadUriFromSettings(configuration);
-                builder.Services.AddSingleton<IWebSocketClientsService>(new WebSocketClientsService(loogerService, uri));
+                builder.Services.AddSingleton<IWebSocketClientsService>(serviceProvider 
+                    => new WebSocketClientsService(serviceProvider.GetService<ILoggerService>(), uri));
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
                     // the background service monitors the connection disconnection of the game controller
-                    builder.Services.AddSingleton<IGamepadService>(new LinuxGamepadService(loogerService));
-                    builder.Services.AddHostedService<LinuxGamepadHostedService>();
+                    builder.Services.AddSingleton<IGamepadService>(serviceProvider 
+                        => new LinuxGamepadService(serviceProvider.GetService<ILoggerService>()));
+                    builder.Services.AddHostedService(serviceProvider => 
+                        new LinuxGamepadHostedService(serviceProvider.GetService<IGamepadService>(), new UpdateIntervalCollection(10, 10)));
                 }
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     //The Gamepad library for Windows requires background updates
-                    builder.Services.AddSingleton<IGamepadService>(new WindowsGamepadService(loogerService));
-                    builder.Services.AddHostedService<WindowsGamepadHostedService>();
+                    builder.Services.AddSingleton<IGamepadService>(serviceProvider => 
+                        new WindowsGamepadService(serviceProvider.GetService<ILoggerService>()));
+                    builder.Services.AddHostedService(serviceProvider => 
+                        new WindowsGamepadHostedService(serviceProvider.GetService<IGamepadService>(), new UpdateIntervalCollection(10, 10)));
                 }
 
                 builder.Services.AddHostedService<App>();

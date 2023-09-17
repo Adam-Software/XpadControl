@@ -2,16 +2,19 @@
 using System.Threading;
 using System.Threading.Tasks;
 using XpadControl.Interfaces.GamepadService;
+using XpadControl.Interfaces.GamepadService.Dependencies.SettingsCollection;
 
 namespace XpadControl.Windows.Services.GamepadService
 {
     public class GamepadHostedService : BackgroundService
     {
         private readonly IGamepadService mGamepadService;
+        private readonly UpdateIntervalCollection mUpdateIntervalCollection;
         
-        public GamepadHostedService(IGamepadService gamepadService) 
+        public GamepadHostedService(IGamepadService gamepadService, UpdateIntervalCollection updateIntervalCollection) 
         {
             mGamepadService = gamepadService;
+            mUpdateIntervalCollection = updateIntervalCollection;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -24,7 +27,7 @@ namespace XpadControl.Windows.Services.GamepadService
 
                     // XInputium library requires updating every game frame
                     // 100 is the optimal parameter in the ratio of performance/response speed of the gamepad
-                    await Task.Delay(100);
+                    await Task.Delay(mUpdateIntervalCollection.WindowGamepadUpdatePolling);
                 }
                 
             }, stoppingToken);

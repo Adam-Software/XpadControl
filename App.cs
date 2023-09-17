@@ -71,7 +71,7 @@ namespace XpadControl
 
         private void RaiseButtonChangedEvent(object sender, ButtonEventArgs e)
         {
-            mLoggerService.WriteVerboseLog($"RaiseButtonChangedEvent {e.Button} is {e.Pressed}");
+            mLoggerService.WriteVerboseLog($"RaiseButtonChangedEvent in app {e.Button} is {e.Pressed}");
         }
 
         #endregion
@@ -123,7 +123,6 @@ namespace XpadControl
 
         private void SubscribeToEvent()
         {
-            mGamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
             mGamepadService.RaiseAxisChangedEvent += RaiseAxisChangedEvent;
             mGamepadService.RaiseLeftTriggerChangedEvent += RaiseLeftTriggerChangedEvent;
             mGamepadService.RaiseRightTriggerChangedEvent += RaiseRightTriggerChangedEvent;
@@ -133,7 +132,6 @@ namespace XpadControl
 
         private void UnsubscribeFromEvent()
         {
-            mGamepadService.RaiseButtonChangedEvent -= RaiseButtonChangedEvent;
             mGamepadService.RaiseAxisChangedEvent -= RaiseAxisChangedEvent;
             mGamepadService.RaiseLeftTriggerChangedEvent -= RaiseLeftTriggerChangedEvent;
             mGamepadService.RaiseRightTriggerChangedEvent -= RaiseRightTriggerChangedEvent;

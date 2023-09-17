@@ -20,10 +20,10 @@ namespace XpadControl.Linux.Services.Test
                 Assert.That(((byte)0x5).ToButtons(), Is.EqualTo(Buttons.RB));
                 Assert.That(((byte)0x6).ToButtons(), Is.EqualTo(Buttons.Back));
                 Assert.That(((byte)0x7).ToButtons(), Is.EqualTo(Buttons.Start));
-                Assert.That(((byte)0x8).ToButtons(), Is.EqualTo(Buttons.DPadLeft));
-                Assert.That(((byte)0x9).ToButtons(), Is.EqualTo(Buttons.DPadRight));
-                Assert.That(((byte)0x10).ToButtons(), Is.EqualTo(Buttons.DPadDown));
-                Assert.That(((byte)0x11).ToButtons(), Is.EqualTo(Buttons.DPadUp));
+                Assert.That(((byte)0x9).ToButtons(), Is.EqualTo(Buttons.DPadLeft));
+                Assert.That(((byte)0x10).ToButtons(), Is.EqualTo(Buttons.DPadRight));
+                Assert.That(((byte)0x11).ToButtons(), Is.EqualTo(Buttons.DPadDown));
+                Assert.That(((byte)0x12).ToButtons(), Is.EqualTo(Buttons.DPadUp));
             });
         }
 

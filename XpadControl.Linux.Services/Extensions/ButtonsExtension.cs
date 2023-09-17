@@ -6,10 +6,10 @@ namespace XpadControl.Linux.Services.Extensions
 {
     public static class ButtonsExtension
     {
-        private static readonly Buttons dPadLeftButton = ((byte)0x8).ToButtons();
-        private static readonly Buttons dPadRightButton = ((byte)0x9).ToButtons();
-        private static readonly Buttons dPadDownButton = ((byte)0x10).ToButtons();
-        private static readonly Buttons dPadUpButton = ((byte)0x11).ToButtons();
+        private static readonly Buttons dPadLeftButton = ((byte)0x9).ToButtons();
+        private static readonly Buttons dPadRightButton = ((byte)0x10).ToButtons();
+        private static readonly Buttons dPadDownButton = ((byte)0x11).ToButtons();
+        private static readonly Buttons dPadUpButton = ((byte)0x12).ToButtons();
 
         private static bool dpadLeftPressed = false;
         private static bool dpadRightPressed = false;
@@ -30,10 +30,10 @@ namespace XpadControl.Linux.Services.Extensions
                 0x5 => Buttons.RB,
                 0x6 => Buttons.Back,
                 0x7 => Buttons.Start,
-                0x8 => Buttons.DPadLeft,
-                0x9 => Buttons.DPadRight,
-                0x10 => Buttons.DPadDown,
-                0x11 => Buttons.DPadUp,
+                0x9 => Buttons.DPadLeft,
+                0x10 => Buttons.DPadRight,
+                0x11 => Buttons.DPadDown,
+                0x12 => Buttons.DPadUp,
 
                 _ => Buttons.None,
             };

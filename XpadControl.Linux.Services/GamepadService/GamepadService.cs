@@ -25,7 +25,7 @@ namespace XpadControl.Linux.Services.GamepadService
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
         public event ConnectedChangedEventHandler RaiseConnectedChangedEvent;
 
-        private GamepadController? mGamepad;
+        private GamepadController mGamepad;
         private readonly ILoggerService mLoggerService;
 
         public GamepadService(ILoggerService loggerService) 
@@ -107,6 +107,11 @@ namespace XpadControl.Linux.Services.GamepadService
         private void ButtonChanged(object sender, ButtonEventArgs e)
         {
             mLoggerService.WriteVerboseLog($"{e.Button} is {e.Pressed}");
+
+            // 0x08 controller on/ off button,
+            // this functionality cannot be implemented for Windows service, therefore disabled
+            if (e.Button == 0x08)
+                return;
 
             OnRaiseButtonChangedEvent(e.Button.ToButtons(), e.Pressed);
         }

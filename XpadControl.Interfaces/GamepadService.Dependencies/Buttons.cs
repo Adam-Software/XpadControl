@@ -9,49 +9,49 @@
     {
 
         // No button. This is used to represent no buttons.
-        None = 0x0,
+        None,
 
         // D-Pad Up. This is one of the directional buttons.
-        DPadUp = 0x1,
+        DPadUp,
 
 
         // D-Pad Down. This is one of the directional buttons.
-        DPadDown = 0x2,
+        DPadDown,
         
         // D-Pad Left. This is one of the directional buttons.
-        DPadLeft = 0x4,
+        DPadLeft,
         
         // D-Pad Right. This is one of the directional buttons.
-        DPadRight = 0x8,
+        DPadRight,
         
         // The Start button.
-        Start = 0x10,
+        Start,
         
         // The Back button.
-        Back = 0x20,
+        Back,
         
         // The LS (Left Stick) button.
-        LS = 0x40,
+        LS,
         
         // The RS (Right Stick) button.
-        RS = 0x80,
+        RS,
         
         // The LB (Left Shoulder) button.
-        LB = 0x100,
+        LB,
         
         // The RB (Right Shoulder).
-        RB = 0x200,
+        RB,
         
         // The A button.
-        A = 0x1000,
+        A,
         
         // The B button.
-        B = 0x2000,
+        B,
         
         // The X button.
-        X = 0x4000,
+        X,
         
         // The Y button.
-        Y = 0x8000
+        Y
     }
 }

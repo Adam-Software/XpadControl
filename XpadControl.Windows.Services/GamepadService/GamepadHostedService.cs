@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Hosting;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using XpadControl.Interfaces.GamepadService;
@@ -16,8 +15,6 @@ namespace XpadControl.Windows.Services.GamepadService
         {
             mGamepadService = gamepadService;
             mUpdateIntervalCollection = updateIntervalCollection;
-
-            Console.WriteLine($"Interval collection windows: {updateIntervalCollection.WindowGamepadUpdatePolling} linux {updateIntervalCollection.LinuxGamepadUpdatePolling}");
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)

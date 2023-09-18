@@ -3,7 +3,7 @@ using XpadControl.Interfaces.GamepadService.Dependencies.SettingsCollection;
 
 namespace XpadControl.Interfaces.Tests.GamepadService
 {
-    public class CollectionTest
+    public class IntervalCollectionTest
     {
         [Test]
         public void TestConvertsToMs()

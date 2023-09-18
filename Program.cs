@@ -20,6 +20,7 @@ using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.Gamepa
 using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 using LinuxGamepadHostedService = XpadControl.Linux.Services.GamepadService.GamepadHostedService;
 using System.Net.Http.Headers;
+using System.Runtime;
 
 namespace XpadControl
 {
@@ -100,10 +101,10 @@ namespace XpadControl
         {
             IConfigurationSection appSettings = configuration.GetRequiredSection("AppSettings");
 
-            string webSocketHost = appSettings["WebSocketHost"];
-            string webSocketPort = appSettings["WebSocketPort"];
-            string wheelWebSocketPath = appSettings["WheelWebSocketPath"];
-            string servosWebSocketPath = appSettings["ServosWebSocketPath"];
+            string webSocketHost = appSettings.GetValue<string>("WebSocketHost");
+            int webSocketPort = appSettings.GetValue<int>("WebSocketPort");
+            string wheelWebSocketPath = appSettings.GetValue<string>("WheelWebSocketPath");
+            string servosWebSocketPath = appSettings.GetValue<string>("ServosWebSocketPath");
 
             UriCollection uriCollection = new(webSocketHost, webSocketPort, wheelWebSocketPath, servosWebSocketPath); 
             return uriCollection;

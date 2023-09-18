@@ -56,13 +56,15 @@ namespace XpadControl
                 builder.Services.AddSingleton<IWebSocketClientsService>(serviceProvider 
                     => new WebSocketClientsService(serviceProvider.GetService<ILoggerService>(), uri));
 
+                UpdateIntervalCollection intervalCollection = ReadUpdateIntervalFromSettings(configuration);
+
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
                     // the background service monitors the connection disconnection of the game controller
                     builder.Services.AddSingleton<IGamepadService>(serviceProvider 
                         => new LinuxGamepadService(serviceProvider.GetService<ILoggerService>()));
                     builder.Services.AddHostedService(serviceProvider => 
-                        new LinuxGamepadHostedService(serviceProvider.GetService<IGamepadService>(), new UpdateIntervalCollection(10, 10)));
+                        new LinuxGamepadHostedService(serviceProvider.GetService<IGamepadService>(), intervalCollection));
                 }
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -71,7 +73,7 @@ namespace XpadControl
                     builder.Services.AddSingleton<IGamepadService>(serviceProvider => 
                         new WindowsGamepadService(serviceProvider.GetService<ILoggerService>()));
                     builder.Services.AddHostedService(serviceProvider => 
-                        new WindowsGamepadHostedService(serviceProvider.GetService<IGamepadService>(), new UpdateIntervalCollection(10, 10)));
+                        new WindowsGamepadHostedService(serviceProvider.GetService<IGamepadService>(), intervalCollection));
                 }
 
                 builder.Services.AddHostedService<App>();
@@ -92,6 +94,8 @@ namespace XpadControl
             host.WaitForShutdownAsync();
         }
 
+        #region Read settings methods
+
         private static UriCollection ReadUriFromSettings(IConfigurationRoot configuration)
         {
             IConfigurationSection appSettings = configuration.GetRequiredSection("AppSettings");
@@ -104,6 +108,19 @@ namespace XpadControl
             UriCollection uriCollection = new(webSocketHost, webSocketPort, wheelWebSocketPath, servosWebSocketPath); 
             return uriCollection;
         }
+
+        private static UpdateIntervalCollection ReadUpdateIntervalFromSettings(IConfigurationRoot configuration)
+        {
+            IConfigurationSection appSettings = configuration.GetRequiredSection("AppSettings");
+
+            double windowGamepadUpdatePolling = appSettings.GetValue<double>("WindowGamepadUpdatePolling");
+            int linuxGamepadUpdatePolling = appSettings.GetValue<int>("LinuxGamepadUpdatePolling");
+
+            UpdateIntervalCollection updateIntervalCollection = new(linuxGamepadUpdatePolling, windowGamepadUpdatePolling);
+            return updateIntervalCollection;
+        }
+
+        #endregion
 
         private static bool ParseArguments(string[] args)
         {

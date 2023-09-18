@@ -12,8 +12,9 @@ namespace XpadControl.Interfaces.GamepadService.Dependencies.SettingsCollection
             if (windowGamepadUpdatePolling <= 0)
                 windowGamepadUpdatePolling = 0.1;
 
-            LinuxGamepadUpdatePolling = linuxGamepadUpdatePolling;
-            WindowGamepadUpdatePolling = (int) Math.Round(windowGamepadUpdatePolling, 3) * 1000;
+            // *1000 - convert to ms
+            LinuxGamepadUpdatePolling = linuxGamepadUpdatePolling * 1000;
+            WindowGamepadUpdatePolling = (int)(Math.Round(windowGamepadUpdatePolling, 3) * 1000);
         }
 
         public int LinuxGamepadUpdatePolling { get; }

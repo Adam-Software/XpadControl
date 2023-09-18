@@ -46,14 +46,14 @@ namespace XpadControl.Linux.Services.Test
         }
 
         [Test]
-        public void TestConvertedShortToDpadButtonsPressedReleaseLogicForOneButton()
+        public void TestConvertedNegativeShortToDpadButtonsPressedReleaseLogicForOneButton()
         {
             short negativeValue = short.MinValue;
             short zeroValue = 0;
 
             MyButtonEventArgs actualArgs = negativeValue.ToButtonEventArgs(true);
             MyButtonEventArgs expectedArgs = new() { Button = Buttons.DPadLeft, Pressed = true };
-            
+
             // button pressed check
             Assert.Multiple(() =>
             {
@@ -73,7 +73,34 @@ namespace XpadControl.Linux.Services.Test
         }
 
         [Test]
-        public void TestConvertedShortToDpadButtonsPressedReleaseLogicForTwoButton()
+        public void TestConvertedPositiveShortToDpadButtonsPressedReleaseLogicForOneButton()
+        {
+            short positiveValue = short.MaxValue;
+            short zeroValue = 0;
+
+            MyButtonEventArgs actualArgs = positiveValue.ToButtonEventArgs(true);
+            MyButtonEventArgs expectedArgs = new() { Button = Buttons.DPadRight, Pressed = true };
+            
+            // button pressed check
+            Assert.Multiple(() =>
+            {
+                Assert.That(actualArgs.Button, Is.EqualTo(expectedArgs.Button));
+                Assert.That(actualArgs.Pressed, Is.EqualTo(expectedArgs.Pressed));
+            });
+
+            actualArgs = zeroValue.ToButtonEventArgs(true);
+            expectedArgs = new() { Button = Buttons.DPadRight, Pressed = false };
+
+            // button released check
+            Assert.Multiple(() =>
+            {
+                Assert.That(actualArgs.Button, Is.EqualTo(expectedArgs.Button));
+                Assert.That(actualArgs.Pressed, Is.EqualTo(expectedArgs.Pressed));
+            });
+        }
+
+        [Test]
+        public void TestConvertedNegativeShortToDpadButtonsPressedReleaseLogicForTwoButton()
         {
             short negativeValue = short.MinValue;
             short zeroValue = 0;
@@ -96,6 +123,41 @@ namespace XpadControl.Linux.Services.Test
             expectedArgsX = new() { Button = Buttons.DPadLeft, Pressed = false };
             actualArgsY = zeroValue.ToButtonEventArgs(false);
             expectedArgsY = new() { Button = Buttons.DPadUp, Pressed = false };
+
+            // button released check
+            Assert.Multiple(() =>
+            {
+                Assert.That(actualArgsX.Button, Is.EqualTo(expectedArgsX.Button));
+                Assert.That(actualArgsX.Pressed, Is.EqualTo(expectedArgsX.Pressed));
+                Assert.That(actualArgsY.Button, Is.EqualTo(expectedArgsY.Button));
+                Assert.That(actualArgsY.Pressed, Is.EqualTo(expectedArgsY.Pressed));
+            });
+        }
+
+        [Test]
+        public void TestConvertedPositiveShortToDpadButtonsPressedReleaseLogicForTwoButton()
+        {
+            short positiveValue = short.MaxValue;
+            short zeroValue = 0;
+
+            MyButtonEventArgs actualArgsX = positiveValue.ToButtonEventArgs(true);
+            MyButtonEventArgs expectedArgsX = new() { Button = Buttons.DPadRight, Pressed = true };
+            MyButtonEventArgs actualArgsY = positiveValue.ToButtonEventArgs(false);
+            MyButtonEventArgs expectedArgsY = new() { Button = Buttons.DPadDown, Pressed = true };
+
+            // button pressed check
+            Assert.Multiple(() =>
+            {
+                Assert.That(actualArgsX.Button, Is.EqualTo(expectedArgsX.Button));
+                Assert.That(actualArgsX.Pressed, Is.EqualTo(expectedArgsX.Pressed));
+                Assert.That(actualArgsY.Button, Is.EqualTo(expectedArgsY.Button));
+                Assert.That(actualArgsY.Pressed, Is.EqualTo(expectedArgsY.Pressed));
+            });
+
+            actualArgsX = zeroValue.ToButtonEventArgs(true);
+            expectedArgsX = new() { Button = Buttons.DPadRight, Pressed = false };
+            actualArgsY = zeroValue.ToButtonEventArgs(false);
+            expectedArgsY = new() { Button = Buttons.DPadDown, Pressed = false };
 
             // button released check
             Assert.Multiple(() =>

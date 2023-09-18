@@ -1,9 +1,9 @@
 using NUnit.Framework;
 using XpadControl.Interfaces.GamepadService.Dependencies.Extensions;
 
-namespace XpadControl.Interfaces.Tests
+namespace XpadControl.Interfaces.Tests.GamepadService
 {
-    public class GamepadServiceExtensionTest
+    public class ExtensionTest
     {
         [Test]
         public void TestConvertsThumbToFloat()
@@ -18,13 +18,13 @@ namespace XpadControl.Interfaces.Tests
             });
         }
 
-        [Test]  
+        [Test]
         public void TestConvertsTriggerToFloat()
         {
             short minTrigger = short.MinValue;
             short deadZoneValue = -32767;
             short maxTrigger = short.MaxValue;
-            
+
             Assert.Multiple(() =>
             {
                 Assert.That(minTrigger.TriggerToFloat(), Is.EqualTo(0));

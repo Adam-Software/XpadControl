@@ -31,6 +31,8 @@ namespace XpadControl.Interfaces.WebSocketCkientService
 
         #endregion
 
+        #region Send/SendInstant
+
         /// <summary>
         /// Send text with queue
         /// </summary>
@@ -50,5 +52,7 @@ namespace XpadControl.Interfaces.WebSocketCkientService
         /// Send vector without queue
         /// </summary>
         public Task SendInstant(VectorModel vector);
+
+        #endregion
     }
 }

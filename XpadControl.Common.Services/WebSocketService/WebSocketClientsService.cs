@@ -47,14 +47,14 @@ namespace XpadControl.Common.Services.WebSocketService
         private void WheelClientDisconnectionHappened(DisconnectionInfo info)
         {
             WheelClientIsDisconnection = true;
-
+            
             mLoggerService.WriteVerboseLog($"Wheel websocket client disconnection happened reason {info.Type}");
         }
 
         private void WheelClientReconectHappened(ReconnectionInfo info)
         {
             WheelClientIsDisconnection = false;
-
+            
             mLoggerService.WriteVerboseLog($"Wheel websocket client reconect happened reason {info.Type}");
         }
 
@@ -104,7 +104,7 @@ namespace XpadControl.Common.Services.WebSocketService
 
                 mServosClientIsDisconnection = value;
 
-                OnRaiseIsDisconnectionStatusChangedEvent("ServosClient", WheelClientIsDisconnection);
+                OnRaiseIsDisconnectionStatusChangedEvent("ServosClient", ServosClientIsDisconnection);
             } 
         }
 

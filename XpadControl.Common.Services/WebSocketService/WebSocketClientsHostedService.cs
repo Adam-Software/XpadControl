@@ -45,7 +45,5 @@ namespace XpadControl.Common.Services.WebSocketService
         {
             mClientsService.ServosClientReconnectOrFail();
         }
-
-        
     }
 }

@@ -6,6 +6,7 @@ using XpadControl.Interfaces.GamepadService;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 using XpadControl.Interfaces.LoggerService;
 using XpadControl.Interfaces.WebSocketCkientService;
+using XpadControl.Interfaces.WebSocketClientsService.Dependencies.EventArgs;
 using XpadControl.JsonModel;
 
 namespace XpadControl
@@ -29,6 +30,15 @@ namespace XpadControl
 
             SubscribeToEvent();
         }
+
+        #region Websocket clients event
+
+        private void RaiseIsDisconnectionStatusChangedEvent(object sender, IsDisconnectionStatusChangedEventArgs eventArgs)
+        {
+            mLoggerService.WriteInformationLog($"{eventArgs.ClientName} is connected status now is {!eventArgs.IsDisconnection}");
+        }
+
+        #endregion
 
         #region Gamepad event
 
@@ -128,6 +138,8 @@ namespace XpadControl
             mGamepadService.RaiseRightTriggerChangedEvent += RaiseRightTriggerChangedEvent;
             mGamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
             mGamepadService.RaiseConnectedChangedEvent += RaiseConnectedChangedEvent;
+
+            mWebSocketClientsService.RaiseIsDisconnectionStatusChangedEvent += RaiseIsDisconnectionStatusChangedEvent;
         }
 
         private void UnsubscribeFromEvent()
@@ -137,6 +149,8 @@ namespace XpadControl
             mGamepadService.RaiseRightTriggerChangedEvent -= RaiseRightTriggerChangedEvent;
             mGamepadService.RaiseButtonChangedEvent -= RaiseButtonChangedEvent;
             mGamepadService.RaiseConnectedChangedEvent -= RaiseConnectedChangedEvent;
+
+            mWebSocketClientsService.RaiseIsDisconnectionStatusChangedEvent -= RaiseIsDisconnectionStatusChangedEvent;
         }
 
         #endregion

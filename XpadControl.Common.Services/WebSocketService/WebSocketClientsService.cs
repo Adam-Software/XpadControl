@@ -6,14 +6,14 @@ using Websocket.Client;
 using XpadControl.Interfaces.LoggerService;
 using XpadControl.Interfaces.WebSocketCkientService;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies;
+using XpadControl.Interfaces.WebSocketClientsService.Dependencies.EventArgs;
 using XpadControl.JsonModel;
 
 namespace XpadControl.Common.Services.WebSocketService
 {
     public class WebSocketClientsService : IWebSocketClientsService
     {
-        //public event WebSocketConnectedEventHandler RaiseWebSocketConnectedEvent;
-        //public event WebSocketClientDisconnectEventHandler RaiseWebSocketClientDisconnectedEvent;
+        public event IsDisconnectionStatusChangedEventHandler RaiseIsDisconnectionStatusChangedEvent;
 
         private readonly ILoggerService mLoggerService;
         private readonly WebsocketClient mWheelWebsocketClient;
@@ -76,8 +76,37 @@ namespace XpadControl.Common.Services.WebSocketService
 
         #region IsDisconnection
 
-        public bool WheelClientIsDisconnection { get; private set; } = false;
-        public bool ServosClientIsDisconnection { get; private set; } = false;
+        private bool mWheelClientIsDisconnection = false;
+        public bool WheelClientIsDisconnection 
+        { 
+            get { return mWheelClientIsDisconnection; }
+
+            private set
+            {
+                if (mWheelClientIsDisconnection == value)
+                    return; 
+                
+                mWheelClientIsDisconnection = value;
+
+                OnRaiseIsDisconnectionStatusChangedEvent("WheelClient", WheelClientIsDisconnection);
+            } 
+        } 
+
+        private bool mServosClientIsDisconnection = false;
+        public bool ServosClientIsDisconnection 
+        { 
+            get { return mServosClientIsDisconnection; }
+
+            private set
+            {
+                if(mServosClientIsDisconnection == value)
+                    return;
+
+                mServosClientIsDisconnection = value;
+
+                OnRaiseIsDisconnectionStatusChangedEvent("ServosClient", WheelClientIsDisconnection);
+            } 
+        }
 
         #endregion
 
@@ -113,6 +142,8 @@ namespace XpadControl.Common.Services.WebSocketService
 
         #endregion
 
+        #region Send/SendInstant
+
         public void Send(string text) => mWheelWebsocketClient.Send(text);
 
         public void Send(VectorModel vector)
@@ -129,6 +160,8 @@ namespace XpadControl.Common.Services.WebSocketService
             return mWheelWebsocketClient.SendInstant(json);
         }
 
+        #endregion
+
         public void Dispose()
         {
             mLoggerService.WriteVerboseLog($"Dispose {nameof(WebSocketClientsService)} called");
@@ -144,6 +177,19 @@ namespace XpadControl.Common.Services.WebSocketService
 
             if (mWheelWebsocketClient.IsStarted)
                 mWheelWebsocketClient.Dispose();
+        }
+
+        protected virtual void OnRaiseIsDisconnectionStatusChangedEvent(string clientName, bool isDisconnection)
+        {
+            IsDisconnectionStatusChangedEventHandler raiseEvent = RaiseIsDisconnectionStatusChangedEvent;
+
+            IsDisconnectionStatusChangedEventArgs eventArgs = new IsDisconnectionStatusChangedEventArgs()
+            {
+                 ClientName = clientName,
+                 IsDisconnection = isDisconnection
+            };
+
+            raiseEvent?.Invoke(this, eventArgs);
         }
     }
 }

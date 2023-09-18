@@ -190,7 +190,7 @@ namespace XpadControl.Windows.Services.GamepadService
                 IsConnected = isConnected
             };
 
-            raiseEvent.Invoke(this, eventArgs);
+            raiseEvent?.Invoke(this, eventArgs);
         }
 
         #endregion

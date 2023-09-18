@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
+using XpadControl.Interfaces.WebSocketClientsService.Dependencies.EventArgs;
 using XpadControl.JsonModel;
 
 namespace XpadControl.Interfaces.WebSocketCkientService
 {
-    //public delegate void WebSocketConnectedEventHandler();
-    //public delegate void WebSocketClientDisconnectEventHandler();
+    public delegate void IsDisconnectionStatusChangedEventHandler(object sender, IsDisconnectionStatusChangedEventArgs eventArgs);
+    
     public interface IWebSocketClientsService : IDisposable
     {
-        //public event WebSocketConnectedEventHandler RaiseWebSocketConnectedEvent;
-        //public event WebSocketClientDisconnectEventHandler RaiseWebSocketClientDisconnectedEvent;
+        public event IsDisconnectionStatusChangedEventHandler RaiseIsDisconnectionStatusChangedEvent;
 
         #region IsDisconnection
 

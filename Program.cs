@@ -19,8 +19,6 @@ using LinuxGamepadService = XpadControl.Linux.Services.GamepadService.GamepadSer
 using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.GamepadService;
 using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 using LinuxGamepadHostedService = XpadControl.Linux.Services.GamepadService.GamepadHostedService;
-using System.Net.Http.Headers;
-using System.Runtime;
 
 namespace XpadControl
 {
@@ -56,6 +54,9 @@ namespace XpadControl
                 UriCollection uri = ReadUriFromSettings(configuration);
                 builder.Services.AddSingleton<IWebSocketClientsService>(serviceProvider 
                     => new WebSocketClientsService(serviceProvider.GetService<ILoggerService>(), uri));
+
+                builder.Services.AddHostedService(serviceProvider 
+                    => new WebSocketClientsHostedService(serviceProvider.GetService<IWebSocketClientsService>()));
 
                 UpdateIntervalCollection intervalCollection = ReadUpdateIntervalFromSettings(configuration);
 

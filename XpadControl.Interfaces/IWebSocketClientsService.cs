@@ -11,23 +11,23 @@ namespace XpadControl.Interfaces.WebSocketCkientService
         //public event WebSocketConnectedEventHandler RaiseWebSocketConnectedEvent;
         //public event WebSocketClientDisconnectEventHandler RaiseWebSocketClientDisconnectedEvent;
 
-        #region IsRunning/IsStarted
+        #region IsDisconnection
 
-        public bool WheelClientIsRunning { get; }
-        public bool WheelClientIsStarted { get; }
-        
-        public bool ServosClientIsRunning { get; }
-        public bool ServosClientIsStarted { get; }
+        public bool WheelClientIsDisconnection { get;  }
+        public bool ServosClientIsDisconnection { get; }
 
         #endregion
 
-        #region Start/Stop
+        #region Start/Stop/Reconnect
 
         public Task WheelClientStartOrFail();
         public Task<bool> WheelClientStopOrFail();
 
         public Task ServosClientStartOrFail();
         public Task<bool> ServosClientStopOrFail();
+
+        public Task WheelClientReconnectOrFail();
+        public Task ServosClientReconnectOrFail();
 
         #endregion
 

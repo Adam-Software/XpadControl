@@ -25,12 +25,14 @@ namespace XpadControl.Common.Services.WebSocketService
 
             mWheelWebsocketClient = new WebsocketClient(uri.WheelWebSocketUri)
             {
-                ReconnectTimeout = null
+                ReconnectTimeout = null,
+                ErrorReconnectTimeout = null
             };
 
             mServosWebsocketClient = new WebsocketClient(uri.ServosWebSocketUri)
             {
-                ReconnectTimeout = null
+                ReconnectTimeout = null,
+                ErrorReconnectTimeout = null
             };
 
             mWheelWebsocketClient.ReconnectionHappened.Subscribe(WheelClientReconectHappened);
@@ -38,60 +40,74 @@ namespace XpadControl.Common.Services.WebSocketService
 
             mServosWebsocketClient.ReconnectionHappened.Subscribe(ServosClientReconectHappened);
             mServosWebsocketClient.DisconnectionHappened.Subscribe(ServosClientDisconnectionHappened);
-
-            WheelClientStartOrFail();
-            ServosClientStartOrFail();
         }
 
         #region Client events 
 
         private void WheelClientDisconnectionHappened(DisconnectionInfo info)
         {
-            mLoggerService.WriteInformationLog($"Wheel websocket client disconnection happened reason {info.Type}");
+            WheelClientIsDisconnection = true;
+
+            mLoggerService.WriteVerboseLog($"Wheel websocket client disconnection happened reason {info.Type}");
         }
 
         private void WheelClientReconectHappened(ReconnectionInfo info)
         {
-            mLoggerService.WriteInformationLog($"Wheel websocket client reconect happened reason {info.Type}");
+            WheelClientIsDisconnection = false;
+
+            mLoggerService.WriteVerboseLog($"Wheel websocket client reconect happened reason {info.Type}");
         }
 
         private void ServosClientDisconnectionHappened(DisconnectionInfo info)
         {
-            mLoggerService.WriteInformationLog($"Servos websocket client disconnection happened reason {info.Type}");
+            ServosClientIsDisconnection = true;
+
+            mLoggerService.WriteVerboseLog($"Servos websocket client disconnection happened reason {info.Type}");
         }
 
         private void ServosClientReconectHappened(ReconnectionInfo info)
         {
-            mLoggerService.WriteInformationLog($"Servos websocket client reconect happened reason {info.Type}");
+            ServosClientIsDisconnection = false;
+
+            mLoggerService.WriteVerboseLog($"Servos websocket client reconect happened reason {info.Type}");
         }
 
         #endregion
 
-        #region IsRunning/IsStarted
+        #region IsDisconnection
 
-        /// <summary>
-        /// If connect to server true, false otherwise
-        /// </summary>
-        public bool WheelClientIsRunning => mWheelWebsocketClient.IsRunning;
-
-        public bool WheelClientIsStarted => mWheelWebsocketClient.IsStarted;
-
-        /// <summary>
-        /// If connect to server true, false otherwise
-        /// </summary>
-        public bool ServosClientIsRunning => mServosWebsocketClient.IsRunning;
-
-        public bool ServosClientIsStarted => mServosWebsocketClient.IsStarted;
+        public bool WheelClientIsDisconnection { get; private set; } = false;
+        public bool ServosClientIsDisconnection { get; private set; } = false;
 
         #endregion
 
-        #region Start/Stop
+        #region Start/Stop/Reconnect
 
-        public Task WheelClientStartOrFail() => mWheelWebsocketClient.StartOrFail();
+        public Task WheelClientStartOrFail()
+        {
+            mLoggerService.WriteVerboseLog("Try to connect wheel clients ...");
+            return mWheelWebsocketClient.StartOrFail();
+        }
+
+        public Task WheelClientReconnectOrFail()
+        {
+            mLoggerService.WriteVerboseLog("Try to reconnect wheel clients ...");
+            return mWheelWebsocketClient.ReconnectOrFail();
+        }
 
         public Task<bool> WheelClientStopOrFail() => mWheelWebsocketClient.StopOrFail(WebSocketCloseStatus.NormalClosure, "Nomal close");
 
-        public Task ServosClientStartOrFail() => mServosWebsocketClient.StartOrFail();
+        public Task ServosClientStartOrFail() 
+        {
+            mLoggerService.WriteVerboseLog("Try to connect servo clients ...");
+            return mServosWebsocketClient.StartOrFail(); 
+        }
+
+        public Task ServosClientReconnectOrFail()
+        {
+            mLoggerService.WriteVerboseLog("Try to reconnect servo clients ...");
+            return mServosWebsocketClient.ReconnectOrFail();
+        }
 
         public Task<bool> ServosClientStopOrFail() => mServosWebsocketClient.StopOrFail(WebSocketCloseStatus.NormalClosure, "Nomal close");
 
@@ -117,11 +133,17 @@ namespace XpadControl.Common.Services.WebSocketService
         {
             mLoggerService.WriteVerboseLog($"Dispose {nameof(WebSocketClientsService)} called");
 
-            WheelClientStopOrFail();
-            ServosClientStopOrFail();
+            if (mServosWebsocketClient.IsRunning)
+                ServosClientStopOrFail();
 
-            mWheelWebsocketClient.Dispose();
-            mServosWebsocketClient.Dispose();
+            if (mWheelWebsocketClient.IsRunning)
+                WheelClientStopOrFail();
+
+            if (mServosWebsocketClient.IsStarted)
+                mServosWebsocketClient.Dispose();
+
+            if (mWheelWebsocketClient.IsStarted)
+                mWheelWebsocketClient.Dispose();
         }
     }
 }

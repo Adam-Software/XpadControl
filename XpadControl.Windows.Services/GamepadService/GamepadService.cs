@@ -1,9 +1,8 @@
 ﻿using System;
 using XInputium.XInput;
-using XpadControl.Interfaces.GamepadService;
+using XpadControl.Interfaces;
 using XpadControl.Interfaces.GamepadService.Dependencies;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
-using XpadControl.Interfaces.LoggerService;
 using XpadControl.Windows.Services.Extensions;
 
 namespace XpadControl.Windows.Services.GamepadService

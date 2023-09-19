@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
-using XpadControl.Interfaces.WebSocketCkientService;
+using XpadControl.Interfaces;
 
 namespace XpadControl.Common.Services.WebSocketService
 {

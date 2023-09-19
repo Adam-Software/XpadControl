@@ -1,16 +1,16 @@
 ﻿using Gamepad;
 using System;
-using XpadControl.Interfaces.GamepadService;
-using XpadControl.Interfaces.LoggerService;
+using XpadControl.Interfaces;
 using XpadControl.Interfaces.GamepadService.Dependencies.Extensions;
 using XpadControl.Interfaces.GamepadService.Dependencies;
 using XpadControl.Linux.Services.Extensions;
+using System.IO;
 
 using MyAxisEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.AxisEventArgs;
 using MyButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
 using MyTriggerEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.TriggerEventArgs;
 using MyConnectedEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ConnectedEventArgs;
-using System.IO;
+
 
 
 namespace XpadControl.Linux.Services.GamepadService

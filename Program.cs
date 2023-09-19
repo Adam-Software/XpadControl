@@ -7,18 +7,16 @@ using System.IO;
 using System.Runtime.InteropServices;
 using XpadControl.Common.Services.LoggerService;
 using XpadControl.Common.Services.WebSocketService;
-using XpadControl.Interfaces.GamepadService;
-using XpadControl.Interfaces.LoggerService;
-using XpadControl.Interfaces.WebSocketCkientService;
+using XpadControl.Interfaces;
 using System.Configuration;
 using System.Reflection;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies;
-using XpadControl.Interfaces.GamepadService.Dependencies.SettingsCollection;
 
 using LinuxGamepadService = XpadControl.Linux.Services.GamepadService.GamepadService;
 using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.GamepadService;
 using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 using LinuxGamepadHostedService = XpadControl.Linux.Services.GamepadService.GamepadHostedService;
+using XpadControl.Interfaces.Common.Dependencies.SettingsCollection;
 
 namespace XpadControl
 {
@@ -55,10 +53,10 @@ namespace XpadControl
                 builder.Services.AddSingleton<IWebSocketClientsService>(serviceProvider 
                     => new WebSocketClientsService(serviceProvider.GetService<ILoggerService>(), uri));
 
+                UpdateIntervalCollection intervalCollection = ReadUpdateIntervalFromSettings(configuration);
+
                 builder.Services.AddHostedService(serviceProvider 
                     => new WebSocketClientsHostedService(serviceProvider.GetService<IWebSocketClientsService>()));
-
-                UpdateIntervalCollection intervalCollection = ReadUpdateIntervalFromSettings(configuration);
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {

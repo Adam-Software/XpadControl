@@ -1,5 +1,4 @@
-﻿using System;
-using XpadControl.Interfaces.GamepadService.Dependencies;
+﻿using XpadControl.Interfaces.GamepadService.Dependencies;
 using MyButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
 
 namespace XpadControl.Linux.Services.Extensions

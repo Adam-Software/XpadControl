@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XpadControl.Interfaces.LoggerService
+namespace XpadControl.Interfaces
 {
     public interface ILoggerService : IDisposable
     {

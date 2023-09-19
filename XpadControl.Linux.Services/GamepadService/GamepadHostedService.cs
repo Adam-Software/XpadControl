@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
-using XpadControl.Interfaces.GamepadService;
-using XpadControl.Interfaces.GamepadService.Dependencies.SettingsCollection;
+using XpadControl.Interfaces;
+using XpadControl.Interfaces.Common.Dependencies.SettingsCollection;
 
 namespace XpadControl.Linux.Services.GamepadService
 {

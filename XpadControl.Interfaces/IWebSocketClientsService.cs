@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.EventArgs;
 using XpadControl.JsonModel;
 
-namespace XpadControl.Interfaces.WebSocketCkientService
+namespace XpadControl.Interfaces
 {
     public delegate void IsDisconnectionStatusChangedEventHandler(object sender, IsDisconnectionStatusChangedEventArgs eventArgs);
     

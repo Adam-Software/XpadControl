@@ -2,10 +2,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using XpadControl.Interfaces.GamepadService;
+using XpadControl.Interfaces;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
-using XpadControl.Interfaces.LoggerService;
-using XpadControl.Interfaces.WebSocketCkientService;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.EventArgs;
 using XpadControl.JsonModel;
 
@@ -17,8 +15,7 @@ namespace XpadControl
         private readonly IWebSocketClientsService mWebSocketClientsService;
         private readonly IGamepadService mGamepadService;
 
-        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IGamepadService gamepadService,
-            IHostApplicationLifetime applicationLifetime)
+        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IGamepadService gamepadService, IHostApplicationLifetime applicationLifetime)
         {
             mLoggerService = loggerService;
             mWebSocketClientsService = webSocketClientsService;

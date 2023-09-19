@@ -1,7 +1,7 @@
 ﻿using System;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 
-namespace XpadControl.Interfaces.GamepadService
+namespace XpadControl.Interfaces
 {
     #region Delegate axis/button/trigger
 

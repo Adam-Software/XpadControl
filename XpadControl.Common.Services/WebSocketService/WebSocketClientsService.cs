@@ -26,13 +26,16 @@ namespace XpadControl.Common.Services.WebSocketService
             mWheelWebsocketClient = new WebsocketClient(uri.WheelWebSocketUri)
             {
                 ReconnectTimeout = null,
-                ErrorReconnectTimeout = null
+                ErrorReconnectTimeout = null,
+                Name = "WheelWebsocketClient"
+
             };
 
             mServosWebsocketClient = new WebsocketClient(uri.ServosWebSocketUri)
             {
                 ReconnectTimeout = null,
-                ErrorReconnectTimeout = null
+                ErrorReconnectTimeout = null,
+                Name = "ServosWebsocketClient"
             };
 
             mWheelWebsocketClient.ReconnectionHappened.Subscribe(WheelClientReconectHappened);
@@ -76,10 +79,23 @@ namespace XpadControl.Common.Services.WebSocketService
 
         #region IsDisconnection
 
-        private bool mWheelClientIsDisconnection = false;
+        // null because when initializing the service,
+        // the event is not triggered because the check occurs: new value == current value
+        private bool? mWheelClientIsDisconnection = null;
         public bool WheelClientIsDisconnection 
         { 
-            get { return mWheelClientIsDisconnection; }
+            get 
+            {
+                switch (mWheelClientIsDisconnection)
+                {
+                    case false:
+                        return false;
+                    case true:
+                        return true;
+                    case null:
+                        return false;
+                }
+            }
 
             private set
             {
@@ -88,14 +104,27 @@ namespace XpadControl.Common.Services.WebSocketService
                 
                 mWheelClientIsDisconnection = value;
 
-                OnRaiseIsDisconnectionStatusChangedEvent("WheelClient", WheelClientIsDisconnection);
+                OnRaiseIsDisconnectionStatusChangedEvent(mWheelWebsocketClient.Name, WheelClientIsDisconnection);
             } 
-        } 
+        }
 
-        private bool mServosClientIsDisconnection = false;
+        // null because when initializing the service,
+        // the event is not triggered because the check occurs: new value == current value
+        private bool? mServosClientIsDisconnection = null;
         public bool ServosClientIsDisconnection 
         { 
-            get { return mServosClientIsDisconnection; }
+            get 
+            {
+                switch (mServosClientIsDisconnection)
+                {
+                    case false:
+                        return false;
+                    case true:
+                        return true;
+                    case null:
+                        return false;
+                }
+            }
 
             private set
             {
@@ -104,7 +133,7 @@ namespace XpadControl.Common.Services.WebSocketService
 
                 mServosClientIsDisconnection = value;
 
-                OnRaiseIsDisconnectionStatusChangedEvent("ServosClient", ServosClientIsDisconnection);
+                OnRaiseIsDisconnectionStatusChangedEvent(mServosWebsocketClient.Name, ServosClientIsDisconnection);
             } 
         }
 

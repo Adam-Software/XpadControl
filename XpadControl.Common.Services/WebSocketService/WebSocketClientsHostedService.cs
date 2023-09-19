@@ -2,15 +2,19 @@
 using System.Threading;
 using System.Threading.Tasks;
 using XpadControl.Interfaces;
+using XpadControl.Interfaces.Common.Dependencies.SettingsCollection;
 
 namespace XpadControl.Common.Services.WebSocketService
 {
     public class WebSocketClientsHostedService : BackgroundService
     {
         private readonly IWebSocketClientsService mClientsService;
-        public WebSocketClientsHostedService(IWebSocketClientsService webSocketClientsService) 
+        private readonly int mWebsocketReconnectInterval;
+
+        public WebSocketClientsHostedService(IWebSocketClientsService webSocketClientsService, UpdateIntervalCollection updateIntervalCollection) 
         {
             mClientsService = webSocketClientsService;
+            mWebsocketReconnectInterval = updateIntervalCollection.WebsocketReconnectInterval;
 
             mClientsService.WheelClientStartOrFail();
             mClientsService.ServosClientStartOrFail();
@@ -28,7 +32,7 @@ namespace XpadControl.Common.Services.WebSocketService
                     if (mClientsService.ServosClientIsDisconnection)
                         ServosClientReconnectOrFail();
 
-                     await Task.Delay(2000);
+                     await Task.Delay(mWebsocketReconnectInterval);
                 }
 
             }, stoppingToken);

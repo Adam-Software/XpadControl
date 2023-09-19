@@ -11,12 +11,12 @@ using XpadControl.Interfaces;
 using System.Configuration;
 using System.Reflection;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies;
-
+using XpadControl.Interfaces.Common.Dependencies.SettingsCollection;
 using LinuxGamepadService = XpadControl.Linux.Services.GamepadService.GamepadService;
 using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.GamepadService;
 using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 using LinuxGamepadHostedService = XpadControl.Linux.Services.GamepadService.GamepadHostedService;
-using XpadControl.Interfaces.Common.Dependencies.SettingsCollection;
+
 
 namespace XpadControl
 {
@@ -50,17 +50,18 @@ namespace XpadControl
                 builder.Services.AddSingleton<ILoggerService>(new LoggerService(configuration));
 
                 UriCollection uri = ReadUriFromSettings(configuration);
+                UpdateIntervalCollection intervalCollection = ReadUpdateIntervalFromSettings(configuration);
+
                 builder.Services.AddSingleton<IWebSocketClientsService>(serviceProvider 
                     => new WebSocketClientsService(serviceProvider.GetService<ILoggerService>(), uri));
 
-                UpdateIntervalCollection intervalCollection = ReadUpdateIntervalFromSettings(configuration);
-
+                // The background service reconnects when the connection is disconnected
                 builder.Services.AddHostedService(serviceProvider 
-                    => new WebSocketClientsHostedService(serviceProvider.GetService<IWebSocketClientsService>()));
+                    => new WebSocketClientsHostedService(serviceProvider.GetService<IWebSocketClientsService>(), intervalCollection));
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    // the background service monitors the connection disconnection of the game controller
+                    // The background service monitors the connection disconnection of the game controller
                     builder.Services.AddSingleton<IGamepadService>(serviceProvider 
                         => new LinuxGamepadService(serviceProvider.GetService<ILoggerService>()));
                     builder.Services.AddHostedService(serviceProvider => 
@@ -69,7 +70,7 @@ namespace XpadControl
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    //The Gamepad library for Windows requires background updates
+                    // The Gamepad library for Windows requires background updates
                     builder.Services.AddSingleton<IGamepadService>(serviceProvider => 
                         new WindowsGamepadService(serviceProvider.GetService<ILoggerService>()));
                     builder.Services.AddHostedService(serviceProvider => 
@@ -115,8 +116,9 @@ namespace XpadControl
 
             double windowGamepadUpdatePolling = appSettings.GetValue<double>("WindowGamepadUpdatePolling");
             int linuxGamepadUpdatePolling = appSettings.GetValue<int>("LinuxGamepadUpdatePolling");
+            int websocketReconnectInterval = appSettings.GetValue<int>("WebsocketReconnectInterval");
 
-            UpdateIntervalCollection updateIntervalCollection = new(linuxGamepadUpdatePolling, windowGamepadUpdatePolling);
+            UpdateIntervalCollection updateIntervalCollection = new(linuxGamepadUpdatePolling, windowGamepadUpdatePolling, websocketReconnectInterval);
             return updateIntervalCollection;
         }
 
@@ -150,7 +152,6 @@ namespace XpadControl
                 throw new FileNotFoundException($"Cannot find app settings file {mProgramArguments.ConfigPathName}");
 
             return true;
-
         }
     }
 }

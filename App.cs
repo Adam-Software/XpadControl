@@ -57,7 +57,7 @@ namespace XpadControl
 
         private void RaiseAxisChangedEvent(object sender, AxisEventArgs left, AxisEventArgs right)
         {
-            VectorModel vector = new()
+            Vector vector = new()
             {
                 Move = new VectorItem
                 {

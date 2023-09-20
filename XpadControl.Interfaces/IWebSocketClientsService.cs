@@ -41,7 +41,7 @@ namespace XpadControl.Interfaces
         /// <summary>
         /// Send vector with queue
         /// </summary>
-        public void Send(VectorModel vector);
+        public void Send(Vector vector);
 
         /// <summary>
         /// Send text without queue
@@ -51,7 +51,7 @@ namespace XpadControl.Interfaces
         /// <summary>
         /// Send vector without queue
         /// </summary>
-        public Task SendInstant(VectorModel vector);
+        public Task SendInstant(Vector vector);
 
         #endregion
     }

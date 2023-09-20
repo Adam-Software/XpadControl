@@ -2,7 +2,7 @@
 
 namespace XpadControl.JsonModel
 {
-    public class VectorModel
+    public class Vector
     {
         [JsonPropertyName("move")]
         public VectorItem Move { get; set; }

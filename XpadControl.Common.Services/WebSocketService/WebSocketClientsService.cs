@@ -174,7 +174,7 @@ namespace XpadControl.Common.Services.WebSocketService
 
         public void Send(string text) => mWheelWebsocketClient.Send(text);
 
-        public void Send(VectorModel vector)
+        public void Send(Vector vector)
         {
             string json = JsonSerializer.Serialize(vector);
             mWheelWebsocketClient.Send(json);
@@ -182,7 +182,7 @@ namespace XpadControl.Common.Services.WebSocketService
 
         public Task SendInstant(string text) => mWheelWebsocketClient.SendInstant(text);
 
-        public Task SendInstant(VectorModel vector) 
+        public Task SendInstant(Vector vector) 
         {
             string json = JsonSerializer.Serialize(vector);
             return mWheelWebsocketClient.SendInstant(json);

@@ -15,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpadControl.Common.Services
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpadControl.Interfaces.Tests", "XpadControl.Interfaces.Tests\XpadControl.Interfaces.Tests.csproj", "{EF3632B4-5889-46D6-B300-44A9063CDEBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpadControl.Windows.Services.Test", "XpadControl.Windows.Services.Test\XpadControl.Windows.Services.Test.csproj", "{6CC5DAF9-339E-4980-935A-14838C1EBF08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpadControl.Windows.Services.Test", "XpadControl.Windows.Services.Test\XpadControl.Windows.Services.Test.csproj", "{6CC5DAF9-339E-4980-935A-14838C1EBF08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpadControl.Linux.Services.Test", "XpadControl.Linux.Services.Test\XpadControl.Linux.Services.Test.csproj", "{9E59966B-7308-4792-B84A-D0F193540AD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpadControl.Linux.Services.Test", "XpadControl.Linux.Services.Test\XpadControl.Linux.Services.Test.csproj", "{9E59966B-7308-4792-B84A-D0F193540AD2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

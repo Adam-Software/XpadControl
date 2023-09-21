@@ -31,7 +31,6 @@ namespace XpadControl.Interfaces.Tests.Common
             });
         }
 
-
         [Test]
         public void TestRoundedValuesToDefaut()
         {

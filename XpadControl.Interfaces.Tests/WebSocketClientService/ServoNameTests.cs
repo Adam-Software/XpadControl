@@ -4,21 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using XpadControl.Interfaces.Tests.WebSocketClientService.JsonModel;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies;
 
 namespace XpadControl.Interfaces.Tests.WebSocketClientService
 {
     public class ServoNameTests
     {
-        IList<Servo>? mServos;
+        private const string cAdamSdkBranch = "devel";
+        private const string cAdamSdkUrl = $"https://raw.githubusercontent.com/Adam-Software/Adam-SDK/{cAdamSdkBranch}/examples/servo_range.config";
+        private IList<Servo>? mServos;
 
         [SetUp]
         public async Task SetUp() 
         {
             using HttpClient client = new();
-            string expectedJson = await client.GetStringAsync("https://raw.githubusercontent.com/Adam-Software/Adam-SDK/main/examples/servo_range.config");
+            string expectedJson = await client.GetStringAsync(cAdamSdkUrl);
             mServos = JsonSerializer.Deserialize<List<Servo>>(expectedJson);
         }
 
@@ -39,20 +41,5 @@ namespace XpadControl.Interfaces.Tests.WebSocketClientService
          
             Assert.That(actual: actualIds, Is.EqualTo(expected: expectedIds));
         }
-    }
-
-    public class Servo
-    {
-        [JsonPropertyName("name")]
-        public string? Name { get; set; }
-
-        [JsonPropertyName("joint")]
-        public Joint? Joint { get; set; }
-    }
-
-    public class Joint
-    {
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
     }
 }

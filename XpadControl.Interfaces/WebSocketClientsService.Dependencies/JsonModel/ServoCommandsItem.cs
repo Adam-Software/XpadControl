@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel
 {
     public class ServoCommandsItem
     {
-        [JsonPropertyName("motors")]
-        public List<ServoCommands> Motors { get; set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("goal_position")]
+        public int GoalPosition { get; set; }
+
     }
 }

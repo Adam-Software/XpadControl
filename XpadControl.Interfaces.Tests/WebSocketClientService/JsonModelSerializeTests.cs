@@ -1,12 +1,9 @@
 ﻿using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Numerics;
 using System.Text.Json;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel;
 using XpadControl.JsonModel;
-using Vector = XpadControl.JsonModel.Vector;
 
 namespace XpadControl.Interfaces.Tests.WebSocketClientService
 {
@@ -48,16 +45,12 @@ namespace XpadControl.Interfaces.Tests.WebSocketClientService
             {
                 Motors = new List<ServoCommandsItem>
                 {
-                    new ServoCommandsItem {  Name = "head", GoalPosition = 100 }
+                    new ServoCommandsItem { Name = "head", GoalPosition = 100 }
                 }
             };
 
             string json = JsonSerializer.Serialize(servoCommands);
             Assert.That(json, Is.EqualTo(expectedJson));
         }
-
-        
-
-       
     }
 }

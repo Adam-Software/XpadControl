@@ -59,10 +59,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.debug.json">
+    <None Update="Configs\appsettings.debug.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="appsettings.default.json">
+    <None Update="Configs\appsettings.default.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Configs\zero.position.json">

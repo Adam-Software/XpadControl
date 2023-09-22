@@ -6,6 +6,11 @@ namespace XpadControl.Extensions
 {
     public static class ServoCommandsExtensions
     {
+        /// <summary>
+        /// Read file wiht zero position and deserealize to ServoCommands model
+        /// </summary>
+        /// <param name="jsonFilePath"></param>
+        /// <returns></returns>
         public static ServoCommands ToServoCommands(this string jsonFilePath)
         {
             var options = new JsonSerializerOptions

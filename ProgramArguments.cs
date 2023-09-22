@@ -4,7 +4,7 @@ namespace XpadControl
 {
     public class ProgramArguments
     {
-        private const string DefaultConfigName = $"appsettings.default.json";
+        private const string DefaultConfigName = $"Configs/appsettings.default.json";
 
         [ValueArgument(typeof(string), 'c', 
             LongName = "config", 

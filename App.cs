@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using XpadControl.Interfaces;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.EventArgs;
+using XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel;
+using XpadControl.Interfaces.WebSocketClientsService.Dependencies.Extension;
 using XpadControl.JsonModel;
+using XpadControl.Interfaces.GamepadService.Dependencies;
 
 namespace XpadControl
 {
@@ -14,12 +17,15 @@ namespace XpadControl
         private readonly ILoggerService mLoggerService;
         private readonly IWebSocketClientsService mWebSocketClientsService;
         private readonly IGamepadService mGamepadService;
+        private readonly ServoCommands mZeroPositionsCommands;
 
-        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IGamepadService gamepadService, IHostApplicationLifetime applicationLifetime)
+        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IGamepadService gamepadService, IHostApplicationLifetime applicationLifetime, 
+            string zeroPositionsConfigPath)
         {
             mLoggerService = loggerService;
             mWebSocketClientsService = webSocketClientsService;
             mGamepadService = gamepadService;
+            mZeroPositionsCommands = zeroPositionsConfigPath.ToServoCommands();
 
             applicationLifetime.ApplicationStarted.Register(OnStarted);
             applicationLifetime.ApplicationStopped.Register(OnStopped);
@@ -79,6 +85,16 @@ namespace XpadControl
         private void RaiseButtonChangedEvent(object sender, ButtonEventArgs e)
         {
             mLoggerService.WriteVerboseLog($"RaiseButtonChangedEvent in app {e.Button} is {e.Pressed}");
+
+            switch (e.Button)
+            {
+                case Buttons.Back:
+                    
+                    if(e.Pressed)
+                        mWebSocketClientsService.SendInstant(mZeroPositionsCommands);
+
+                    break;
+            }
         }
 
         #endregion

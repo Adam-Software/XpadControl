@@ -51,6 +51,7 @@ namespace XpadControl
 
                 UriCollection uri = ReadUriFromSettings(configuration);
                 UpdateIntervalCollection intervalCollection = ReadUpdateIntervalFromSettings(configuration);
+                string zeroPositionConfigPath = ReadZeroPositionPathFromSettings(configuration);
 
                 builder.Services.AddSingleton<IWebSocketClientsService>(serviceProvider 
                     => new WebSocketClientsService(serviceProvider.GetService<ILoggerService>(), uri));
@@ -77,7 +78,8 @@ namespace XpadControl
                         new WindowsGamepadHostedService(serviceProvider.GetService<IGamepadService>(), intervalCollection));
                 }
 
-                builder.Services.AddHostedService<App>();
+                builder.Services.AddHostedService(serviceProvider => new App(serviceProvider.GetService<IWebSocketClientsService>(), 
+                    serviceProvider.GetService<ILoggerService>(), serviceProvider.GetService<IGamepadService>(), serviceProvider.GetService<IHostApplicationLifetime>(), zeroPositionConfigPath));
             }
             catch (ConfigurationErrorsException ex)
             {
@@ -120,6 +122,18 @@ namespace XpadControl
 
             UpdateIntervalCollection updateIntervalCollection = new(linuxGamepadUpdatePolling, windowGamepadUpdatePolling, websocketReconnectInterval);
             return updateIntervalCollection;
+        }
+
+        private static string ReadZeroPositionPathFromSettings(IConfigurationRoot configuration)
+        {
+            IConfigurationSection appSettings = configuration.GetRequiredSection("AppSettings");
+
+            string path = appSettings.GetValue<string>("AdamZeroPositionConfig");
+
+            if (!File.Exists(path))
+                throw new FileNotFoundException($"Can read AdamZeroPositionConfig. File {path} does not exist");
+
+            return path;
         }
 
         #endregion

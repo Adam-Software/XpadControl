@@ -6,6 +6,7 @@ using Websocket.Client;
 using XpadControl.Interfaces;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.EventArgs;
+using XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel;
 using XpadControl.JsonModel;
 
 namespace XpadControl.Common.Services.WebSocketService
@@ -185,6 +186,12 @@ namespace XpadControl.Common.Services.WebSocketService
         public Task SendInstant(Vector vector) 
         {
             string json = JsonSerializer.Serialize(vector);
+            return mWheelWebsocketClient.SendInstant(json);
+        }
+
+        public Task SendInstant(ServoCommands servoCommands)
+        {
+            string json = JsonSerializer.Serialize(servoCommands);
             return mWheelWebsocketClient.SendInstant(json);
         }
 

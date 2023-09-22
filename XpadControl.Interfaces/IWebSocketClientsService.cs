@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.EventArgs;
+using XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel;
 using XpadControl.JsonModel;
 
 namespace XpadControl.Interfaces
@@ -44,6 +45,11 @@ namespace XpadControl.Interfaces
         public void Send(Vector vector);
 
         /// <summary>
+        /// Send command with queue
+        /// </summary>
+        public void Send(ServoCommands commands);
+
+        /// <summary>
         /// Send text without queue
         /// </summary>
         public Task SendInstant(string text);
@@ -52,6 +58,11 @@ namespace XpadControl.Interfaces
         /// Send vector without queue
         /// </summary>
         public Task SendInstant(Vector vector);
+
+        /// <summary>
+        /// Send commands without queue
+        /// </summary>
+        public Task SendInstant(ServoCommands commands);
 
         #endregion
     }

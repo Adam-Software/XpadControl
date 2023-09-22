@@ -1,0 +1,48 @@
+/* Configuration file containing zero points for each servo. */
+/* Parameter "name" - the name of the servo. Must match the name in the configuration file https://github.com/Adam-Software/Adam-SDK/blob/main/examples/servo_range.config */
+/* Parameter "goal_position" - zero position. Can be integer only. */
+{
+  "motors": [
+    {
+      "name": "head",
+      "goal_position": 50
+    },
+    {
+      "name": "neck",
+      "goal_position": 50
+    },
+    {
+      "name": "right_hand",
+      "goal_position": 17
+    },
+    {
+      "name": "right_upper_arm",
+      "goal_position": 12
+    },
+    {
+      "name": "right_shoulder",
+      "goal_position": 0
+    },
+    {
+      "name": "left_hand",
+      "goal_position": 17
+    },
+    {
+      "name": "left_upper_arm",
+      "goal_position": 12
+    },
+    {
+      "name": "left_shoulder",
+      "goal_position": 0
+
+    },
+    {
+      "name": "chest",
+      "goal_position": 50
+    },
+    {
+      "name": "press",
+      "goal_position": 0
+    }
+  ]
+}

@@ -6,9 +6,9 @@ using XpadControl.Interfaces;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.EventArgs;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel;
-using XpadControl.Interfaces.WebSocketClientsService.Dependencies.Extension;
 using XpadControl.JsonModel;
 using XpadControl.Interfaces.GamepadService.Dependencies;
+using XpadControl.Extensions;
 
 namespace XpadControl
 {
@@ -17,15 +17,16 @@ namespace XpadControl
         private readonly ILoggerService mLoggerService;
         private readonly IWebSocketClientsService mWebSocketClientsService;
         private readonly IGamepadService mGamepadService;
-        private readonly ServoCommands mZeroPositionsCommands;
+        private readonly AppArguments mAppArguments;
 
         public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IGamepadService gamepadService, IHostApplicationLifetime applicationLifetime, 
-            string zeroPositionsConfigPath)
+            AppArguments appArguments)
         {
             mLoggerService = loggerService;
             mWebSocketClientsService = webSocketClientsService;
             mGamepadService = gamepadService;
-            mZeroPositionsCommands = zeroPositionsConfigPath.ToServoCommands();
+            mAppArguments = appArguments;
+            
 
             applicationLifetime.ApplicationStarted.Register(OnStarted);
             applicationLifetime.ApplicationStopped.Register(OnStopped);
@@ -89,10 +90,13 @@ namespace XpadControl
             switch (e.Button)
             {
                 case Buttons.Back:
-                    
-                    if(e.Pressed)
-                        mWebSocketClientsService.SendInstant(mZeroPositionsCommands);
 
+                    if (e.Pressed)
+                    {
+                        ServoCommands zeroPosition = mAppArguments.ZeroPositionConfigPath.ToServoCommands();
+                        mWebSocketClientsService.SendInstant(zeroPosition);
+                    }
+                    
                     break;
             }
         }

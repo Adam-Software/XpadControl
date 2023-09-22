@@ -2,7 +2,7 @@
 using System.Text.Json;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel;
 
-namespace XpadControl.Interfaces.WebSocketClientsService.Dependencies.Extension
+namespace XpadControl.Extensions
 {
     public static class ServoCommandsExtensions
     {
@@ -13,7 +13,7 @@ namespace XpadControl.Interfaces.WebSocketClientsService.Dependencies.Extension
                 ReadCommentHandling = JsonCommentHandling.Skip
             };
 
-            using StreamReader reader = new StreamReader(jsonFilePath);
+            using StreamReader reader = new(jsonFilePath);
             var json = reader.ReadToEnd();
             ServoCommands commands = JsonSerializer.Deserialize<ServoCommands>(json, options);
 

@@ -1,7 +1,8 @@
-/* Configuration file containing zero points for each servo. */
-/* Parameter "name" - the name of the servo. Must match the name in the configuration file https://github.com/Adam-Software/Adam-SDK/blob/main/examples/servo_range.config */
-/* Parameter "goal_position" - zero position. Can be integer only. */
 {
+  /* Configuration file containing zero points for each servo. 
+     Parameter "name" - the name of the servo. Must match the name in the configuration file https://github.com/Adam-Software/Adam-SDK/blob/main/examples/servo_range.config 
+     Parameter "goal_position" - zero position. Can be integer only. */
+
   "motors": [
     {
       "name": "head",

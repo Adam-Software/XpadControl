@@ -51,7 +51,7 @@ namespace XpadControl
 
                 UriCollection uri = ReadUriFromSettings(configuration);
                 UpdateIntervalCollection intervalCollection = ReadUpdateIntervalFromSettings(configuration);
-                string zeroPositionConfigPath = ReadZeroPositionPathFromSettings(configuration);
+                AppArguments appArguments = ReadAppArgumentsFromSettings(configuration);
 
                 builder.Services.AddSingleton<IWebSocketClientsService>(serviceProvider 
                     => new WebSocketClientsService(serviceProvider.GetService<ILoggerService>(), uri));
@@ -79,7 +79,7 @@ namespace XpadControl
                 }
 
                 builder.Services.AddHostedService(serviceProvider => new App(serviceProvider.GetService<IWebSocketClientsService>(), 
-                    serviceProvider.GetService<ILoggerService>(), serviceProvider.GetService<IGamepadService>(), serviceProvider.GetService<IHostApplicationLifetime>(), zeroPositionConfigPath));
+                    serviceProvider.GetService<ILoggerService>(), serviceProvider.GetService<IGamepadService>(), serviceProvider.GetService<IHostApplicationLifetime>(), appArguments));
             }
             catch (ConfigurationErrorsException ex)
             {
@@ -124,16 +124,15 @@ namespace XpadControl
             return updateIntervalCollection;
         }
 
-        private static string ReadZeroPositionPathFromSettings(IConfigurationRoot configuration)
+        private static AppArguments ReadAppArgumentsFromSettings(IConfigurationRoot configuration)
         {
             IConfigurationSection appSettings = configuration.GetRequiredSection("AppSettings");
+            IConfigurationSection optionsSection = appSettings.GetSection("PathOptions");
+            string path = optionsSection.GetValue<string>("AdamZeroPositionConfig");
 
-            string path = appSettings.GetValue<string>("AdamZeroPositionConfig");
-
-            if (!File.Exists(path))
-                throw new FileNotFoundException($"Can read AdamZeroPositionConfig. File {path} does not exist");
-
-            return path;
+            AppArguments appArguments = new(path);
+            
+            return appArguments;
         }
 
         #endregion

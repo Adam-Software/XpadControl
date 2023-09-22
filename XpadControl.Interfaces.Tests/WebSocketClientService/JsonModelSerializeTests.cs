@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json;
+using XpadControl.Interfaces.WebSocketClientsService.Dependencies;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel;
 using XpadControl.JsonModel;
 
@@ -45,7 +46,7 @@ namespace XpadControl.Interfaces.Tests.WebSocketClientService
             {
                 Motors = new List<ServoCommandsItem>
                 {
-                    new ServoCommandsItem { Name = "head", GoalPosition = 100 }
+                    new ServoCommandsItem { Name = ServoNames.Head, GoalPosition = 100 }
                 }
             };
 

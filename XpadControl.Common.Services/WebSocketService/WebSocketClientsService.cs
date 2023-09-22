@@ -181,6 +181,12 @@ namespace XpadControl.Common.Services.WebSocketService
             mWheelWebsocketClient.Send(json);
         }
 
+        public void Send(ServoCommands commands)
+        {
+            string json = JsonSerializer.Serialize(commands);
+            mWheelWebsocketClient.Send(json);
+        }
+
         public Task SendInstant(string text) => mWheelWebsocketClient.SendInstant(text);
 
         public Task SendInstant(Vector vector) 

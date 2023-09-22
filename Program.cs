@@ -16,13 +16,13 @@ using LinuxGamepadService = XpadControl.Linux.Services.GamepadService.GamepadSer
 using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.GamepadService;
 using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 using LinuxGamepadHostedService = XpadControl.Linux.Services.GamepadService.GamepadHostedService;
-
+using System.Text.Json;
 
 namespace XpadControl
 {
     public class Program 
     {
-        private static ProgramArguments mProgramArguments;
+        private static readonly ProgramArguments mProgramArguments = new();
 
         static void Main(string[] args)
         {
@@ -146,7 +146,7 @@ namespace XpadControl
 
         private static bool ParseArguments(string[] args)
         {
-            mProgramArguments = new();
+            
             CommandLineParser.CommandLineParser parser = new()
             {
                 IgnoreCase = true,
@@ -154,6 +154,21 @@ namespace XpadControl
 
             parser.ExtractArgumentAttributes(mProgramArguments);
             parser.ParseCommandLine(args);
+
+            if (!Path.Exists(mProgramArguments.ConfigPathName))
+                throw new FileNotFoundException($"Cannot find app settings file {mProgramArguments.ConfigPathName}");
+
+
+            if (mProgramArguments.ShowConfigParams)
+            {
+                //is example realization
+                using StreamReader reader = new(mProgramArguments.ConfigPathName);
+                var json = reader.ReadToEnd();
+                
+                Console.WriteLine(json);
+
+                return false; 
+            }
 
             if (mProgramArguments.ShowVersion)
             {
@@ -167,9 +182,6 @@ namespace XpadControl
                 parser.ShowUsage();
                 return false;
             }
-
-            if (!Path.Exists(mProgramArguments.ConfigPathName))
-                throw new FileNotFoundException($"Cannot find app settings file {mProgramArguments.ConfigPathName}");
 
             return true;
         }

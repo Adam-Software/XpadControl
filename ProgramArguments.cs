@@ -11,7 +11,12 @@ namespace XpadControl
             Description = "Set the path to the settings file",
             DefaultValue = DefaultConfigName,
             ValueOptional = true)]
-        public string ConfigPathName;
+        public string ConfigPathName = DefaultConfigName;
+
+        [SwitchArgument('s', "show-config-param", 
+            defaultValue: false, 
+            Description = "Shows the read arguments from the config and closes")]
+        public bool ShowConfigParams;
 
         [SwitchArgument('v',  "version", 
             defaultValue: false,

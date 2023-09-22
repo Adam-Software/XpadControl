@@ -44,14 +44,16 @@ namespace XpadControl
             HostApplicationBuilder builder = Host.CreateApplicationBuilder();
             builder.Logging.ClearProviders();
             builder.Configuration.AddConfiguration(configuration);
-
+            
             try
             {
                 builder.Services.AddSingleton<ILoggerService>(new LoggerService(configuration));
 
+                var appSettingsSection = configuration.GetRequiredSection("AppSettings");
+
                 UriCollection uri = ReadUriFromSettings(configuration);
-                UpdateIntervalCollection intervalCollection = ReadUpdateIntervalFromSettings(configuration);
-                AppArguments appArguments = ReadAppArgumentsFromSettings(configuration);
+                UpdateIntervalCollection intervalCollection = ReadUpdateIntervalFromSettings(appSettingsSection);
+                AppArguments appArguments = ReadAppArgumentsFromSettings(appSettingsSection);
 
                 builder.Services.AddSingleton<IWebSocketClientsService>(serviceProvider 
                     => new WebSocketClientsService(serviceProvider.GetService<ILoggerService>(), uri));
@@ -112,21 +114,21 @@ namespace XpadControl
             return uriCollection;
         }
 
-        private static UpdateIntervalCollection ReadUpdateIntervalFromSettings(IConfigurationRoot configuration)
+        private static UpdateIntervalCollection ReadUpdateIntervalFromSettings(IConfigurationSection appSettings)
         {
-            IConfigurationSection appSettings = configuration.GetRequiredSection("AppSettings");
+            IConfigurationSection pollingOptions = appSettings.GetSection("GamepadPollingOptions");
 
-            double windowGamepadUpdatePolling = appSettings.GetValue<double>("WindowGamepadUpdatePolling");
-            int linuxGamepadUpdatePolling = appSettings.GetValue<int>("LinuxGamepadUpdatePolling");
+            double windowGamepadUpdatePolling = pollingOptions.GetValue<double>("WindowGamepadUpdatePolling");
+            int linuxGamepadUpdatePolling = pollingOptions.GetValue<int>("LinuxGamepadUpdatePolling");
+
             int websocketReconnectInterval = appSettings.GetValue<int>("WebsocketReconnectInterval");
 
             UpdateIntervalCollection updateIntervalCollection = new(linuxGamepadUpdatePolling, windowGamepadUpdatePolling, websocketReconnectInterval);
             return updateIntervalCollection;
         }
 
-        private static AppArguments ReadAppArgumentsFromSettings(IConfigurationRoot configuration)
+        private static AppArguments ReadAppArgumentsFromSettings(IConfigurationSection appSettings)
         {
-            IConfigurationSection appSettings = configuration.GetRequiredSection("AppSettings");
             IConfigurationSection optionsSection = appSettings.GetSection("PathOptions");
             string path = optionsSection.GetValue<string>("AdamZeroPositionConfig");
 

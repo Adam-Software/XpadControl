@@ -51,10 +51,9 @@ namespace XpadControl
 
                 var appSettingsSection = configuration.GetRequiredSection("AppSettings");
 
-                UriCollection uri = ReadUriFromSettings(configuration);
+                UriCollection uri = ReadUriFromSettings(appSettingsSection);
                 UpdateIntervalCollection intervalCollection = ReadUpdateIntervalFromSettings(appSettingsSection);
-                AppArguments appArguments = ReadAppArgumentsFromSettings(appSettingsSection);
-
+                
                 builder.Services.AddSingleton<IWebSocketClientsService>(serviceProvider 
                     => new WebSocketClientsService(serviceProvider.GetService<ILoggerService>(), uri));
 
@@ -80,8 +79,14 @@ namespace XpadControl
                         new WindowsGamepadHostedService(serviceProvider.GetService<IGamepadService>(), intervalCollection));
                 }
 
-                builder.Services.AddHostedService(serviceProvider => new App(serviceProvider.GetService<IWebSocketClientsService>(), 
-                    serviceProvider.GetService<ILoggerService>(), serviceProvider.GetService<IGamepadService>(), serviceProvider.GetService<IHostApplicationLifetime>(), appArguments));
+                AppArguments appArguments = ReadAppArgumentsFromSettings(appSettingsSection);
+
+                builder.Services.AddHostedService(serviceProvider => 
+                        new App(serviceProvider.GetService<IWebSocketClientsService>(), 
+                                serviceProvider.GetService<ILoggerService>(), 
+                                serviceProvider.GetService<IGamepadService>(), 
+                                serviceProvider.GetService<IHostApplicationLifetime>(), 
+                                appArguments));
             }
             catch (ConfigurationErrorsException ex)
             {
@@ -101,14 +106,14 @@ namespace XpadControl
 
         #region Read settings methods
 
-        private static UriCollection ReadUriFromSettings(IConfigurationRoot configuration)
+        private static UriCollection ReadUriFromSettings(IConfigurationSection appSettings)
         {
-            IConfigurationSection appSettings = configuration.GetRequiredSection("AppSettings");
+            IConfigurationSection socketClientOptions = appSettings.GetRequiredSection("WebSocketClientOptions");
 
-            string webSocketHost = appSettings.GetValue<string>("WebSocketHost");
-            int webSocketPort = appSettings.GetValue<int>("WebSocketPort");
-            string wheelWebSocketPath = appSettings.GetValue<string>("WheelWebSocketPath");
-            string servosWebSocketPath = appSettings.GetValue<string>("ServosWebSocketPath");
+            string webSocketHost = socketClientOptions.GetValue<string>("WebSocketHost");
+            int webSocketPort = socketClientOptions.GetValue<int>("WebSocketPort");
+            string wheelWebSocketPath = socketClientOptions.GetValue<string>("WheelWebSocketPath");
+            string servosWebSocketPath = socketClientOptions.GetValue<string>("ServosWebSocketPath");
 
             UriCollection uriCollection = new(webSocketHost, webSocketPort, wheelWebSocketPath, servosWebSocketPath); 
             return uriCollection;
@@ -117,11 +122,11 @@ namespace XpadControl
         private static UpdateIntervalCollection ReadUpdateIntervalFromSettings(IConfigurationSection appSettings)
         {
             IConfigurationSection pollingOptions = appSettings.GetSection("GamepadPollingOptions");
+            IConfigurationSection socketClientOptions = appSettings.GetRequiredSection("WebSocketClientOptions");
 
             double windowGamepadUpdatePolling = pollingOptions.GetValue<double>("WindowGamepadUpdatePolling");
             int linuxGamepadUpdatePolling = pollingOptions.GetValue<int>("LinuxGamepadUpdatePolling");
-
-            int websocketReconnectInterval = appSettings.GetValue<int>("WebsocketReconnectInterval");
+            int websocketReconnectInterval = socketClientOptions.GetValue<int>("WebsocketReconnectInterval");
 
             UpdateIntervalCollection updateIntervalCollection = new(linuxGamepadUpdatePolling, windowGamepadUpdatePolling, websocketReconnectInterval);
             return updateIntervalCollection;

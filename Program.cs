@@ -16,7 +16,6 @@ using LinuxGamepadService = XpadControl.Linux.Services.GamepadService.GamepadSer
 using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.GamepadService;
 using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 using LinuxGamepadHostedService = XpadControl.Linux.Services.GamepadService.GamepadHostedService;
-using System.Text.Json;
 
 namespace XpadControl
 {
@@ -144,6 +143,8 @@ namespace XpadControl
 
         #endregion
 
+        #region Read program arguments
+
         private static bool ParseArguments(string[] args)
         {
             
@@ -158,15 +159,9 @@ namespace XpadControl
             if (!Path.Exists(mProgramArguments.ConfigPathName))
                 throw new FileNotFoundException($"Cannot find app settings file {mProgramArguments.ConfigPathName}");
 
-
-            if (mProgramArguments.ShowConfigParams)
+            if (mProgramArguments.ShowConfigPath)
             {
-                //is example realization
-                using StreamReader reader = new(mProgramArguments.ConfigPathName);
-                var json = reader.ReadToEnd();
-                
-                Console.WriteLine(json);
-
+                Console.WriteLine($"Setting loaded from \"{mProgramArguments.ConfigPathName}\" file path");
                 return false; 
             }
 
@@ -185,5 +180,7 @@ namespace XpadControl
 
             return true;
         }
+
+        #endregion
     }
 }

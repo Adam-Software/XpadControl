@@ -6,6 +6,8 @@ namespace XpadControl
     {
         public AppArguments(string zeroPositionConfigPath) 
         {
+            zeroPositionConfigPath = Path.GetFullPath(zeroPositionConfigPath);
+
             if (!File.Exists(zeroPositionConfigPath))
                 throw new FileNotFoundException($"Can read AdamZeroPositionConfig. File {zeroPositionConfigPath} does not exist");
 

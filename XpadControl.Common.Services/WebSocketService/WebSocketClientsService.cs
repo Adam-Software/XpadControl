@@ -184,7 +184,7 @@ namespace XpadControl.Common.Services.WebSocketService
         public void Send(ServoCommands commands)
         {
             string json = JsonSerializer.Serialize(commands);
-            mWheelWebsocketClient.Send(json);
+            mServosWebsocketClient.Send(json);
         }
 
         public Task SendInstant(string text) => mWheelWebsocketClient.SendInstant(text);
@@ -198,7 +198,7 @@ namespace XpadControl.Common.Services.WebSocketService
         public Task SendInstant(ServoCommands servoCommands)
         {
             string json = JsonSerializer.Serialize(servoCommands);
-            return mWheelWebsocketClient.SendInstant(json);
+            return mServosWebsocketClient.SendInstant(json);
         }
 
         #endregion

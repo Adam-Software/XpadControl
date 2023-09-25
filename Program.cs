@@ -37,7 +37,7 @@ namespace XpadControl
             }
 
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .AddJsonFile(mProgramArguments.ConfigPathName)
+                .AddJsonFile(mProgramArguments.ConfigPath)
                 .Build();
 
             HostApplicationBuilder builder = Host.CreateApplicationBuilder();
@@ -147,7 +147,6 @@ namespace XpadControl
 
         private static bool ParseArguments(string[] args)
         {
-            
             CommandLineParser.CommandLineParser parser = new()
             {
                 IgnoreCase = true,
@@ -156,12 +155,12 @@ namespace XpadControl
             parser.ExtractArgumentAttributes(mProgramArguments);
             parser.ParseCommandLine(args);
 
-            if (!Path.Exists(mProgramArguments.ConfigPathName))
-                throw new FileNotFoundException($"Cannot find app settings file {mProgramArguments.ConfigPathName}");
+            if (!Path.Exists(mProgramArguments.ConfigPath))
+                throw new FileNotFoundException($"Cannot find app settings file {mProgramArguments.ConfigPath}");
 
             if (mProgramArguments.ShowConfigPath)
             {
-                Console.WriteLine($"Setting loaded from \"{mProgramArguments.ConfigPathName}\" file path");
+                Console.WriteLine($"Setting loaded from {mProgramArguments.ConfigPath}");
                 return false; 
             }
 
@@ -183,4 +182,5 @@ namespace XpadControl
 
         #endregion
     }
+
 }

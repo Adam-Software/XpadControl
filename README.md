@@ -26,9 +26,10 @@ You can view the command line arguments by typing --help or -h in Linux:
 
 ```bash
 $ dotnet XpadControl.dll -h
-        -c, --config[optional]... Set the path to the settings file
-        -v, --version[optional]... Show app version
-        -h, --help[optional]... Show this help
+        -c, --set-config-path[optional]... Loads the settings from the specified configuration file path and runs the program
+        -s, --show-config-path[optional]... Shows path loaded config and close program
+        -v, --version[optional]... Show app version and close program
+        -h, --help[optional]... Show this help and close program
 ```
 
 or Windows
@@ -38,9 +39,10 @@ or Windows
 C:\XpadControl\bin\Debug\net7.0-windows>XpadControl.exe -h
 
 Usage:
-        -c, --config[optional]... Set the path to the settings file
-        -v, --version[optional]... Show app version
-        -h, --help[optional]... Show this help
+        -c, --set-config-path[optional]... Loads the settings from the specified configuration file path and runs the program
+        -s, --show-config-path[optional]... Shows path loaded config and close program
+        -v, --version[optional]... Show app version and close program
+        -h, --help[optional]... Show this help and close program
 ```
 
 ### Managing configuration files
@@ -70,6 +72,16 @@ If the configuration file is located in an external directory relative to the ex
 $ dotnet XpadControl.dll -c /etc/mysettings.json
 
 ```
+
+To check where the settings are loaded from, run the program with the `-s` key
+
+```bash
+$ dotnet XpadControl.dll -s
+Setting loaded from /usr/src/XpadControl/bin/Debug/net7.0-windows/publish/Configs/appsettings.default.json
+```
+
+### 
+
 ## Tested WebSocket server
 
 The test web socket server is located [here](https://raw.githubusercontent.com/Adam-Software/Adam-SDK/main/servers/GamepadDebugServer.py)

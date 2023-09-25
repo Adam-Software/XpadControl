@@ -26,7 +26,6 @@ namespace XpadControl
             mWebSocketClientsService = webSocketClientsService;
             mGamepadService = gamepadService;
             mAppArguments = appArguments;
-            
 
             applicationLifetime.ApplicationStarted.Register(OnStarted);
             applicationLifetime.ApplicationStopped.Register(OnStopped);

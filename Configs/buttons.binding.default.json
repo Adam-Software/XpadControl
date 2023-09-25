@@ -1,0 +1,49 @@
+﻿{
+  /* action buttons: Button.X Button.Y Button.A Button.B */
+  "action_buttons": [
+    {
+      "action": "to_home_position",
+      "button": "Back"
+    }
+  ],
+
+  /* triggers */
+  "triggers": [
+    {
+      "action": "",
+      "button": "left_trigger"
+    },
+    {
+      "action": "",
+      "button": "right_trigger"
+    }
+  ],
+
+  /* d-pad buttons */
+
+  /* bumpers */
+
+  /* analog sticks */
+  /* axis: X - left/right Y - up/down */
+  "left_stick": [
+    {
+      "action": "riding_left_right",
+      "axis": "X"
+    },
+    {
+      "action": "riding_forward_backward",
+      "axis": "Y"
+    }
+  ],
+
+  "right_stick": [
+    {
+      "action": "head_left_right",
+      "axis": "X"
+    },
+    {
+      "action": "neck_up_down",
+      "axis": "Y"
+    }
+  ]
+}

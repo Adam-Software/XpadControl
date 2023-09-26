@@ -17,10 +17,10 @@ namespace XpadControl
         private readonly ILoggerService mLoggerService;
         private readonly IWebSocketClientsService mWebSocketClientsService;
         private readonly IGamepadService mGamepadService;
-        private readonly AppArguments mAppArguments;
+        private readonly PathCollection mAppArguments;
 
-        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IGamepadService gamepadService, IHostApplicationLifetime applicationLifetime, 
-            AppArguments appArguments)
+        public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IGamepadService gamepadService, 
+            IBindingButtonsService bindingButtonsService, IHostApplicationLifetime applicationLifetime, PathCollection appArguments)
         {
             mLoggerService = loggerService;
             mWebSocketClientsService = webSocketClientsService;

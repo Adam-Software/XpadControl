@@ -3,18 +3,18 @@
   "action_buttons": [
     {
       "action": "to_home_position",
-      "button": "Back"
+      "button": "button_back"
     }
   ],
 
   /* triggers */
   "triggers": [
     {
-      "action": "",
+      "action": "turn_to_left",
       "button": "left_trigger"
     },
     {
-      "action": "",
+      "action": "turn_to_right",
       "button": "right_trigger"
     }
   ],
@@ -24,26 +24,22 @@
   /* bumpers */
 
   /* analog sticks */
-  /* axis: X - left/right Y - up/down */
-  "left_stick": [
+  "sticks": [
     {
       "action": "riding_left_right",
-      "axis": "X"
+      "axis": "left_stick_x"
     },
     {
       "action": "riding_forward_backward",
-      "axis": "Y"
-    }
-  ],
-
-  "right_stick": [
+      "axis": "left_stick_y"
+    },
     {
       "action": "head_left_right",
-      "axis": "X"
+      "axis": "right_stick_x"
     },
     {
       "action": "neck_up_down",
-      "axis": "Y"
+      "axis": "right_stick_y"
     }
   ]
 }

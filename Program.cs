@@ -16,6 +16,7 @@ using LinuxGamepadService = XpadControl.Linux.Services.GamepadService.GamepadSer
 using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.GamepadService;
 using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 using LinuxGamepadHostedService = XpadControl.Linux.Services.GamepadService.GamepadHostedService;
+using XpadControl.Common.Services.BindingButtonsService;
 
 namespace XpadControl
 {
@@ -57,14 +58,14 @@ namespace XpadControl
                     => new WebSocketClientsService(serviceProvider.GetService<ILoggerService>(), uri));
 
                 // The background service reconnects when the connection is disconnected
-                builder.Services.AddHostedService(serviceProvider 
-                    => new WebSocketClientsHostedService(serviceProvider.GetService<IWebSocketClientsService>(), intervalCollection));
+                builder.Services.AddHostedService(serviceProvider => 
+                        new WebSocketClientsHostedService(serviceProvider.GetService<IWebSocketClientsService>(), intervalCollection));
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
                     // The background service monitors the connection disconnection of the game controller
-                    builder.Services.AddSingleton<IGamepadService>(serviceProvider 
-                        => new LinuxGamepadService(serviceProvider.GetService<ILoggerService>()));
+                    builder.Services.AddSingleton<IGamepadService>(serviceProvider => 
+                        new LinuxGamepadService(serviceProvider.GetService<ILoggerService>()));
                     builder.Services.AddHostedService(serviceProvider => 
                         new LinuxGamepadHostedService(serviceProvider.GetService<IGamepadService>(), intervalCollection));
                 }
@@ -78,14 +79,18 @@ namespace XpadControl
                         new WindowsGamepadHostedService(serviceProvider.GetService<IGamepadService>(), intervalCollection));
                 }
 
-                AppArguments appArguments = ReadAppArgumentsFromSettings(appSettingsSection);
+                PathCollection pathCollection = ReadPathCollectionFromSettings(appSettingsSection);
+
+                builder.Services.AddSingleton<IBindingButtonsService>(serviceProvider =>
+                    new BindingButtonsService(serviceProvider.GetService<ILoggerService>(), pathCollection.ButtonBindingsConfigPath));
 
                 builder.Services.AddHostedService(serviceProvider => 
                         new App(serviceProvider.GetService<IWebSocketClientsService>(), 
                                 serviceProvider.GetService<ILoggerService>(), 
-                                serviceProvider.GetService<IGamepadService>(), 
+                                serviceProvider.GetService<IGamepadService>(),
+                                serviceProvider.GetService<IBindingButtonsService>(),
                                 serviceProvider.GetService<IHostApplicationLifetime>(), 
-                                appArguments));
+                                pathCollection));
             }
             catch (ConfigurationErrorsException ex)
             {
@@ -131,12 +136,13 @@ namespace XpadControl
             return updateIntervalCollection;
         }
 
-        private static AppArguments ReadAppArgumentsFromSettings(IConfigurationSection appSettings)
+        private static PathCollection ReadPathCollectionFromSettings(IConfigurationSection appSettings)
         {
             IConfigurationSection optionsSection = appSettings.GetSection("PathOptions");
-            string path = optionsSection.GetValue<string>("AdamZeroPositionConfig");
+            string zeroConfigPath = optionsSection.GetValue<string>("AdamZeroPositionConfig");
+            string buttonBindingConfigPath = optionsSection.GetValue<string>("ButtonBindingsConfig");
 
-            AppArguments appArguments = new(path);
+            PathCollection appArguments = new(zeroConfigPath, buttonBindingConfigPath);
             
             return appArguments;
         }

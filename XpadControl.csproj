@@ -65,6 +65,9 @@
     <None Update="Configs\appsettings.default.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Configs\buttons.binding.default.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Configs\zero.position.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

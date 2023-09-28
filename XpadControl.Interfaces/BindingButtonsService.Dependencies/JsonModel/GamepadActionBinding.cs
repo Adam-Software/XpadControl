@@ -6,12 +6,12 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies.JsonModel
     public class GamepadActionBinding
     {
         [JsonPropertyName("action_buttons")]
-        public List<ButtonActionBinding> ButtonBindings { get; set; }
+        public List<ButtonActionBinding> ButtonsAction { get; set; }
 
         [JsonPropertyName("sticks")]
-        public List<SticksToActionBindingModel> SticksActions { get; set; }
+        public List<SticksActionBinding> SticksAction { get; set; }
 
         [JsonPropertyName("triggers")]
-        public List<TriggerToActionBindingModel> TriggerActions { get; set; }
+        public List<TriggerActionBinding> TriggerAction { get; set; }
     }
 }

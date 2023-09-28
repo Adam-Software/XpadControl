@@ -14,16 +14,16 @@ namespace XpadControl.Common.Services.BindingButtonsService
         public event ActionEventHandler RaiseActionEvent;
 
         private List<ButtonActionBinding> mButtonBindings;
-        private List<SticksToActionBindingModel> mSticksActions;
-        private List<TriggerToActionBindingModel> mTriggerAction;
+        private List<SticksActionBinding> mSticksActions;
+        private List<TriggerActionBinding> mTriggerAction;
 
         public BindingButtonsService(ILoggerService loggerService, IGamepadService gamepadService, string jsonConfigPath) 
         {
             var gamepadActionBinding = jsonConfigPath.ToGamepadAction();
 
-            mButtonBindings = gamepadActionBinding.ButtonBindings;
-            mSticksActions = gamepadActionBinding.SticksActions;
-            mTriggerAction = gamepadActionBinding.TriggerActions;
+            mButtonBindings = gamepadActionBinding.ButtonsAction;
+            mSticksActions = gamepadActionBinding.SticksAction;
+            mTriggerAction = gamepadActionBinding.TriggerAction;
 
             gamepadService.RaiseLeftTriggerChangedEvent += RaiseLeftTriggerChangedEvent;
             gamepadService.RaiseRightTriggerChangedEvent += RaiseRightTriggerChangedEvent;
@@ -43,7 +43,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
 
             ActionEventArgs eventArgs = new ActionEventArgs
             {
-                AamActions = action,
+                AdamActions = action,
                 IsAxis = false,
                 IsButton = true,
                 IsTrigger = false,
@@ -70,7 +70,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
                     
                     ActionEventArgs eventArgsX = new ActionEventArgs
                     {
-                        AamActions = actionX,
+                        AdamActions = actionX,
                         IsAxis = true,
                         IsButton = false,
                         IsTrigger = false,
@@ -87,7 +87,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
                     
                     ActionEventArgs eventArgsY = new ActionEventArgs
                     {
-                        AamActions = actionY,
+                        AdamActions = actionY,
                         IsAxis = true,
                         IsButton = false,
                         IsTrigger = false,
@@ -110,7 +110,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
                     
                     ActionEventArgs eventArgsX = new ActionEventArgs
                     {
-                        AamActions = actionX,
+                        AdamActions = actionX,
                         IsAxis = true,
                         IsButton = false,
                         IsTrigger = false,
@@ -127,7 +127,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
                     
                     ActionEventArgs eventArgsY = new ActionEventArgs
                     {
-                        AamActions = actionY,
+                        AdamActions = actionY,
                         IsAxis = true,
                         IsButton = false,
                         IsTrigger = false,
@@ -147,7 +147,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
 
             ActionEventArgs eventArgs = new ActionEventArgs
             {
-                AamActions = action,
+                AdamActions = action,
                 IsAxis = false,
                 IsButton = false,
                 IsTrigger = true,
@@ -165,7 +165,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
             
             ActionEventArgs eventArgs = new ActionEventArgs
             {
-                AamActions = action,
+                AdamActions = action,
                 IsAxis = false,
                 IsButton = false,
                 IsTrigger = true,

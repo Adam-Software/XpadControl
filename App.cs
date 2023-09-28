@@ -153,7 +153,7 @@ namespace XpadControl
 
         private void RaiseActionEvent(object sender, ActionEventArgs eventArgs)
         {
-            switch (eventArgs.AamActions)
+            switch (eventArgs.AdamActions)
             {
                 case AdamActions.ToHomePosition:
                     ToHomePosition(eventArgs);

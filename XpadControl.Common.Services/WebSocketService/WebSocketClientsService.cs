@@ -28,7 +28,6 @@ namespace XpadControl.Common.Services.WebSocketService
                 ReconnectTimeout = null,
                 ErrorReconnectTimeout = null,
                 Name = "WheelWebsocketClient"
-
             };
 
             mServosWebsocketClient = new WebsocketClient(uri.ServosWebSocketUri)

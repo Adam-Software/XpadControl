@@ -19,11 +19,11 @@
   "triggers": [
     {
       "action": "turn_to_left",
-      "button": "left_trigger"
+      "trigger": "left_trigger"
     },
     {
       "action": "turn_to_right",
-      "button": "right_trigger"
+      "trigger": "right_trigger"
     }
   ],
 

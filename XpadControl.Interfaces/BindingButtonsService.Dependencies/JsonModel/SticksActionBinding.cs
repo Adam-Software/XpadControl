@@ -2,12 +2,12 @@
 
 namespace XpadControl.Interfaces.BindingButtonsService.Dependencies.JsonModel
 {
-    public class ButtonActionBinding
+    public class SticksActionBinding
     {
         [JsonPropertyName("action")]
         public AdamActions Action { get; set; }
 
-        [JsonPropertyName("button")]
-        public ConfigButtons Button { get; set; }
+        [JsonPropertyName("axis")]
+        public Sticks Sticks { get; set; }
     }
 }

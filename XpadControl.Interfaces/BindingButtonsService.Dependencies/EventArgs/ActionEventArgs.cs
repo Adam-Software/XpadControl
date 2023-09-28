@@ -2,7 +2,7 @@
 {
     public class ActionEventArgs : System.EventArgs
     {
-        public AdamActions AamActions { get; set; }
+        public AdamActions AdamActions { get; set; }
         public bool IsTrigger { get; set; }
         public bool IsAxis { get; set; }
         public bool IsButton { get; set; }

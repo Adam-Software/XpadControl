@@ -44,12 +44,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
             ActionEventArgs eventArgs = new ActionEventArgs
             {
                 AdamActions = action,
-                IsAxis = false,
-                IsButton = true,
-                IsTrigger = false,
-                
-                ButtonValue = e.Pressed,
-                FloatValue = 0,
+                IsButton = e.Pressed.ToButtonEventArgs(),
             };
 
             OnRaiseActionEvent(eventArgs);
@@ -66,34 +61,26 @@ namespace XpadControl.Common.Services.BindingButtonsService
             switch (e.PropertyName)
             {
                 case "X":
-                    AdamActions actionX = mSticksActions.Where(x => x.Sticks == Sticks.LeftStickX).Select(x => x.Action).FirstOrDefault();
+                    AdamActions actionX = mSticksActions.Where(x => x.Sticks == ConfigSticks.LeftStickX).Select(x => x.Action).FirstOrDefault();
 
                     ActionEventArgs eventArgsX = new ActionEventArgs
                     {
                         AdamActions = actionX,
-                        IsAxis = true,
-                        IsButton = false,
-                        IsTrigger = false,
-
-                        ButtonValue = false,
-                        FloatValue = e.Value,
+                        IsAxis = IsAxis.IsAxisX,
+                        FloatValue = e.Value
                     };
 
                     OnRaiseActionEvent(eventArgsX);
                     break;
 
                 case "Y":
-                    AdamActions actionY = mSticksActions.Where(x => x.Sticks == Sticks.LeftStickY).Select(x => x.Action).FirstOrDefault();
+                    AdamActions actionY = mSticksActions.Where(x => x.Sticks == ConfigSticks.LeftStickY).Select(x => x.Action).FirstOrDefault();
 
                     ActionEventArgs eventArgsY = new ActionEventArgs
                     {
                         AdamActions = actionY,
-                        IsAxis = true,
-                        IsButton = false,
-                        IsTrigger = false,
-
-                        ButtonValue = false,
-                        FloatValue = e.Value,
+                        IsAxis = IsAxis.IsAxisY,
+                        FloatValue = e.Value
                     };
 
                     OnRaiseActionEvent(eventArgsY);
@@ -106,34 +93,26 @@ namespace XpadControl.Common.Services.BindingButtonsService
             switch (e.PropertyName)
             {
                 case "X":
-                    AdamActions actionX = mSticksActions.Where(x => x.Sticks == Sticks.RightStickX).Select(x => x.Action).FirstOrDefault();
+                    AdamActions actionX = mSticksActions.Where(x => x.Sticks == ConfigSticks.RightStickX).Select(x => x.Action).FirstOrDefault();
                     
                     ActionEventArgs eventArgsX = new ActionEventArgs
                     {
                         AdamActions = actionX,
-                        IsAxis = true,
-                        IsButton = false,
-                        IsTrigger = false,
-
-                        ButtonValue = false,
-                        FloatValue = e.Value,
+                        IsAxis = IsAxis.IsAxisX,
+                        FloatValue = e.Value
                     };
 
                     OnRaiseActionEvent(eventArgsX);
                     break;
 
                 case "Y":
-                    AdamActions actionY = mSticksActions.Where(x => x.Sticks == Sticks.RightStickY).Select(x => x.Action).FirstOrDefault();
+                    AdamActions actionY = mSticksActions.Where(x => x.Sticks == ConfigSticks.RightStickY).Select(x => x.Action).FirstOrDefault();
                     
                     ActionEventArgs eventArgsY = new ActionEventArgs
                     {
                         AdamActions = actionY,
-                        IsAxis = true,
-                        IsButton = false,
-                        IsTrigger = false,
-
-                        ButtonValue = false,
-                        FloatValue = e.Value,
+                        IsAxis = IsAxis.IsAxisY,
+                        FloatValue = e.Value
                     };
 
                     OnRaiseActionEvent(eventArgsY);
@@ -143,16 +122,12 @@ namespace XpadControl.Common.Services.BindingButtonsService
 
         private void RaiseRightTriggerChangedEvent(object sender, TriggerEventArgs e)
         {
-            AdamActions action = mTriggerAction.Where(x => x.Trigger == Triggers.RightTrigger).Select(x => x.Action).FirstOrDefault();
+            AdamActions action = mTriggerAction.Where(x => x.Trigger == ConfigTriggers.RightTrigger).Select(x => x.Action).FirstOrDefault();
 
             ActionEventArgs eventArgs = new ActionEventArgs
             {
                 AdamActions = action,
-                IsAxis = false,
-                IsButton = false,
-                IsTrigger = true,
-
-                ButtonValue = false,
+                IsTrigger = IsTrigger.IsTriggerRight,
                 FloatValue = e.Value,
             };
 
@@ -161,17 +136,13 @@ namespace XpadControl.Common.Services.BindingButtonsService
 
         private void RaiseLeftTriggerChangedEvent(object sender, TriggerEventArgs e)
         {
-            AdamActions action = mTriggerAction.Where(x => x.Trigger == Triggers.LeftTrigger).Select(x => x.Action).FirstOrDefault();
+            AdamActions action = mTriggerAction.Where(x => x.Trigger == ConfigTriggers.LeftTrigger).Select(x => x.Action).FirstOrDefault();
             
             ActionEventArgs eventArgs = new ActionEventArgs
             {
                 AdamActions = action,
-                IsAxis = false,
-                IsButton = false,
-                IsTrigger = true,
-
-                ButtonValue = false,
-                FloatValue = e.Value,
+                IsTrigger = IsTrigger.IsTriggerLeft,
+                FloatValue = e.Value
             };
 
             OnRaiseActionEvent(eventArgs);

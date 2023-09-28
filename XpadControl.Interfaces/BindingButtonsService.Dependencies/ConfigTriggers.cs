@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
 {
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
-    public enum Triggers
+    public enum ConfigTriggers
     {
         [EnumMember(Value = "left_trigger")]
         LeftTrigger = 0,

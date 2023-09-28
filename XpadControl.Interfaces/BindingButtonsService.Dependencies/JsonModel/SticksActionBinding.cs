@@ -8,6 +8,6 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies.JsonModel
         public AdamActions Action { get; set; }
 
         [JsonPropertyName("axis")]
-        public Sticks Sticks { get; set; }
+        public ConfigSticks Sticks { get; set; }
     }
 }

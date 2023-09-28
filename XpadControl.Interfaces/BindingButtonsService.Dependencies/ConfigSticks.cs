@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
 {
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
-    public enum Sticks
+    public enum ConfigSticks
     {
         [EnumMember(Value = "left_stick_x")]
         LeftStickX = 0,

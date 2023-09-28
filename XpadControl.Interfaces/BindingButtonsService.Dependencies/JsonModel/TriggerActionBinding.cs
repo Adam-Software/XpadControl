@@ -9,6 +9,6 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies.JsonModel
         public AdamActions Action { get; set; }
 
         [JsonPropertyName("trigger")]
-        public Triggers Trigger { get; set; }
+        public ConfigTriggers Trigger { get; set; }
     }
 }

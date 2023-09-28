@@ -54,6 +54,42 @@ namespace XpadControl
 
         #endregion
 
+        #region AdamActionEvent
+
+        private void RaiseActionEvent(object sender, ActionEventArgs eventArgs)
+        {
+            switch (eventArgs.AdamActions)
+            {
+                case AdamActions.ToHomePosition:
+                    ToHomePosition(eventArgs);
+                    break;
+            }
+        }
+
+        private void ToHomePosition(ActionEventArgs eventArgs)
+        {
+            if (eventArgs.IsButton == IsButton.IsButtonPressed)
+            {
+                HomePositionCommandExecute();
+            }
+
+            if (eventArgs.IsAxis != IsAxis.None || eventArgs.IsTrigger != IsTrigger.None)
+            {
+                if (eventArgs.FloatValue <= 0.5 || eventArgs.FloatValue >= 0.5)
+                {
+                    HomePositionCommandExecute();
+                }
+            }
+        }
+
+        private void HomePositionCommandExecute()
+        {
+            ServoCommands zeroPosition = mAppArguments.ZeroPositionConfigPath.ToServoCommands();
+            mWebSocketClientsService.SendInstant(zeroPosition);
+        }
+
+        #endregion
+
         #region Websocket clients event
 
         private void RaiseIsDisconnectionStatusChangedEvent(object sender, IsDisconnectionStatusChangedEventArgs eventArgs)
@@ -161,45 +197,6 @@ namespace XpadControl
         {
             mLoggerService.WriteVerboseLog("Task complete and stop async called");
             return Task.CompletedTask;
-        }
-
-        #endregion
-
-        #region AdamActionEvent
-
-        private void RaiseActionEvent(object sender, ActionEventArgs eventArgs)
-        {
-            switch (eventArgs.AdamActions)
-            {
-                case AdamActions.ToHomePosition:
-                    ToHomePosition(eventArgs);
-                    break;
-            }
-        }
-
-        private void ToHomePosition(ActionEventArgs eventArgs)
-        {
-            if (eventArgs.IsButton)
-            {
-                if (eventArgs.ButtonValue)
-                {
-                    HomePositionCommandExecute();
-                }
-            }
-
-            if (eventArgs.IsAxis || eventArgs.IsTrigger)
-            {
-                if (eventArgs.FloatValue <= 0.5 || eventArgs.FloatValue >= 0.5)
-                {
-                    HomePositionCommandExecute();
-                }
-            }
-        }
-
-        private void HomePositionCommandExecute()
-        {
-            ServoCommands zeroPosition = mAppArguments.ZeroPositionConfigPath.ToServoCommands();
-            mWebSocketClientsService.SendInstant(zeroPosition);
         }
 
         #endregion

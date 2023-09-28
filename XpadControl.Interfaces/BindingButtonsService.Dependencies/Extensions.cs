@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text.Json;
+using XpadControl.Interfaces.BindingButtonsService.Dependencies.EventArgs;
 using XpadControl.Interfaces.BindingButtonsService.Dependencies.JsonModel;
 using XpadControl.Interfaces.GamepadService.Dependencies;
 
@@ -28,6 +29,17 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
         {
             int value = (int) buttons;
             return (ConfigButtons)value;
+        }
+
+        public static IsButton ToButtonEventArgs(this bool isPressed)
+        {
+            switch (isPressed)
+            {
+                case true:
+                    return IsButton.IsButtonPressed;
+                case false:
+                    return IsButton.IsButtonReleased;    
+            }
         }
     }
 }

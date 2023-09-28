@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
-using XpadControl.Interfaces.BindingButtonsService.Dependencies.JsonModel;
+﻿using XpadControl.Interfaces.BindingButtonsService.Dependencies.EventArgs;
 
 namespace XpadControl.Interfaces
 {
+    #region action delegate
+
+    public delegate void ActionEventHandler(object sender, ActionEventArgs eventArgs);
+
+    #endregion
+
     public interface IBindingButtonsService
     {
-        public List<ButtonActionBinding> ButtonBindings { get; }
-
-        public List<SticksToActionBindingModel> SticksActions { get; }
-
-        public List<TriggerToActionBindingModel> TriggerAction { get; }
-
+        public event ActionEventHandler RaiseActionEvent;
     }
 }

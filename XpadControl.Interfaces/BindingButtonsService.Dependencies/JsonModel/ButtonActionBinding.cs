@@ -5,6 +5,6 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies.JsonModel
     public class ButtonActionBinding
     {
         public AdamActions Action { get; set; }
-        public Buttons Button { get; set; }
+        public ConfigButtons Button { get; set; }
     }
 }

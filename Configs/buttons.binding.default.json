@@ -1,5 +1,13 @@
 ﻿{
-  /* action buttons: Button.X Button.Y Button.A Button.B */
+  /* action buttons: 
+     possible values:  
+              button_a
+              button_b
+              button_x
+              button_y
+              button_start
+              button_back
+  */
   "action_buttons": [
     {
       "action": "to_home_position",

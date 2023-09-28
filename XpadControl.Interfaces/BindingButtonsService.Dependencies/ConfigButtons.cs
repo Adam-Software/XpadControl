@@ -1,15 +1,15 @@
-﻿namespace XpadControl.Interfaces.GamepadService.Dependencies
+﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+
+namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
 {
     /// <summary>
-    /// Buttons value 
-    /// 
-    /// Copy from https://github.com/AderitoSilva/XInputium/blob/main/source/XInputium/XInputium/XInput/XButtons.cs
+    /// The values are used for quick conversion to config buttons. Dont change this!
     /// </summary>
-    public enum Buttons
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
+    public enum ConfigButtons
     {
-        // No button. This is used to represent no buttons.
         None = 0x0,
-
         // D-Pad Up. This is one of the directional buttons.
         DPadUp = 0x1,
 
@@ -22,10 +22,10 @@
         // D-Pad Right. This is one of the directional buttons.
         DPadRight = 0x8,
 
-        // The Start button.
+        [EnumMember(Value = "button_start")]
         Start = 0x10,
 
-        // The Back button.
+        [EnumMember(Value = "button_back")]
         Back = 0x20,
 
         // The LS (Left Stick) button.
@@ -40,16 +40,20 @@
         // The RB (Right Shoulder).
         RB = 0x200,
 
-        // The A button.
+        [EnumMember(Value = "button_a")]
         A = 0x1000,
 
-        // The B button.
+        [EnumMember(Value = "button_b")]
         B = 0x2000,
 
-        // The X button.
+        [EnumMember(Value = "button_x")]
         X = 0x4000,
 
-        // The Y button.
+        [EnumMember(Value = "button_y")]
         Y = 0x8000
+
+
+
+
     }
 }

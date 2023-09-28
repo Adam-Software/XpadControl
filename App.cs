@@ -9,6 +9,8 @@ using XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel;
 using XpadControl.JsonModel;
 using XpadControl.Interfaces.GamepadService.Dependencies;
 using XpadControl.Extensions;
+using XpadControl.Interfaces.BindingButtonsService.Dependencies.EventArgs;
+using XpadControl.Interfaces.BindingButtonsService.Dependencies;
 
 namespace XpadControl
 {
@@ -17,6 +19,7 @@ namespace XpadControl
         private readonly ILoggerService mLoggerService;
         private readonly IWebSocketClientsService mWebSocketClientsService;
         private readonly IGamepadService mGamepadService;
+        private readonly IBindingButtonsService mBindingButtonsService;
         private readonly PathCollection mAppArguments;
 
         public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IGamepadService gamepadService, 
@@ -25,6 +28,7 @@ namespace XpadControl
             mLoggerService = loggerService;
             mWebSocketClientsService = webSocketClientsService;
             mGamepadService = gamepadService;
+            mBindingButtonsService = bindingButtonsService;
             mAppArguments = appArguments;
 
             applicationLifetime.ApplicationStarted.Register(OnStarted);
@@ -86,7 +90,7 @@ namespace XpadControl
         {
             mLoggerService.WriteVerboseLog($"RaiseButtonChangedEvent in app {e.Button} is {e.Pressed}");
 
-            switch (e.Button)
+            /*switch (e.Button)
             {
                 case Buttons.Back:
 
@@ -97,7 +101,7 @@ namespace XpadControl
                     }
                     
                     break;
-            }
+            }*/
         }
 
         #endregion
@@ -145,6 +149,45 @@ namespace XpadControl
 
         #endregion
 
+        #region AdamActionEvent
+
+        private void RaiseActionEvent(object sender, ActionEventArgs eventArgs)
+        {
+            switch (eventArgs.AamActions)
+            {
+                case AdamActions.ToHomePosition:
+                    ToHomePosition(eventArgs);
+                    break;
+            }
+        }
+
+        private void ToHomePosition(ActionEventArgs eventArgs)
+        {
+            if (eventArgs.IsButton)
+            {
+                if (eventArgs.ButtonValue)
+                {
+                    HomePositionCommandExecute();
+                }
+            }
+
+            if (eventArgs.IsAxis || eventArgs.IsTrigger)
+            {
+                if (eventArgs.FloatValue <= 0.5 || eventArgs.FloatValue >= 0.5)
+                {
+                    HomePositionCommandExecute();
+                }
+            }
+        }
+
+        private void HomePositionCommandExecute()
+        {
+            ServoCommands zeroPosition = mAppArguments.ZeroPositionConfigPath.ToServoCommands();
+            mWebSocketClientsService.SendInstant(zeroPosition);
+        }
+
+        #endregion
+
         #region Subscribe/Unsubscribe to/from event
 
         private void SubscribeToEvent()
@@ -154,6 +197,8 @@ namespace XpadControl
             mGamepadService.RaiseRightTriggerChangedEvent += RaiseRightTriggerChangedEvent;
             mGamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
             mGamepadService.RaiseConnectedChangedEvent += RaiseConnectedChangedEvent;
+
+            mBindingButtonsService.RaiseActionEvent += RaiseActionEvent;
 
             mWebSocketClientsService.RaiseIsDisconnectionStatusChangedEvent += RaiseIsDisconnectionStatusChangedEvent;
         }
@@ -165,6 +210,8 @@ namespace XpadControl
             mGamepadService.RaiseRightTriggerChangedEvent -= RaiseRightTriggerChangedEvent;
             mGamepadService.RaiseButtonChangedEvent -= RaiseButtonChangedEvent;
             mGamepadService.RaiseConnectedChangedEvent -= RaiseConnectedChangedEvent;
+
+            mBindingButtonsService.RaiseActionEvent -= RaiseActionEvent;
 
             mWebSocketClientsService.RaiseIsDisconnectionStatusChangedEvent -= RaiseIsDisconnectionStatusChangedEvent;
         }

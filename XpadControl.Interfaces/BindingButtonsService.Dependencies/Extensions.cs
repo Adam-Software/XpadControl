@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text.Json;
 using XpadControl.Interfaces.BindingButtonsService.Dependencies.JsonModel;
+using XpadControl.Interfaces.GamepadService.Dependencies;
 
 namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
 {
@@ -23,16 +24,10 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
             return commands;
         }
 
-        public static GamepadService.Dependencies.Buttons ToGamepadButton(this Buttons buttons) 
+        public static ConfigButtons ToConfigButton(this Buttons buttons) 
         {
-            switch (buttons)
-            {
-                case Buttons.Back:
-                    return GamepadService.Dependencies.Buttons.Back;
-
-                default:
-                    return GamepadService.Dependencies.Buttons.None;
-            }
+            int value = (int) buttons;
+            return (ConfigButtons)value;
         }
     }
 }

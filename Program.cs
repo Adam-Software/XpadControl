@@ -82,7 +82,7 @@ namespace XpadControl
                 PathCollection pathCollection = ReadPathCollectionFromSettings(appSettingsSection);
 
                 builder.Services.AddSingleton<IBindingButtonsService>(serviceProvider =>
-                    new BindingButtonsService(serviceProvider.GetService<ILoggerService>(), pathCollection.ButtonBindingsConfigPath));
+                    new BindingButtonsService(serviceProvider.GetService<ILoggerService>(), serviceProvider.GetService<IGamepadService>(), pathCollection.ButtonBindingsConfigPath));
 
                 builder.Services.AddHostedService(serviceProvider => 
                         new App(serviceProvider.GetService<IWebSocketClientsService>(), 

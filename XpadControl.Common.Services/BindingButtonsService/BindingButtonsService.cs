@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using XpadControl.Interfaces;
 using XpadControl.Interfaces.BindingButtonsService.Dependencies;
 using XpadControl.Interfaces.BindingButtonsService.Dependencies.EventArgs;
 using XpadControl.Interfaces.BindingButtonsService.Dependencies.JsonModel;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
+using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.PropertyChangedArgs;
 
 namespace XpadControl.Common.Services.BindingButtonsService
 {
@@ -13,9 +13,9 @@ namespace XpadControl.Common.Services.BindingButtonsService
     {
         public event ActionEventHandler RaiseActionEvent;
 
-        private List<ButtonActionBinding> mButtonBindings;
-        private List<SticksActionBinding> mSticksActions;
-        private List<TriggerActionBinding> mTriggerAction;
+        private readonly List<ButtonActionBinding> mButtonBindings;
+        private readonly List<SticksActionBinding> mSticksActions;
+        private readonly List<TriggerActionBinding> mTriggerAction;
 
         public BindingButtonsService(ILoggerService loggerService, IGamepadService gamepadService, string jsonConfigPath) 
         {
@@ -57,8 +57,48 @@ namespace XpadControl.Common.Services.BindingButtonsService
 
         private void RaiseAxisChangedEvent(object sender, AxisEventArgs left, AxisEventArgs right)
         {
-            left.RaiseAxisPropertyChangedEvent += LeftAxisPropertyChangedEvent;
-            right.RaiseAxisPropertyChangedEvent += RightAxisPropertyChangedEvent;
+            left.PropertyChanged += LeftAxisPropertyChangedEvent;
+            right.PropertyChanged += RightAxisPropertyChangedEvent;
+        }
+
+        private void LeftAxisPropertyChangedEvent(object sender, AxisPropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "X":
+                    AdamActions actionX = mSticksActions.Where(x => x.Sticks == Sticks.LeftStickX).Select(x => x.Action).FirstOrDefault();
+
+                    ActionEventArgs eventArgsX = new ActionEventArgs
+                    {
+                        AdamActions = actionX,
+                        IsAxis = true,
+                        IsButton = false,
+                        IsTrigger = false,
+
+                        ButtonValue = false,
+                        FloatValue = e.Value,
+                    };
+
+                    OnRaiseActionEvent(eventArgsX);
+                    break;
+
+                case "Y":
+                    AdamActions actionY = mSticksActions.Where(x => x.Sticks == Sticks.LeftStickY).Select(x => x.Action).FirstOrDefault();
+
+                    ActionEventArgs eventArgsY = new ActionEventArgs
+                    {
+                        AdamActions = actionY,
+                        IsAxis = true,
+                        IsButton = false,
+                        IsTrigger = false,
+
+                        ButtonValue = false,
+                        FloatValue = e.Value,
+                    };
+
+                    OnRaiseActionEvent(eventArgsY);
+                    break;
+            }
         }
 
         private void RightAxisPropertyChangedEvent(object sender, AxisPropertyChangedEventArgs e)
@@ -84,46 +124,6 @@ namespace XpadControl.Common.Services.BindingButtonsService
 
                 case "Y":
                     AdamActions actionY = mSticksActions.Where(x => x.Sticks == Sticks.RightStickY).Select(x => x.Action).FirstOrDefault();
-                    
-                    ActionEventArgs eventArgsY = new ActionEventArgs
-                    {
-                        AdamActions = actionY,
-                        IsAxis = true,
-                        IsButton = false,
-                        IsTrigger = false,
-
-                        ButtonValue = false,
-                        FloatValue = e.Value,
-                    };
-
-                    OnRaiseActionEvent(eventArgsY);
-                    break;
-            }
-        }
-
-        private void LeftAxisPropertyChangedEvent(object sender, AxisPropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case "X":
-                    AdamActions actionX = mSticksActions.Where(x => x.Sticks == Sticks.LeftStickX).Select(x => x.Action).FirstOrDefault();
-                    
-                    ActionEventArgs eventArgsX = new ActionEventArgs
-                    {
-                        AdamActions = actionX,
-                        IsAxis = true,
-                        IsButton = false,
-                        IsTrigger = false,
-
-                        ButtonValue = false,
-                        FloatValue = e.Value,
-                    };
-
-                    OnRaiseActionEvent(eventArgsX);
-                    break;
-
-                case "Y":
-                    AdamActions actionY = mSticksActions.Where(x => x.Sticks == Sticks.LeftStickY).Select(x => x.Action).FirstOrDefault();
                     
                     ActionEventArgs eventArgsY = new ActionEventArgs
                     {
@@ -173,6 +173,8 @@ namespace XpadControl.Common.Services.BindingButtonsService
                 ButtonValue = false,
                 FloatValue = e.Value,
             };
+
+            OnRaiseActionEvent(eventArgs);
         }
 
         protected virtual void OnRaiseActionEvent(ActionEventArgs aventArgs)

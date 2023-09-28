@@ -1,13 +1,11 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
+using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.PropertyChangedArgs;
 
 namespace XpadControl.Interfaces.GamepadService.Dependencies.EventArgs
 {
-    public delegate void AxisPropertyChangedEventHandler(object sender, AxisPropertyChangedEventArgs e);
-
-    public class AxisEventArgs : System.EventArgs
+    public class AxisEventArgs : IAxisPropertyChanged
     {
-        public event AxisPropertyChangedEventHandler RaiseAxisPropertyChangedEvent;
+        public event AxisPropertyChangedEventHandler PropertyChanged;
 
         private float x;
         public float X
@@ -22,6 +20,7 @@ namespace XpadControl.Interfaces.GamepadService.Dependencies.EventArgs
         }
 
         private float y;
+        
         public float Y
         {
             get { return y; }
@@ -35,21 +34,9 @@ namespace XpadControl.Interfaces.GamepadService.Dependencies.EventArgs
 
         protected virtual void NotifyPropertyChanged(float value, [CallerMemberName] string propertyName = "")
         {
-            AxisPropertyChangedEventHandler raiseEvent = RaiseAxisPropertyChangedEvent;
-
+            AxisPropertyChangedEventHandler raiseEvent = PropertyChanged;
             AxisPropertyChangedEventArgs eventArgs = new AxisPropertyChangedEventArgs(propertyName, value);
-
-            RaiseAxisPropertyChangedEvent?.Invoke(this, eventArgs);
+            raiseEvent?.Invoke(this, eventArgs);
         }
-    }
-
-    public class AxisPropertyChangedEventArgs : PropertyChangedEventArgs
-    {
-        public AxisPropertyChangedEventArgs(string propertyName, float value) : base(propertyName)
-        {
-            Value = value;
-        }
-
-        public float Value { get; private set; }
     }
 }

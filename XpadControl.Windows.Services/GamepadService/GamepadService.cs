@@ -117,11 +117,6 @@ namespace XpadControl.Windows.Services.GamepadService
 
         #endregion
 
-        public void Dispose()
-        {
-            mLoggerService.WriteVerboseLog($"Dispose {nameof(GamepadService)} called");
-        }
-
         #region Raise events
 
         protected virtual void OnRaiseAxisChangedEvent(float lx, float ly, float rx, float ry)
@@ -193,6 +188,11 @@ namespace XpadControl.Windows.Services.GamepadService
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            mLoggerService.WriteVerboseLog($"Dispose {nameof(GamepadService)} called");
+        }
 
     }
 }

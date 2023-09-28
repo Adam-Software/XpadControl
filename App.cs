@@ -6,8 +6,6 @@ using XpadControl.Interfaces;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.EventArgs;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel;
-using XpadControl.JsonModel;
-using XpadControl.Interfaces.GamepadService.Dependencies;
 using XpadControl.Extensions;
 using XpadControl.Interfaces.BindingButtonsService.Dependencies.EventArgs;
 using XpadControl.Interfaces.BindingButtonsService.Dependencies;
@@ -38,6 +36,24 @@ namespace XpadControl
             SubscribeToEvent();
         }
 
+        #region Subscribe/Unsubscribe to/from event
+
+        private void SubscribeToEvent()
+        {
+            mGamepadService.RaiseConnectedChangedEvent += RaiseConnectedChangedEvent;
+            mBindingButtonsService.RaiseActionEvent += RaiseActionEvent;
+            mWebSocketClientsService.RaiseIsDisconnectionStatusChangedEvent += RaiseIsDisconnectionStatusChangedEvent;
+        }
+
+        private void UnsubscribeFromEvent()
+        {
+            mGamepadService.RaiseConnectedChangedEvent -= RaiseConnectedChangedEvent;
+            mBindingButtonsService.RaiseActionEvent -= RaiseActionEvent;
+            mWebSocketClientsService.RaiseIsDisconnectionStatusChangedEvent -= RaiseIsDisconnectionStatusChangedEvent;
+        }
+
+        #endregion
+
         #region Websocket clients event
 
         private void RaiseIsDisconnectionStatusChangedEvent(object sender, IsDisconnectionStatusChangedEventArgs eventArgs)
@@ -47,11 +63,11 @@ namespace XpadControl
 
         #endregion
 
-        #region Gamepad event
+        #region Gamepad event example
 
-        #region Trigger event
+        #region Trigger event example
 
-        private void RaiseRightTriggerChangedEvent(object sender, TriggerEventArgs e)
+        /*private void RaiseRightTriggerChangedEvent(object sender, TriggerEventArgs e)
         {
             mLoggerService.WriteVerboseLog($"RaiseRightTriggerChangedEvent {e.Value}");
         }
@@ -59,13 +75,13 @@ namespace XpadControl
         private void RaiseLeftTriggerChangedEvent(object sender, TriggerEventArgs e)
         {
             mLoggerService.WriteVerboseLog($"RaiseLeftTriggerChangedEvent {e.Value}");
-        }
+        }*/
 
         #endregion
 
-        #region Axis event
+        #region Axis event example
 
-        private void RaiseAxisChangedEvent(object sender, AxisEventArgs left, AxisEventArgs right)
+        /*private void RaiseAxisChangedEvent(object sender, AxisEventArgs left, AxisEventArgs right)
         {
             Vector vector = new()
             {
@@ -80,17 +96,17 @@ namespace XpadControl
             mWebSocketClientsService.SendInstant(vector);
 
             mLoggerService.WriteDebugLog($"lx {left.X} ly {left.Y} rx {right.X} ry {right.Y}");
-        }
+        }*/
 
         #endregion
 
-        #region Button event
+        #region Button event example
 
-        private void RaiseButtonChangedEvent(object sender, ButtonEventArgs e)
+        /*private void RaiseButtonChangedEvent(object sender, ButtonEventArgs e)
         {
             mLoggerService.WriteVerboseLog($"RaiseButtonChangedEvent in app {e.Button} is {e.Pressed}");
 
-            /*switch (e.Button)
+            switch (e.Button)
             {
                 case Buttons.Back:
 
@@ -101,8 +117,8 @@ namespace XpadControl
                     }
                     
                     break;
-            }*/
-        }
+            }
+        }*/
 
         #endregion
 
@@ -184,36 +200,6 @@ namespace XpadControl
         {
             ServoCommands zeroPosition = mAppArguments.ZeroPositionConfigPath.ToServoCommands();
             mWebSocketClientsService.SendInstant(zeroPosition);
-        }
-
-        #endregion
-
-        #region Subscribe/Unsubscribe to/from event
-
-        private void SubscribeToEvent()
-        {
-            mGamepadService.RaiseAxisChangedEvent += RaiseAxisChangedEvent;
-            mGamepadService.RaiseLeftTriggerChangedEvent += RaiseLeftTriggerChangedEvent;
-            mGamepadService.RaiseRightTriggerChangedEvent += RaiseRightTriggerChangedEvent;
-            mGamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
-            mGamepadService.RaiseConnectedChangedEvent += RaiseConnectedChangedEvent;
-
-            mBindingButtonsService.RaiseActionEvent += RaiseActionEvent;
-
-            mWebSocketClientsService.RaiseIsDisconnectionStatusChangedEvent += RaiseIsDisconnectionStatusChangedEvent;
-        }
-
-        private void UnsubscribeFromEvent()
-        {
-            mGamepadService.RaiseAxisChangedEvent -= RaiseAxisChangedEvent;
-            mGamepadService.RaiseLeftTriggerChangedEvent -= RaiseLeftTriggerChangedEvent;
-            mGamepadService.RaiseRightTriggerChangedEvent -= RaiseRightTriggerChangedEvent;
-            mGamepadService.RaiseButtonChangedEvent -= RaiseButtonChangedEvent;
-            mGamepadService.RaiseConnectedChangedEvent -= RaiseConnectedChangedEvent;
-
-            mBindingButtonsService.RaiseActionEvent -= RaiseActionEvent;
-
-            mWebSocketClientsService.RaiseIsDisconnectionStatusChangedEvent -= RaiseIsDisconnectionStatusChangedEvent;
         }
 
         #endregion

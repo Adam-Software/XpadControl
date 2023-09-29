@@ -9,17 +9,19 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum ConfigButtons
     {
+        [EnumMember(Value = "none")]
         None = 0x0,
-        // D-Pad Up. This is one of the directional buttons.
+
+        [EnumMember(Value = "dpad_up")]
         DPadUp = 0x1,
 
-        // D-Pad Down. This is one of the directional buttons.
+        [EnumMember(Value = "dpad_down")]
         DPadDown = 0x2,
 
-        // D-Pad Left. This is one of the directional buttons.
+        [EnumMember(Value = "dpad_left")]
         DPadLeft = 0x4,
 
-        // D-Pad Right. This is one of the directional buttons.
+        [EnumMember(Value = "dpad_right")]
         DPadRight = 0x8,
 
         [EnumMember(Value = "button_start")]
@@ -34,10 +36,10 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
         // The RS (Right Stick) button.
         RS = 0x80,
 
-        // The LB (Left Shoulder) button.
+        [EnumMember(Value = "left_bamper")]
         LB = 0x100,
 
-        // The RB (Right Shoulder).
+        [EnumMember(Value = "right_bamper")]
         RB = 0x200,
 
         [EnumMember(Value = "button_a")]
@@ -51,9 +53,5 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
 
         [EnumMember(Value = "button_y")]
         Y = 0x8000
-
-
-
-
     }
 }

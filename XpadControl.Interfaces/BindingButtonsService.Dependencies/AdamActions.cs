@@ -6,6 +6,9 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum AdamActions
     {
+        [EnumMember(Value = "none")]
+        None = 0,
+
         #region Riding
 
         [EnumMember(Value = "riding_left_right")]

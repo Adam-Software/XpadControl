@@ -8,6 +8,15 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies.JsonModel
         [JsonPropertyName("action_buttons")]
         public List<ButtonActionBinding> ButtonsAction { get; set; }
 
+        [JsonPropertyName("option_buttons")]
+        public List<ButtonActionBinding> ButtonsOption { get; set; }
+
+        [JsonPropertyName("dpad")]
+        public List<ButtonActionBinding> ButtonsDpad { get; set; }
+
+        [JsonPropertyName("bumpers")]
+        public List<ButtonActionBinding> ButtonsBumper { get; set; }
+
         [JsonPropertyName("sticks")]
         public List<SticksActionBinding> SticksAction { get; set; }
 

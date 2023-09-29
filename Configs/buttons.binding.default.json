@@ -1,21 +1,50 @@
 ﻿{
-  /* action buttons: 
-     possible values:  
+  /* possible button values:  
               button_a
               button_b
               button_x
-              button_y
-              button_start
-              button_back
+              button_y,
+              none 
   */
   "action_buttons": [
     {
-      "action": "to_home_position",
-      "button": "button_back"
+      "action": "none",
+      "button": "button_a"
+    },
+    {
+      "action": "none",
+      "button": "button_b"
+    },
+    {
+      "action": "none",
+      "button": "button_x"
+    },
+    {
+      "action": "none",
+      "button": "button_y"
     }
   ],
 
-  /* triggers */
+  /* possible button values:  
+              button_back
+              button_start,
+              none
+  */
+  "option_buttons": [
+    {
+      "action": "to_home_position",
+      "button": "button_back"
+    },
+    {
+      "action": "none",
+      "button": "button_start"
+    }
+  ],
+
+  /* possible triggers values:
+              left_trigger
+              right_trigger 
+  */
   "triggers": [
     {
       "action": "turn_to_left",
@@ -27,11 +56,55 @@
     }
   ],
 
-  /* d-pad buttons */
+  /* possible d-pad buttons values:
+              dpad_left
+              dpad_right
+              dpad_down,
+              dpad_up
+              none
+  */
+  "dpad": [
+    {
+      "action": "none",
+      "button": "dpad_left"
+    },
+    {
+      "action": "none",
+      "button": "dpad_right"
+    },
+    {
+      "action": "none",
+      "button": "dpad_down"
+    },
+    {
+      "action": "none",
+      "button": "dpad_up"
+    }
+  ],
 
-  /* bumpers */
+  /* possible bampers buttons values:
+              left_bamper
+              right_bamper
+              none
+  */
+  "bumpers": [
+    {
+      "action": "none",
+      "button": "left_bamper"
+    },
+    {
+      "action": "none",
+      "button": "right_bamper"
+    }
+  ],
 
-  /* analog sticks */
+
+  /* possible analog sticks values:
+              left_stick_x
+              left_stick_y
+              right_stick_x
+              right_stick_y
+  */
   "sticks": [
     {
       "action": "riding_left_right",

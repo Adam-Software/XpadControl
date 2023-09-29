@@ -1,6 +1,6 @@
 # XpadControl
 
-![GitHub](https://img.shields.io/github/license/Adam-Software/XpadControl)
+![GitHub](https://img.shields.io/github/license/Adam-Software/XpadControl) [![.NET Core Desktop](https://github.com/Adam-Software/XpadControl/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/Adam-Software/XpadControl/actions/workflows/dotnet-desktop.yml)
 
 
 A cross-platform console application  for controlling the Adam robot via a local/remote socket using an xbox gamepad and its analogues.

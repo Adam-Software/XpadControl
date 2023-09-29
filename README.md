@@ -1,6 +1,7 @@
 # XpadControl
 
-![GitHub](https://img.shields.io/github/license/Adam-Software/XpadControl) [![.NET Core Desktop](https://github.com/Adam-Software/XpadControl/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/Adam-Software/XpadControl/actions/workflows/dotnet-desktop.yml) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Adam-Software/XpadControl)
+![GitHub](https://img.shields.io/github/license/Adam-Software/XpadControl) [![.NET Core Desktop](https://github.com/Adam-Software/XpadControl/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/Adam-Software/XpadControl/actions/workflows/dotnet-desktop.yml) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Adam-Software/XpadControl) ![GitHub tag (with filter)](https://img.shields.io/github/v/tag/Adam-Software/XpadControl)
+
 
 
 

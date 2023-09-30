@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using XpadControl.Interfaces;
 using XpadControl.Interfaces.BindingButtonsService.Dependencies;
 using XpadControl.Interfaces.BindingButtonsService.Dependencies.EventArgs;
 using XpadControl.Interfaces.BindingButtonsService.Dependencies.JsonModel;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.PropertyChangedArgs;
+
 
 namespace XpadControl.Common.Services.BindingButtonsService
 {
@@ -19,9 +21,15 @@ namespace XpadControl.Common.Services.BindingButtonsService
 
         public BindingButtonsService(ILoggerService loggerService, IGamepadService gamepadService, string jsonConfigPath) 
         {
-            var gamepadActionBinding = jsonConfigPath.ToGamepadAction();
+            GamepadActionBinding gamepadActionBinding = jsonConfigPath.ToGamepadAction();
 
-            mButtonBindings = gamepadActionBinding.ButtonsAction;
+            List<ButtonActionBinding> buttonBindings = gamepadActionBinding.ButtonsAction;
+            buttonBindings.AddRange(gamepadActionBinding.SticksButtonsAction);
+            buttonBindings.AddRange(gamepadActionBinding.ButtonsBumper);
+            buttonBindings.AddRange(gamepadActionBinding.ButtonsDpad);
+            buttonBindings.AddRange(gamepadActionBinding.ButtonsOption);
+
+            mButtonBindings = buttonBindings;
             mSticksActions = gamepadActionBinding.SticksAction;
             mTriggerAction = gamepadActionBinding.TriggerAction;
 

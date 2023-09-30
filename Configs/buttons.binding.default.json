@@ -115,12 +115,27 @@
       "axis": "left_stick_y"
     },
     {
-      "action": "head_left_right",
+      "action": "none",
       "axis": "right_stick_x"
     },
     {
-      "action": "neck_up_down",
+      "action": "none",
       "axis": "right_stick_y"
+    }
+  ],
+
+   /* possible sticks buttons values:
+              left_stick_button
+              right_stick_button
+  */
+  "sticks_buttons": [
+    {
+      "action": "head_left_right",
+      "button": "left_stick_button"
+    },
+    {
+      "action": "neck_up_down",
+      "button": "right_stick_button"
     }
   ]
 }

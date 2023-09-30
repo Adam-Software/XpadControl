@@ -30,10 +30,10 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
         [EnumMember(Value = "button_back")]
         Back = 0x20,
 
-        // The LS (Left Stick) button.
+        [EnumMember(Value = "left_stick_button")]
         LS = 0x40,
 
-        // The RS (Right Stick) button.
+        [EnumMember(Value = "right_stick_button")]
         RS = 0x80,
 
         [EnumMember(Value = "left_bamper")]

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Compile Remove="Properties\**" />
+    <Compile Remove="Visual Studio 2022\**" />
     <Compile Remove="XpadControl.Common.Services\**" />
     <Compile Remove="XpadControl.Interfaces\**" />
     <Compile Remove="XpadControl.Linux.Services.Test\**" />
@@ -22,6 +23,7 @@
     <Compile Remove="XpadControl.Windows.Services.Test\**" />
     <Compile Remove="XpadControl.Windows.Services\**" />
     <EmbeddedResource Remove="Properties\**" />
+    <EmbeddedResource Remove="Visual Studio 2022\**" />
     <EmbeddedResource Remove="XpadControl.Common.Services\**" />
     <EmbeddedResource Remove="XpadControl.Interfaces\**" />
     <EmbeddedResource Remove="XpadControl.Linux.Services.Test\**" />
@@ -32,6 +34,7 @@
     <EmbeddedResource Remove="XpadControl.Windows.Services.Test\**" />
     <EmbeddedResource Remove="XpadControl.Windows.Services\**" />
     <None Remove="Properties\**" />
+    <None Remove="Visual Studio 2022\**" />
     <None Remove="XpadControl.Common.Services\**" />
     <None Remove="XpadControl.Interfaces\**" />
     <None Remove="XpadControl.Linux.Services.Test\**" />

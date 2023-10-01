@@ -58,6 +58,8 @@ namespace XpadControl
 
         private void RaiseActionEvent(object sender, ActionEventArgs eventArgs)
         {
+            mLoggerService.WriteInformationLog($"Calling adam action {eventArgs.AdamActions}");
+
             switch (eventArgs.AdamActions)
             {
                 case AdamActions.ToHomePosition:

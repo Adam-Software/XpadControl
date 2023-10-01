@@ -179,7 +179,6 @@ namespace XpadControl.Linux.Services.GamepadService
 
         #endregion
 
-
         #region Raise events
 
         protected virtual void OnRaiseAxisChangedEvent(float lx, float ly, float rx, float ry)

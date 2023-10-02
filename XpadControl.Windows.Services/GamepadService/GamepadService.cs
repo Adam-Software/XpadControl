@@ -1,4 +1,5 @@
 ﻿using System;
+using XInputium;
 using XInputium.XInput;
 using XpadControl.Interfaces;
 using XpadControl.Interfaces.GamepadService.Dependencies;
@@ -46,8 +47,8 @@ namespace XpadControl.Windows.Services.GamepadService
 
             if (mGamepad != null)
             {
-                mGamepad.LeftJoystick.PropertyChanged += LeftJoystickPropertyChanged;
-                mGamepad.RightJoystick.PropertyChanged += RightJoystickPropertyChanged;
+                mGamepad.LeftJoystick.PositionChanged += LeftJoystickPositionChanged;
+                mGamepad.RightJoystick.PositionChanged += RightJoystickPositionChanged;
 
                 mGamepad.LeftTrigger.ValueChanged += LeftTriggerValueChanged;
                 mGamepad.RightTrigger.ValueChanged += RightTriggerValueChanged;
@@ -57,6 +58,15 @@ namespace XpadControl.Windows.Services.GamepadService
             }
         }
 
+        public void Update()
+        {
+            mGamepad.Update();
+        }
+
+        #region Gamepad event
+
+        #region IsConnected
+
         private void IsConnectedChanged(object sender, EventArgs e)
         {
             bool isConnected = mGamepad.IsConnected;
@@ -65,16 +75,11 @@ namespace XpadControl.Windows.Services.GamepadService
             mLoggerService.WriteInformationLog($"Gamepad conected state change. Now is {isConnected}");
         }
 
-        public void Update() 
-        {
-            mGamepad.Update();
-        }
-
-        #region Gamepad event
+        #endregion
 
         #region Buttons
 
-        private void ButtonStateChanged(object sender, XInputium.DigitalButtonEventArgs<XInputButton> e)
+        private void ButtonStateChanged(object sender, DigitalButtonEventArgs<XInputButton> e)
         {
             OnRaiseButtonChangedEvent(e.Button.Button.ToButtons(), e.Button.IsPressed);
         }
@@ -83,35 +88,88 @@ namespace XpadControl.Windows.Services.GamepadService
 
         #region Axis
 
-        private void LeftJoystickPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void LeftJoystickPositionChanged(object sender, EventArgs e)
         {
-            switch (e.PropertyName)
-            {
-                case "X":
-                    OnRaiseLeftAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y, AxisPropertyChanged.X);
-                    break;
-                case "Y":
-                    OnRaiseLeftAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y, AxisPropertyChanged.Y);
-                    break;
-            }
-
-            mLoggerService.WriteVerboseLog($"X {mGamepad.LeftJoystick.X} Y {mGamepad.LeftJoystick.Y}");
+            LX = mGamepad.LeftJoystick.RawX;
+            LY = mGamepad.LeftJoystick.RawY;
         }
 
-        private void RightJoystickPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void RightJoystickPositionChanged(object sender, EventArgs e)
         {
-            switch (e.PropertyName)
+            RX = mGamepad.RightJoystick.RawX;
+            RY = mGamepad.RightJoystick.RawY;
+        }
+
+        private float lx;
+        private float LX 
+        {
+            get 
+            { 
+                return lx; 
+            } 
+            set 
             {
-                case "X":
-                    OnRaiseLeftAxisChangedEvent(mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y, AxisPropertyChanged.X);
-                    break;
-                case "Y":
-                    OnRaiseLeftAxisChangedEvent(mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y, AxisPropertyChanged.Y);
-                    break;
+                if( lx == value )
+                    return;
 
+                lx = value;
+
+                OnRaiseLeftAxisChangedEvent(LX, mGamepad.LeftJoystick.RawY, AxisPropertyChanged.X);
             }
+        }
 
-            mLoggerService.WriteVerboseLog($"X {mGamepad.RightJoystick.X} Y {mGamepad.RightJoystick.Y}");
+        private float ly;
+        private float LY
+        {
+            get
+            {
+                return ly;
+            }
+            set
+            {
+                if (ly == value)
+                    return;
+
+                ly = value;
+
+                OnRaiseLeftAxisChangedEvent(mGamepad.LeftJoystick.RawX, LY, AxisPropertyChanged.Y);
+            }
+        }
+
+        private float rx;
+        private float RX
+        {
+            get
+            {
+                return rx;
+            }
+            set
+            {
+                if (rx == value)
+                    return;
+
+                rx = value;
+
+                OnRaiseRightAxisChangedEvent(RX, mGamepad.RightJoystick.RawY, AxisPropertyChanged.X);
+            }
+        }
+
+        private float ry;
+        private float RY
+        {
+            get
+            {
+                return ry;
+            }
+            set
+            {
+                if (ry == value)
+                    return;
+
+                ry = value;
+
+                OnRaiseRightAxisChangedEvent(mGamepad.RightJoystick.RawX, RY, AxisPropertyChanged.Y);
+            }
         }
 
         #endregion
@@ -217,8 +275,16 @@ namespace XpadControl.Windows.Services.GamepadService
 
         public void Dispose()
         {
+            mGamepad.LeftJoystick.PositionChanged -= LeftJoystickPositionChanged;
+            mGamepad.RightJoystick.PositionChanged -= RightJoystickPositionChanged;
+
+            mGamepad.LeftTrigger.ValueChanged -= LeftTriggerValueChanged;
+            mGamepad.RightTrigger.ValueChanged -= RightTriggerValueChanged;
+
+            mGamepad.ButtonStateChanged -= ButtonStateChanged;
+            mGamepad.IsConnectedChanged -= IsConnectedChanged;
+
             mLoggerService.WriteVerboseLog($"Dispose {nameof(GamepadService)} called");
         }
-
     }
 }

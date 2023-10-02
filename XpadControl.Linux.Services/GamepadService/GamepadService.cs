@@ -82,9 +82,7 @@ namespace XpadControl.Linux.Services.GamepadService
         {
             if (mGamepad != null)
             {
-                mGamepad.AxisChanged -= AxisChanged;
-                mGamepad.ButtonChanged -= ButtonChanged;
-                mGamepad.Dispose();
+                Dispose();
 
                 mGamepad = null;
 
@@ -97,9 +95,12 @@ namespace XpadControl.Linux.Services.GamepadService
 
         public void Dispose()
         {
-            mLoggerService.WriteVerboseLog($"Dispose {nameof(GamepadService)} called");
+            mGamepad.AxisChanged -= AxisChanged;
+            mGamepad.ButtonChanged -= ButtonChanged;
 
             mGamepad?.Dispose();
+
+            mLoggerService.WriteVerboseLog($"Dispose {nameof(GamepadService)} called");
         }
 
         #region Gamepad event

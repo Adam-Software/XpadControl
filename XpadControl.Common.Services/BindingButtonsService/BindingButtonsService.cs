@@ -42,8 +42,6 @@ namespace XpadControl.Common.Services.BindingButtonsService
             gamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
         }
 
-
-
         private void RaiseButtonChangedEvent(object sender, ButtonEventArgs e)
         {
             var pressedButton = e.Button;
@@ -124,12 +122,6 @@ namespace XpadControl.Common.Services.BindingButtonsService
                     OnRaiseActionEvent(eventArgsY);
                     break;
             }
-        }
-
-
-        private void RightAxisPropertyChangedEvent(object sender, AxisPropertyChangedEventArgs e)
-        {
-
         }
 
         private void RaiseRightTriggerChangedEvent(object sender, TriggerEventArgs e)

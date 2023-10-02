@@ -10,20 +10,20 @@ using MyAxisEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.Event
 using MyButtonEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ButtonEventArgs;
 using MyTriggerEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.TriggerEventArgs;
 using MyConnectedEventArgs = XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.ConnectedEventArgs;
-
-
+using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.PropertyChangedArgs;
 
 namespace XpadControl.Linux.Services.GamepadService
 {
     public class GamepadService : IGamepadService
     {
-        public event AxisChangedEventHandler RaiseAxisChangedEvent;
-
         public event LeftTriggerChangedEventHandler RaiseLeftTriggerChangedEvent;
         public event RightTriggerChangedEventHandler RaiseRightTriggerChangedEvent;
 
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
         public event ConnectedChangedEventHandler RaiseConnectedChangedEvent;
+        
+        public event LeftAxisChangedEventHandler RaiseLeftAxisChangedEvent;
+        public event RightAxisChangedEventHandler RaiseRightAxisChangedEvent;
 
         private GamepadController mGamepad;
         private readonly ILoggerService mLoggerService;
@@ -130,7 +130,7 @@ namespace XpadControl.Linux.Services.GamepadService
             {
                 case 0:
                     lx = value.AxisToFloat();
-                    OnRaiseAxisChangedEvent(lx, ly, rx, ry);
+                    OnRaiseLeftAxisChangedEvent(lx, ly, AxisPropertyChanged.X);
 
                     mLoggerService.WriteVerboseLog($"LEFT STICK X:{lx} or {value}");
                     break;
@@ -142,19 +142,19 @@ namespace XpadControl.Linux.Services.GamepadService
                     break;
                 case 1:
                     ly = -value.AxisToFloat();
-                    OnRaiseAxisChangedEvent(lx, ly, rx, ry);
+                    OnRaiseLeftAxisChangedEvent(lx, ly, AxisPropertyChanged.Y);
 
                     mLoggerService.WriteVerboseLog($"LEFT STICK Y:{ly} or {value}");
                     break; 
                 case 3:
                     rx = value.AxisToFloat();
-                    OnRaiseAxisChangedEvent(lx, ly, rx, ry);
+                    OnRaiseRightAxisChangedEvent(rx, ry, AxisPropertyChanged.X);
 
                     mLoggerService.WriteVerboseLog($"RIGHT STICK X:{rx} or {value}");
                     break;
                 case 4:
                     ry = -value.AxisToFloat();
-                    OnRaiseAxisChangedEvent(lx, ly, rx, ry);
+                    OnRaiseRightAxisChangedEvent(rx, ry, AxisPropertyChanged.Y);
 
                     mLoggerService.WriteVerboseLog($"RIGHT STICK Y:{ry} or {value}");
                     break;
@@ -181,9 +181,9 @@ namespace XpadControl.Linux.Services.GamepadService
 
         #region Raise events
 
-        protected virtual void OnRaiseAxisChangedEvent(float lx, float ly, float rx, float ry)
+        protected virtual void OnRaiseLeftAxisChangedEvent(float lx, float ly, AxisPropertyChanged axisChanged)
         {
-            AxisChangedEventHandler raiseEvent = RaiseAxisChangedEvent;
+            LeftAxisChangedEventHandler raiseEvent = RaiseLeftAxisChangedEvent;
 
             MyAxisEventArgs leftEventArgs = new()
             {
@@ -191,13 +191,20 @@ namespace XpadControl.Linux.Services.GamepadService
                 Y = ly
             };
 
+            raiseEvent?.Invoke(this, axisChanged, leftEventArgs);
+        }
+
+        protected virtual void OnRaiseRightAxisChangedEvent(float rx, float ry, AxisPropertyChanged axisChanged)
+        {
+            RightAxisChangedEventHandler raiseEvent = RaiseRightAxisChangedEvent;
+
             MyAxisEventArgs rightEventArgs = new()
             {
                 X = rx,
                 Y = ry
             };
 
-            raiseEvent?.Invoke(this, leftEventArgs, rightEventArgs);
+            raiseEvent?.Invoke(this, axisChanged, rightEventArgs);
         }
 
         protected virtual void OnRaiseLeftTriggerChangedEvent(float value)

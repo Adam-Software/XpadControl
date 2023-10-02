@@ -3,12 +3,14 @@ using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.PropertyChang
 
 namespace XpadControl.Interfaces.GamepadService.Dependencies.EventArgs
 {
-    public class AxisEventArgs : IAxisPropertyChanged
+    public class AxisEventArgs //: IAxisPropertyChanged
     {
-        public event AxisPropertyChangedEventHandler PropertyChanged;
+        public float X { get; set; }
+        public float Y { get; set; }
+        //public event AxisPropertyChangedEventHandler PropertyChanged;
 
-        private float x;
-        public float X
+        //private float x;
+        /*public float X
         {
             get { return x; }
             set
@@ -37,6 +39,6 @@ namespace XpadControl.Interfaces.GamepadService.Dependencies.EventArgs
             AxisPropertyChangedEventHandler raiseEvent = PropertyChanged;
             AxisPropertyChangedEventArgs eventArgs = new AxisPropertyChangedEventArgs(propertyName, value);
             raiseEvent?.Invoke(this, eventArgs);
-        }
+        }*/
     }
 }

@@ -3,6 +3,7 @@ using XInputium.XInput;
 using XpadControl.Interfaces;
 using XpadControl.Interfaces.GamepadService.Dependencies;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
+using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.PropertyChangedArgs;
 using XpadControl.Windows.Services.Extensions;
 
 namespace XpadControl.Windows.Services.GamepadService
@@ -11,10 +12,11 @@ namespace XpadControl.Windows.Services.GamepadService
     {
         #region Event axis/button/trigger
 
-        public event AxisChangedEventHandler RaiseAxisChangedEvent;
         public event LeftTriggerChangedEventHandler RaiseLeftTriggerChangedEvent;
         public event RightTriggerChangedEventHandler RaiseRightTriggerChangedEvent;
         public event ButtonChangedEventHandler RaiseButtonChangedEvent;
+        public event LeftAxisChangedEventHandler RaiseLeftAxisChangedEvent;
+        public event RightAxisChangedEventHandler RaiseRightAxisChangedEvent;
 
         #endregion
 
@@ -44,8 +46,8 @@ namespace XpadControl.Windows.Services.GamepadService
 
             if (mGamepad != null)
             {
-                mGamepad.LeftJoystick.PositionChanged += LeftJoystickPositionChanged;
-                mGamepad.RightJoystick.PositionChanged += RightJoystickPositionChanged;
+                mGamepad.LeftJoystick.PropertyChanged += LeftJoystickPropertyChanged;
+                mGamepad.RightJoystick.PropertyChanged += RightJoystickPropertyChanged;
 
                 mGamepad.LeftTrigger.ValueChanged += LeftTriggerValueChanged;
                 mGamepad.RightTrigger.ValueChanged += RightTriggerValueChanged;
@@ -81,18 +83,35 @@ namespace XpadControl.Windows.Services.GamepadService
 
         #region Axis
 
-        private void LeftJoystickPositionChanged(object sender, EventArgs e)
+        private void LeftJoystickPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            OnRaiseAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y, mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y);
+            switch (e.PropertyName)
+            {
+                case "X":
+                    OnRaiseLeftAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y, AxisPropertyChanged.X);
+                    break;
+                case "Y":
+                    OnRaiseLeftAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y, AxisPropertyChanged.Y);
+                    break;
+            }
 
             mLoggerService.WriteVerboseLog($"X {mGamepad.LeftJoystick.X} Y {mGamepad.LeftJoystick.Y}");
         }
 
-        private void RightJoystickPositionChanged(object sender, EventArgs e)
+        private void RightJoystickPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            OnRaiseAxisChangedEvent(mGamepad.LeftJoystick.X, mGamepad.LeftJoystick.Y, mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y);
+            switch (e.PropertyName)
+            {
+                case "X":
+                    OnRaiseLeftAxisChangedEvent(mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y, AxisPropertyChanged.X);
+                    break;
+                case "Y":
+                    OnRaiseLeftAxisChangedEvent(mGamepad.RightJoystick.X, mGamepad.RightJoystick.Y, AxisPropertyChanged.Y);
+                    break;
 
-            mLoggerService.WriteVerboseLog($"X {mGamepad.RightJoystick.X} Y {mGamepad.RightJoystick.Y}");            
+            }
+
+            mLoggerService.WriteVerboseLog($"X {mGamepad.RightJoystick.X} Y {mGamepad.RightJoystick.Y}");
         }
 
         #endregion
@@ -119,9 +138,9 @@ namespace XpadControl.Windows.Services.GamepadService
 
         #region Raise events
 
-        protected virtual void OnRaiseAxisChangedEvent(float lx, float ly, float rx, float ry)
+        protected virtual void OnRaiseLeftAxisChangedEvent(float lx, float ly, AxisPropertyChanged axisChanged)
         {
-            AxisChangedEventHandler raiseEvent = RaiseAxisChangedEvent;
+            LeftAxisChangedEventHandler raiseEvent = RaiseLeftAxisChangedEvent;
 
             AxisEventArgs leftEventArgs = new()
             {
@@ -129,13 +148,20 @@ namespace XpadControl.Windows.Services.GamepadService
                 Y = ly
             };
 
+            raiseEvent?.Invoke(this, axisChanged, leftEventArgs);
+        }
+
+        protected virtual void OnRaiseRightAxisChangedEvent(float rx, float ry, AxisPropertyChanged axisChanged)
+        {
+            RightAxisChangedEventHandler raiseEvent = RaiseRightAxisChangedEvent;
+
             AxisEventArgs rightEventArgs = new()
             {
                 X = rx,
                 Y = ry
             };
 
-            raiseEvent?.Invoke(this, leftEventArgs, rightEventArgs);
+            raiseEvent?.Invoke(this, axisChanged, rightEventArgs);
         }
 
         protected virtual void OnRaiseLeftTriggerChangedEvent(float value)

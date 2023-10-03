@@ -30,7 +30,6 @@ namespace XpadControl.Common.Services.BindingButtonsService
                 mButtonBindings = gamepadActionBinding.Buttons;
                 mSticksActions = gamepadActionBinding.SticksAction;
                 mTriggerAction = gamepadActionBinding.TriggerAction;
-
             }
             catch(System.Text.Json.JsonException ex) 
             {
@@ -43,9 +42,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
                 loggerService.WriteErrorLog(commonErrorMessage);
                 loggerService.WriteErrorLog($"{ex}");
             }
-            
 
-           
             gamepadService.RaiseLeftTriggerChangedEvent += RaiseLeftTriggerChangedEvent;
             gamepadService.RaiseRightTriggerChangedEvent += RaiseRightTriggerChangedEvent;
 
@@ -73,9 +70,9 @@ namespace XpadControl.Common.Services.BindingButtonsService
             OnRaiseActionEvent(eventArgs);
         }
 
-        private void RaiseRightAxisChangedEvent(object sender, AxisPropertyChanged axisChanged, AxisEventArgs eventArgs)
+        private void RaiseRightAxisChangedEvent(object sender, AxisEventArgs eventArgs)
         {
-            switch (axisChanged)
+            switch (eventArgs.AxisPropertyChanged)
             {
                 case AxisPropertyChanged.X:
                     AdamActions actionX = mSticksActions.Where(x => x.Sticks == ConfigSticks.RightStickX).Select(x => x.Action).FirstOrDefault();
@@ -105,9 +102,9 @@ namespace XpadControl.Common.Services.BindingButtonsService
             }
         }
 
-        private void RaiseLeftAxisChangedEvent(object sender, AxisPropertyChanged axisChanged, AxisEventArgs eventArgs)
+        private void RaiseLeftAxisChangedEvent(object sender, AxisEventArgs eventArgs)
         {
-            switch (axisChanged)
+            switch (eventArgs.AxisPropertyChanged)
             {
                 case AxisPropertyChanged.X:
                     AdamActions actionX = mSticksActions.Where(x => x.Sticks == ConfigSticks.LeftStickX).Select(x => x.Action).FirstOrDefault();

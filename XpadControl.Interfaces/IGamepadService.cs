@@ -1,13 +1,12 @@
 ﻿using System;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
-using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs.PropertyChangedArgs;
 
 namespace XpadControl.Interfaces
 {
     #region Delegate axis/button/trigger
 
-    public delegate void LeftAxisChangedEventHandler(object sender, AxisPropertyChanged axisChanged, AxisEventArgs eventArgs);
-    public delegate void RightAxisChangedEventHandler(object sender, AxisPropertyChanged axisChanged, AxisEventArgs eventArgs);
+    public delegate void LeftAxisChangedEventHandler(object sender, AxisEventArgs eventArgs);
+    public delegate void RightAxisChangedEventHandler(object sender,AxisEventArgs eventArgs);
 
     public delegate void LeftTriggerChangedEventHandler(object sender, TriggerEventArgs e);
     public delegate void RightTriggerChangedEventHandler(object sender, TriggerEventArgs e);

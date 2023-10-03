@@ -196,30 +196,32 @@ namespace XpadControl.Windows.Services.GamepadService
 
         #region Raise events
 
-        protected virtual void OnRaiseLeftAxisChangedEvent(float lx, float ly, AxisPropertyChanged axisChanged)
+        protected virtual void OnRaiseLeftAxisChangedEvent(float lx, float ly, AxisPropertyChanged propertyChanged)
         {
             LeftAxisChangedEventHandler raiseEvent = RaiseLeftAxisChangedEvent;
 
             AxisEventArgs leftEventArgs = new()
             {
                 X = lx,
-                Y = ly
+                Y = ly,
+                AxisPropertyChanged = propertyChanged
             };
 
-            raiseEvent?.Invoke(this, axisChanged, leftEventArgs);
+            raiseEvent?.Invoke(this, leftEventArgs);
         }
 
-        protected virtual void OnRaiseRightAxisChangedEvent(float rx, float ry, AxisPropertyChanged axisChanged)
+        protected virtual void OnRaiseRightAxisChangedEvent(float rx, float ry, AxisPropertyChanged propertyChanged)
         {
             RightAxisChangedEventHandler raiseEvent = RaiseRightAxisChangedEvent;
 
             AxisEventArgs rightEventArgs = new()
             {
                 X = rx,
-                Y = ry
+                Y = ry,
+                AxisPropertyChanged = propertyChanged
             };
 
-            raiseEvent?.Invoke(this, axisChanged, rightEventArgs);
+            raiseEvent?.Invoke(this, rightEventArgs);
         }
 
         protected virtual void OnRaiseLeftTriggerChangedEvent(float value)

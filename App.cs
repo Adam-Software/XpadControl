@@ -58,7 +58,7 @@ namespace XpadControl
 
         private void RaiseActionEvent(object sender, ActionEventArgs eventArgs)
         {
-            mLoggerService.WriteInformationLog($"Calling adam action {eventArgs.AdamActions} param {eventArgs.FloatValue}");
+            DebugInfoAboutRaiseAction(eventArgs);
 
             switch (eventArgs.AdamActions)
             {
@@ -66,6 +66,18 @@ namespace XpadControl
                     ToHomePosition(eventArgs);
                     break;
             }
+        }
+
+        private void DebugInfoAboutRaiseAction(ActionEventArgs eventArgs)
+        {
+            if(eventArgs.IsAxis != IsAxis.None)
+                mLoggerService.WriteInformationLog($"Is axis. Binding action {eventArgs.AdamActions} param {eventArgs.FloatValue}");
+
+            if(eventArgs.IsButton != IsButton.None)
+                mLoggerService.WriteInformationLog($"Is button. Binding action {eventArgs.AdamActions} param {eventArgs.IsButton}");
+
+            if(eventArgs.IsTrigger != IsTrigger.None)
+                mLoggerService.WriteInformationLog($"Is trigger. Binding action {eventArgs.AdamActions} param {eventArgs.FloatValue}");
         }
 
         private void ToHomePosition(ActionEventArgs eventArgs)

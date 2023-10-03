@@ -58,7 +58,7 @@ namespace XpadControl
 
         private void RaiseActionEvent(object sender, ActionEventArgs eventArgs)
         {
-            mLoggerService.WriteInformationLog($"Calling adam action {eventArgs.AdamActions}");
+            mLoggerService.WriteInformationLog($"Calling adam action {eventArgs.AdamActions} param {eventArgs.FloatValue}");
 
             switch (eventArgs.AdamActions)
             {

@@ -15,21 +15,21 @@ namespace XpadControl.Common.Services.BindingButtonsService
     {
         public event ActionEventHandler RaiseActionEvent;
 
+        private readonly IGamepadService mGamepadService;
         private readonly List<ButtonActionBinding> mButtonBindings;
         private readonly List<SticksActionBinding> mSticksActions;
         private readonly List<TriggerActionBinding> mTriggerAction;
 
         public BindingButtonsService(ILoggerService loggerService, IGamepadService gamepadService, string jsonConfigPath) 
         {
-            const string commonErrorMessage = "An error occurred in the BindingButtonsService";
+            mGamepadService = gamepadService;
+
+            const string commonErrorMessage = $"An error occurred in the {nameof(BindingButtonsService)}";
+            GamepadActionBinding gamepadActionBinding = new();
 
             try
             {
-                GamepadActionBinding gamepadActionBinding = jsonConfigPath.ToGamepadAction();
-
-                mButtonBindings = gamepadActionBinding.Buttons;
-                mSticksActions = gamepadActionBinding.SticksAction;
-                mTriggerAction = gamepadActionBinding.TriggerAction;
+                gamepadActionBinding = jsonConfigPath.ToGamepadAction();
             }
             catch(System.Text.Json.JsonException ex) 
             {
@@ -43,14 +43,44 @@ namespace XpadControl.Common.Services.BindingButtonsService
                 loggerService.WriteErrorLog($"{ex}");
             }
 
-            gamepadService.RaiseLeftTriggerChangedEvent += RaiseLeftTriggerChangedEvent;
-            gamepadService.RaiseRightTriggerChangedEvent += RaiseRightTriggerChangedEvent;
+            mButtonBindings = gamepadActionBinding.Buttons;
+            mSticksActions = gamepadActionBinding.SticksAction;
+            mTriggerAction = gamepadActionBinding.TriggerAction;
 
-            gamepadService.RaiseLeftAxisChangedEvent += RaiseLeftAxisChangedEvent;
-            gamepadService.RaiseRightAxisChangedEvent += RaiseRightAxisChangedEvent;
-            
-            gamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
+            SubscribeToEvent();
         }
+
+        public void Dispose()
+        {
+            UnsubscribeFromEvent();
+        }
+
+        #region Subscribe/Unsubscribe events
+
+        private void SubscribeToEvent()
+        {
+
+            mGamepadService.RaiseLeftTriggerChangedEvent += RaiseLeftTriggerChangedEvent;
+            mGamepadService.RaiseRightTriggerChangedEvent += RaiseRightTriggerChangedEvent;
+
+            mGamepadService.RaiseLeftAxisChangedEvent += RaiseLeftAxisChangedEvent;
+            mGamepadService.RaiseRightAxisChangedEvent += RaiseRightAxisChangedEvent;
+
+            mGamepadService.RaiseButtonChangedEvent += RaiseButtonChangedEvent;
+        }
+
+        private void UnsubscribeFromEvent()
+        {
+            mGamepadService.RaiseLeftTriggerChangedEvent -= RaiseLeftTriggerChangedEvent;
+            mGamepadService.RaiseRightTriggerChangedEvent -= RaiseRightTriggerChangedEvent;
+
+            mGamepadService.RaiseLeftAxisChangedEvent -= RaiseLeftAxisChangedEvent;
+            mGamepadService.RaiseRightAxisChangedEvent -= RaiseRightAxisChangedEvent;
+
+            mGamepadService.RaiseButtonChangedEvent -= RaiseButtonChangedEvent;
+        }
+
+        #endregion
 
         private void RaiseButtonChangedEvent(object sender, ButtonEventArgs e)
         {
@@ -61,7 +91,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
                 .Where(x => x.Button == pressedButton.ToConfigButton())
                 .Select(x => x.Action).FirstOrDefault();
 
-            ActionEventArgs eventArgs = new ActionEventArgs
+            ActionEventArgs eventArgs = new()
             {
                 AdamActions = action,
                 IsButton = e.Pressed.ToButtonEventArgs(),
@@ -77,7 +107,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
                 case AxisPropertyChanged.X:
                     AdamActions actionX = mSticksActions.Where(x => x.Sticks == ConfigSticks.RightStickX).Select(x => x.Action).FirstOrDefault();
 
-                    ActionEventArgs eventArgsX = new ActionEventArgs
+                    ActionEventArgs eventArgsX = new()
                     {
                         AdamActions = actionX,
                         IsAxis = IsAxis.IsAxisX,
@@ -90,7 +120,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
                 case AxisPropertyChanged.Y:
                     AdamActions actionY = mSticksActions.Where(x => x.Sticks == ConfigSticks.RightStickY).Select(x => x.Action).FirstOrDefault();
 
-                    ActionEventArgs eventArgsY = new ActionEventArgs
+                    ActionEventArgs eventArgsY = new()
                     {
                         AdamActions = actionY,
                         IsAxis = IsAxis.IsAxisY,
@@ -109,7 +139,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
                 case AxisPropertyChanged.X:
                     AdamActions actionX = mSticksActions.Where(x => x.Sticks == ConfigSticks.LeftStickX).Select(x => x.Action).FirstOrDefault();
 
-                    ActionEventArgs eventArgsX = new ActionEventArgs
+                    ActionEventArgs eventArgsX = new()
                     {
                         AdamActions = actionX,
                         IsAxis = IsAxis.IsAxisX,
@@ -122,7 +152,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
                 case AxisPropertyChanged.Y:
                     AdamActions actionY = mSticksActions.Where(x => x.Sticks == ConfigSticks.LeftStickY).Select(x => x.Action).FirstOrDefault();
 
-                    ActionEventArgs eventArgsY = new ActionEventArgs
+                    ActionEventArgs eventArgsY = new()
                     {
                         AdamActions = actionY,
                         IsAxis = IsAxis.IsAxisY,
@@ -138,7 +168,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
         {
             AdamActions action = mTriggerAction.Where(x => x.Trigger == ConfigTriggers.RightTrigger).Select(x => x.Action).FirstOrDefault();
 
-            ActionEventArgs eventArgs = new ActionEventArgs
+            ActionEventArgs eventArgs = new()
             {
                 AdamActions = action,
                 IsTrigger = IsTrigger.IsTriggerRight,
@@ -152,7 +182,7 @@ namespace XpadControl.Common.Services.BindingButtonsService
         {
             AdamActions action = mTriggerAction.Where(x => x.Trigger == ConfigTriggers.LeftTrigger).Select(x => x.Action).FirstOrDefault();
             
-            ActionEventArgs eventArgs = new ActionEventArgs
+            ActionEventArgs eventArgs = new()
             {
                 AdamActions = action,
                 IsTrigger = IsTrigger.IsTriggerLeft,

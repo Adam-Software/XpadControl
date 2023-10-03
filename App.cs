@@ -222,9 +222,10 @@ namespace XpadControl
             {
                 UnsubscribeFromEvent();
 
-                mLoggerService.Dispose();
+                mBindingButtonsService.Dispose();
                 mWebSocketClientsService.Dispose();
                 mGamepadService.Dispose();
+                mLoggerService.Dispose();
             }
         }
 

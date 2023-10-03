@@ -1,4 +1,5 @@
-﻿using XpadControl.Interfaces.BindingButtonsService.Dependencies.EventArgs;
+﻿using System;
+using XpadControl.Interfaces.BindingButtonsService.Dependencies.EventArgs;
 
 namespace XpadControl.Interfaces
 {
@@ -8,7 +9,7 @@ namespace XpadControl.Interfaces
 
     #endregion
 
-    public interface IBindingButtonsService
+    public interface IBindingButtonsService : IDisposable
     {
         public event ActionEventHandler RaiseActionEvent;
     }

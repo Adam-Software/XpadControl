@@ -6,10 +6,13 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum ConfigTriggers
     {
-        [EnumMember(Value = "left_trigger")]
-        LeftTrigger = 0,
+        [EnumMember(Value = "none")]
+        None = 0,
 
-        [EnumMember(Value = "right_trigger")]
-        RightTrigger = 1
+        [EnumMember(Value = "left.trigger")]
+        LeftTrigger = 1,
+
+        [EnumMember(Value = "right.trigger")]
+        RightTrigger = 2
     }
 }

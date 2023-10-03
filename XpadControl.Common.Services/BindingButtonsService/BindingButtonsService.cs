@@ -21,18 +21,31 @@ namespace XpadControl.Common.Services.BindingButtonsService
 
         public BindingButtonsService(ILoggerService loggerService, IGamepadService gamepadService, string jsonConfigPath) 
         {
-            GamepadActionBinding gamepadActionBinding = jsonConfigPath.ToGamepadAction();
+            const string commonErrorMessage = "An error occurred in the BindingButtonsService";
 
-            List<ButtonActionBinding> buttonBindings = gamepadActionBinding.ButtonsAction;
-            buttonBindings.AddRange(gamepadActionBinding.SticksButtonsAction);
-            buttonBindings.AddRange(gamepadActionBinding.ButtonsBumper);
-            buttonBindings.AddRange(gamepadActionBinding.ButtonsDpad);
-            buttonBindings.AddRange(gamepadActionBinding.ButtonsOption);
+            try
+            {
+                GamepadActionBinding gamepadActionBinding = jsonConfigPath.ToGamepadAction();
 
-            mButtonBindings = buttonBindings;
-            mSticksActions = gamepadActionBinding.SticksAction;
-            mTriggerAction = gamepadActionBinding.TriggerAction;
+                mButtonBindings = gamepadActionBinding.Buttons;
+                mSticksActions = gamepadActionBinding.SticksAction;
+                mTriggerAction = gamepadActionBinding.TriggerAction;
 
+            }
+            catch(System.Text.Json.JsonException ex) 
+            {
+                loggerService.WriteErrorLog(commonErrorMessage);
+                loggerService.WriteErrorLog($"Error reading json config {jsonConfigPath}");
+                loggerService.WriteErrorLog($"Error details {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                loggerService.WriteErrorLog(commonErrorMessage);
+                loggerService.WriteErrorLog($"{ex}");
+            }
+            
+
+           
             gamepadService.RaiseLeftTriggerChangedEvent += RaiseLeftTriggerChangedEvent;
             gamepadService.RaiseRightTriggerChangedEvent += RaiseRightTriggerChangedEvent;
 

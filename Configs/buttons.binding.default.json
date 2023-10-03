@@ -1,141 +1,144 @@
 ﻿{
   /* possible button values:  
-              button_a
-              button_b
-              button_x
-              button_y,
+              button.a
+              button.b
+              button.x
+              button.y,
               none 
   */
   "action_buttons": [
     {
       "action": "none",
-      "button": "button_a"
+      "button": "button.a"
     },
     {
       "action": "none",
-      "button": "button_b"
+      "button": "button.b"
     },
     {
       "action": "none",
-      "button": "button_x"
+      "button": "button.x"
     },
     {
       "action": "none",
-      "button": "button_y"
+      "button": "button.y"
     }
   ],
 
   /* possible button values:  
-              button_back
-              button_start,
+              button.back
+              button.start,
               none
   */
   "option_buttons": [
     {
       "action": "to_home_position",
-      "button": "button_back"
+      "button": "button.back"
     },
     {
       "action": "none",
-      "button": "button_start"
-    }
-  ],
-
-  /* possible triggers values:
-              left_trigger
-              right_trigger 
-  */
-  "triggers": [
-    {
-      "action": "turn_to_left",
-      "trigger": "left_trigger"
-    },
-    {
-      "action": "turn_to_right",
-      "trigger": "right_trigger"
+      "button": "button.start"
     }
   ],
 
   /* possible d-pad buttons values:
-              dpad_left
-              dpad_right
-              dpad_down,
-              dpad_up
+              dpad.left
+              dpad.right
+              dpad.down,
+              dpad.up
               none
   */
-  "dpad": [
+  "dpad_buttons": [
     {
       "action": "none",
-      "button": "dpad_left"
+      "button": "dpad.left"
     },
     {
       "action": "none",
-      "button": "dpad_right"
+      "button": "dpad.right"
     },
     {
       "action": "none",
-      "button": "dpad_down"
+      "button": "dpad.down"
     },
     {
       "action": "none",
-      "button": "dpad_up"
+      "button": "dpad.up"
     }
   ],
 
   /* possible bampers buttons values:
-              left_bamper
-              right_bamper
+              left.bamper
+              right.bamper
               none
   */
-  "bumpers": [
+  "bumper_buttons": [
     {
       "action": "none",
-      "button": "left_bamper"
+      "button": "left.bamper"
     },
     {
       "action": "none",
-      "button": "right_bamper"
+      "button": "right.bamper"
+    }
+  ],
+
+  /* possible stick buttons values:
+              left.stick.button
+              right.stick.button
+              none
+  */
+  "stick_buttons": [
+    {
+      "action": "none",
+      "button": "left.stick.button"
+    },
+    {
+      "action": "none",
+      "button": "right.stick.button"
     }
   ],
 
 
   /* possible analog sticks values:
-              left_stick_x
-              left_stick_y
-              right_stick_x
-              right_stick_y
+              left.stick.x
+              left.stick.y
+              right.stick.x
+              right.stick.y
+              none
   */
   "sticks": [
     {
       "action": "riding_left_right",
-      "axis": "left_stick_x"
+      "axis": "left.stick.x"
     },
     {
       "action": "riding_forward_backward",
-      "axis": "left_stick_y"
+      "axis": "left.stick.y"
     },
     {
       "action": "head_left_right",
-      "axis": "right_stick_x"
+      "axis": "right.stick.x"
     },
     {
       "action": "neck_up_down",
-      "axis": "right_stick_y"
+      "axis": "right.stick.y"
     }
   ],
 
-   /* possible sticks buttons values:
-              left_stick_button
-              right_stick_button
+  /* possible triggers values:
+              left.trigger
+              right.trigger 
+              none
   */
-  "sticks_buttons": [
+  "triggers": [
     {
-      "action": "none",
-      "button": "left_stick_button"
+      "action": "turn_to_left",
+      "trigger": "left.trigger"
     },
     {
-      "action": "none",
-      "button": "right_stick_button"
+      "action": "turn_to_right",
+      "trigger": "right.trigger"
     }
   ]
 }

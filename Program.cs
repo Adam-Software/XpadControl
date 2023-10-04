@@ -17,6 +17,7 @@ using WindowsGamepadService = XpadControl.Windows.Services.GamepadService.Gamepa
 using WindowsGamepadHostedService = XpadControl.Windows.Services.GamepadService.GamepadHostedService;
 using LinuxGamepadHostedService = XpadControl.Linux.Services.GamepadService.GamepadHostedService;
 using XpadControl.Common.Services.BindingButtonsService;
+using XpadControl.Common.Services.AdamActionsMethods;
 
 namespace XpadControl
 {
@@ -84,13 +85,16 @@ namespace XpadControl
                 builder.Services.AddSingleton<IBindingButtonsService>(serviceProvider =>
                     new BindingButtonsService(serviceProvider.GetService<ILoggerService>(), serviceProvider.GetService<IGamepadService>(), pathCollection.ButtonBindingsConfigPath));
 
+                builder.Services.AddSingleton<IAdamActionsMethods>(serviceProvider =>
+                    new AdamActionsMethods(serviceProvider.GetService<ILoggerService>(), serviceProvider.GetService<IWebSocketClientsService>(), pathCollection.ZeroPositionConfigPath));
+
                 builder.Services.AddHostedService(serviceProvider => 
                         new App(serviceProvider.GetService<IWebSocketClientsService>(), 
                                 serviceProvider.GetService<ILoggerService>(), 
                                 serviceProvider.GetService<IGamepadService>(),
                                 serviceProvider.GetService<IBindingButtonsService>(),
                                 serviceProvider.GetService<IHostApplicationLifetime>(), 
-                                pathCollection));
+                                serviceProvider.GetService<IAdamActionsMethods>()));
             }
             catch (ConfigurationErrorsException ex)
             {

@@ -6,6 +6,6 @@ namespace XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel
     public class ServoCommands
     {
         [JsonPropertyName("motors")]
-        public List<ServoCommandsItem> Motors { get; set; }
+        public IList<ServoCommandsItem> Motors { get; set; }
     }
 }

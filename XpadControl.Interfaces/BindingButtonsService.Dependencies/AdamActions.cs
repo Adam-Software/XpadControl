@@ -33,8 +33,18 @@ namespace XpadControl.Interfaces.BindingButtonsService.Dependencies
         [EnumMember(Value = "head_left_right")]
         HeadLeftRight = 6,
 
-        [EnumMember(Value = "neck_up_down")]
-        NeckUpDown = 7
+        #region head up/down
+
+        [EnumMember(Value = "head_up_down")]
+        HeadUpDown = 7,
+
+        [EnumMember(Value = "head_up")]
+        HeadUp = 8,
+
+        [EnumMember(Value = "head_down")]
+        HeadDown = 9,
+
+        #endregion
 
         #endregion
 

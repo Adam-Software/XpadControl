@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using XpadControl.Interfaces;
 using XpadControl.Interfaces.GamepadService.Dependencies.EventArgs;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.EventArgs;
-using XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel;
-using XpadControl.Extensions;
 using XpadControl.Interfaces.BindingButtonsService.Dependencies.EventArgs;
 using XpadControl.Interfaces.BindingButtonsService.Dependencies;
 
@@ -18,16 +16,16 @@ namespace XpadControl
         private readonly IWebSocketClientsService mWebSocketClientsService;
         private readonly IGamepadService mGamepadService;
         private readonly IBindingButtonsService mBindingButtonsService;
-        private readonly PathCollection mAppArguments;
+        private readonly IAdamActionsMethods mAdamActionsMethods;
 
         public App(IWebSocketClientsService webSocketClientsService, ILoggerService loggerService, IGamepadService gamepadService, 
-            IBindingButtonsService bindingButtonsService, IHostApplicationLifetime applicationLifetime, PathCollection appArguments)
+            IBindingButtonsService bindingButtonsService, IHostApplicationLifetime applicationLifetime, IAdamActionsMethods actionsMethods)
         {
             mLoggerService = loggerService;
             mWebSocketClientsService = webSocketClientsService;
             mGamepadService = gamepadService;
             mBindingButtonsService = bindingButtonsService;
-            mAppArguments = appArguments;
+            mAdamActionsMethods = actionsMethods;
 
             applicationLifetime.ApplicationStarted.Register(OnStarted);
             applicationLifetime.ApplicationStopped.Register(OnStopped);
@@ -63,7 +61,19 @@ namespace XpadControl
             switch (eventArgs.AdamActions)
             {
                 case AdamActions.ToHomePosition:
-                    ToHomePosition(eventArgs);
+                    mAdamActionsMethods.ToHomePosition(eventArgs);
+                    break;
+
+                case AdamActions.HeadUpDown:
+                    mAdamActionsMethods.HeadUpDown(eventArgs);
+                    break;
+
+                case AdamActions.HeadUp:
+                    mAdamActionsMethods.HeadUp(eventArgs);
+                    break;
+
+                case AdamActions.HeadDown:
+                    mAdamActionsMethods.HeadDown(eventArgs);
                     break;
             }
         }
@@ -78,28 +88,6 @@ namespace XpadControl
 
             if(eventArgs.IsTrigger != IsTrigger.None)
                 mLoggerService.WriteInformationLog($"Is trigger. Binding action {eventArgs.AdamActions} param {eventArgs.FloatValue}");
-        }
-
-        private void ToHomePosition(ActionEventArgs eventArgs)
-        {
-            if (eventArgs.IsButton == IsButton.IsButtonPressed)
-            {
-                HomePositionCommandExecute();
-            }
-
-            if (eventArgs.IsAxis != IsAxis.None || eventArgs.IsTrigger != IsTrigger.None)
-            {
-                if (eventArgs.FloatValue <= 0.5 || eventArgs.FloatValue >= 0.5)
-                {
-                    HomePositionCommandExecute();
-                }
-            }
-        }
-
-        private void HomePositionCommandExecute()
-        {
-            ServoCommands zeroPosition = mAppArguments.ZeroPositionConfigPath.ToServoCommands();
-            mWebSocketClientsService.SendInstant(zeroPosition);
         }
 
         #endregion

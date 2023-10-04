@@ -1,8 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text.Json;
 using XpadControl.Interfaces.WebSocketClientsService.Dependencies.JsonModel;
 
-namespace XpadControl.Extensions
+namespace XpadControl.Interfaces.AdamActionsMethodsDependencies
 {
     public static class ServoCommandsExtensions
     {
@@ -21,6 +22,22 @@ namespace XpadControl.Extensions
             ServoCommands commands = JsonSerializer.Deserialize<ServoCommands>(json, options);
 
             return commands;
+        }
+
+        /// <summary>
+        /// Converting float gamepad value -1 .. 1 to servo range int value 0 .. 100
+        /// </summary>
+        public static int ToServoRange(this float gamepadRangeValue, int zeroPosition)
+        {
+            float floatValue = gamepadRangeValue * 100;
+            int intValue = (int)Math.Round(floatValue) + zeroPosition;
+
+            if (intValue < 0)
+                intValue = 0;
+            if (intValue > 100)
+                intValue = 100;
+
+            return intValue;
         }
     }
 }

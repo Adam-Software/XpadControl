@@ -2,9 +2,6 @@
 
 [![CodeQL](https://github.com/Adam-Software/XpadControl/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Adam-Software/XpadControl/actions/workflows/github-code-scanning/codeql) [![.NET Core Desktop](https://github.com/Adam-Software/XpadControl/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/Adam-Software/XpadControl/actions/workflows/dotnet-desktop.yml) ![GitHub](https://img.shields.io/github/license/Adam-Software/XpadControl) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Adam-Software/XpadControl) ![GitHub tag (with filter)](https://img.shields.io/github/v/tag/Adam-Software/XpadControl)
 
-
-
-
 A cross-platform console application  for controlling the Adam robot via a local/remote socket using an xbox gamepad and its analogues.
 
 ## Capture and simulation of game controllers
@@ -82,10 +79,76 @@ $ dotnet XpadControl.dll -s
 Setting loaded from /usr/src/XpadControl/bin/Debug/net7.0-windows/publish/Configs/appsettings.default.json
 ```
 
-### 
-
 ## Tested WebSocket server
 
 The test web socket server is located [here](https://raw.githubusercontent.com/Adam-Software/Adam-SDK/main/servers/GamepadDebugServer.py)
 
+## Action
 
+**Axis action** - an action that consists of two components (for example: head_up_down).   
+*Only stick axes can be linked to such actions. Binding buttons or triggers to them will cause a NotImplementedException error. This is done intentionally to avoid logical errors in bindings.*
+
+**Button/trigger/axis action** - an action that consists of a single component (for example: head_up, head_down, to_home_position)  
+*Can be linked to stick axes, buttons and triggers*
+
+### Action list and binding
+
+* `to_home_position` - is **button/trigger/axis action**. the command to return the Adam robot to the zero position
+
+      execution conditions:    
+              if binding to buttons: button pressed value `{ == true }` => execute    
+              if binding to trigger: trigger value `{ >= 0.5 }` => execute    
+              if binding to axis: axis value `{ <= -0.5 or  >= 0.5 }` => execute   
+
+* `head_up_down` `head_up` `head_down` - head control commands
+  
+   `head_up_down` is **axis action**
+
+      execution conditions: 
+          if binding to buttons:  throw new NotImplementedException("Button can`t binding to axis action");
+          if binding to trigger:  throw new NotImplementedException("Trigger can`t binding to axis action");
+          if binding to axis:     if axis value { == 0 } => execute with param servo command = home position
+                                  if axis value { < 0 } => execute with param servo command = home position - axis value
+                                  if axis value { > 0 } => execute with param servo command = home position + axis value
+     `head_up` `head_down` is **button/trigger/axis action**
+  
+         execution conditions:
+             if binding to buttons:  button pressed value { == true } => execute home position + 1 by goal position != 100
+                                     button pressed value { == false } => execute home position - 1 by goal position != home position 
+             if binding to trigger:  trigger value { == 0 } => execute with param servo command = home position
+                                     trigger value { > 0 } => execute with param servo command = home position + trigger value
+             if binding to axis:     axis value { == 0 } => execute with param servo command = home position 
+                                     axis value { != 0 } => execute with param servo command = home position + axis value
+
+### Examples:
+  
+**Axis action**
+
+Binding the y-axis of the right stick to the action:
+```
+{
+    "action": "head_up_down",
+    "axis": "right.stick.y"
+}
+```
+With this combination of parameters, the robot will move its head down when the right stick is deflected down and up when the stick is deflected up.
+
+**Button/trigger/axis action**
+
+Binding the right trigger to an action:
+```
+{
+    "action": "head_up",
+    "trigger": "right.trigger"
+}
+```
+If you press the right trigger of the joystick, the robot will lift its head up, if you release it, the head returns to its original position
+
+Binding the button A to an action:
+```
+{
+    "action": "head_down",
+    "button": "button.a"
+}
+```
+If you press the button A of the joystick, the robot will lower its head down, if you release it, the head returns to its original position

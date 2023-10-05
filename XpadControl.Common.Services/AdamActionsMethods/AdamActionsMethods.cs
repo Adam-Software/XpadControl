@@ -43,10 +43,8 @@ namespace XpadControl.Common.Services.AdamActionsMethods
 
         public override void HeadUpDown(float value)
         {
-            WriteDebubLog();
-
             int zeroPositions = mNeckZeroPosition;
-            int newGoalPosition = value.ToServoRange(zeroPositions);
+            int goalPosition = value.ToServoRange(zeroPositions);
 
             ServoCommands command = new()
             {
@@ -55,7 +53,7 @@ namespace XpadControl.Common.Services.AdamActionsMethods
                     new ServoCommandsItem
                     {
                         Name = ServoNames.Neck,
-                        GoalPosition = newGoalPosition
+                        GoalPosition = goalPosition
                     }
                 }
             };
@@ -69,9 +67,15 @@ namespace XpadControl.Common.Services.AdamActionsMethods
 
         #region HeadUp
 
-        public override void HeadUp(int value)
+        public override void HeadUp(float value)
         {
             WriteDebubLog();
+
+            if (value == float.NegativeInfinity)
+                value = value * -1;
+
+            int zeroPositions = mNeckZeroPosition;
+            int goalPosition = value.ToServoRange(zeroPositions);
 
             ServoCommands command = new()
             {
@@ -80,7 +84,7 @@ namespace XpadControl.Common.Services.AdamActionsMethods
                     new ServoCommandsItem
                     {
                         Name = ServoNames.Neck,
-                        GoalPosition = mNeckZeroPosition + value
+                        GoalPosition = goalPosition
                     } 
                 }
             };
@@ -112,9 +116,15 @@ namespace XpadControl.Common.Services.AdamActionsMethods
 
         #region HeadDown
 
-        public override void HeadDown(int value)
+        public override void HeadDown(float value)
         {
             WriteDebubLog();
+
+            if (value == float.NegativeInfinity)
+                value = value * -1;
+
+            int zeroPositions = mNeckZeroPosition;
+            int goalPosition = value.ToServoRange(zeroPositions);
 
             ServoCommands command = new()
             {
@@ -123,7 +133,7 @@ namespace XpadControl.Common.Services.AdamActionsMethods
                     new ServoCommandsItem
                     {
                         Name = ServoNames.Neck,
-                        GoalPosition = mNeckZeroPosition - value
+                        GoalPosition = goalPosition
                     }
                 }
             };

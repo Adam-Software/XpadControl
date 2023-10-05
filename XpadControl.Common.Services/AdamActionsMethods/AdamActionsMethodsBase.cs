@@ -46,7 +46,7 @@ namespace XpadControl.Common.Services.AdamActionsMethods
         {
             if (eventArgs.IsButton == IsButton.IsButtonPressed)
             {
-                throw new NotImplementedException("Button can`t binding to axis value");
+                throw new NotImplementedException("Button can`t binding to axis action");
             }
 
             if (eventArgs.IsAxis != IsAxis.None)
@@ -56,6 +56,7 @@ namespace XpadControl.Common.Services.AdamActionsMethods
 
             if (eventArgs.IsTrigger != IsTrigger.None)
             {
+                throw new NotImplementedException("Trigger can`t binding to axis action");
             }
         }
 
@@ -74,22 +75,16 @@ namespace XpadControl.Common.Services.AdamActionsMethods
 
             if (eventArgs.IsAxis != IsAxis.None)
             {
-                float floatValue = eventArgs.FloatValue / 2;
-                int intValue = (int) Math.Round(floatValue);
-
-                HeadDown(intValue);
+                HeadDown(eventArgs.FloatValue);
             }
 
             if (eventArgs.IsTrigger != IsTrigger.None)
             {
-                float floatValue = eventArgs.FloatValue / 2;
-                int intValue = (int)Math.Round(floatValue);
-
-                HeadDown(intValue);
+                HeadDown(eventArgs.FloatValue);
             }
         }
 
-        public abstract void HeadDown(int value);
+        public abstract void HeadDown(float value);
         public abstract void HeadDown(bool value);
 
         #endregion
@@ -105,22 +100,16 @@ namespace XpadControl.Common.Services.AdamActionsMethods
 
             if (eventArgs.IsAxis != IsAxis.None)
             {
-                float floatValue = eventArgs.FloatValue / 2;
-                int intValue = (int) Math.Round(floatValue);
-
-                HeadUp(intValue);
+                HeadUp(eventArgs.FloatValue);
             }
 
             if (eventArgs.IsTrigger != IsTrigger.None)
             {
-                float floatValue = eventArgs.FloatValue / 2;
-                int intValue = (int)Math.Round(floatValue);
-
-                HeadUp(intValue);
+                HeadUp(eventArgs.FloatValue);
             }
         }
 
-        public abstract void HeadUp(int value);
+        public abstract void HeadUp(float value);
         public abstract void HeadUp(bool value);
 
         #endregion

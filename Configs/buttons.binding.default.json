@@ -1,14 +1,16 @@
 ﻿{
   /*
 
-  Action:
+  
 
-  to_home_position: the command to return the Adam robot to the zero position
+  --
 
-  execution conditions:
-  if binding to buttons: button pressed value { == true } => execute
-  if binding to trigger: trigger value { >= 0.5 } => execute
-  if binding to axis: axis value { <= -0.5 or  >= 0.5 } => execute
+  
+  --
+
+
+  --
+  
 
   */
 
